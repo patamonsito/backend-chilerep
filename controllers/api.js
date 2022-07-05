@@ -1810,7 +1810,7 @@ module.exports = class API {
                                             Alsacia: jsonTablesAlsacia.results,
                                             Refax: jsonTablesRefax.results,
                                             Mannheim: ProductoM,
-                                            Bicimoto: [],
+                                            Bicimoto: [[{Descripcion: ''}]],
                                             Noriega: Noriega._results[0]
                                         }
     
