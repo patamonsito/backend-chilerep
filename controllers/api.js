@@ -1387,11 +1387,10 @@ module.exports = class API {
             }
         }
 
+        let environment = process.env.NODE_ENV || 'development';
 
-        console.log(CookieNoriega.Cookie)
 
-
-        if(process.env.NODE_ENV == 'development'){
+        if(environment == 'development'){
             try {
     
                 var headers = {
@@ -1714,7 +1713,6 @@ module.exports = class API {
                              
                                  function callbackTres(error, response, body) {
                                 if (!error && response.statusCode == 200) {
-                                    var body = JSON.parse(body)
                                     const $ = cheerio.load(body.data);
                                     console.log('Noriega OK')
                                     let Noriega = HtmlTableToJson.parse('<table><thead><th>Marca</th><th>Modelo</th><th>Año</th><th>Producto</th><th>Descripcion</th><th>Origen</th><th>Sku</th><th>Precio</th><th>Stock</th></thead>'+$('tbody').html()+'</table>');
