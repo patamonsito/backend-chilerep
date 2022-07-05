@@ -1399,6 +1399,7 @@ module.exports = class API {
             function callback(error, response, body) {
                 if (!error && response.statusCode == 200) {
                     let RefaxResult = body;
+                    console.log('Refax OK')
                     //Init Alsacia Request
                     var headers2 = {
                         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:97.0) Gecko/20100101 Firefox/97.0',
@@ -1431,6 +1432,7 @@ module.exports = class API {
                         if (!error && response.statusCode == 200) {
                     
                             const $ = cheerio.load(body);
+                            console.log('Alsacia OK')
 
                             const jsonTablesAlsacia = HtmlTableToJson.parse('<table>'+$('table').html().replace(/(\r\n|\n|\r)/gm, "").replace(/(\r\n|\n|\r)/gm, "").replace(/(\r\n|\n|\r)/gm, "").replace(/(\r\n|\n|\r)/gm, "").replace(/(\r\n|\n|\r)/gm, "").replace(/(\r\n|\n|\r)/gm, "").replace(/(\r\n|\n|\r)/gm, "").replace(/(\r\n|\n|\r)/gm, "").replace(/(\r\n|\n|\r)/gm, "").replace(/(\r\n|\n|\r)/gm, "").replace(/(\r\n|\n|\r)/gm, "").replace(/(\r\n|\n|\r)/gm, "").replace(/(\r\n|\n|\r)/gm, "").replace(/(\r\n|\n|\r)/gm, "").replace(/(\r\n|\n|\r)/gm, "").replace(/(\r\n|\n|\r)/gm, "").replace('Descripción', 'Descripcion').replace('Año Ini', 'AñoI').replace('Año Fin', 'AñoT')+'</table>');
                      
@@ -1471,6 +1473,7 @@ module.exports = class API {
                                 if (!error && response.statusCode == 200) {
                                     var body = JSON.parse(body)
                                     const $ = cheerio.load(body.data);
+                                    console.log('Bicimoto OK')
 
                                     $('strong').remove();
                                     $('i').remove();
@@ -1530,6 +1533,7 @@ module.exports = class API {
                             function callback(error, response, body) {
                                 if (!error && response.statusCode == 200) {
                                     const $ = cheerio.load(body);
+                                    console.log('Mannheim OK')
                                     $('strong').remove()
                                     let Cantidad =  $('#repuestos > div > div').length + 1;
                                     console.log(Cantidad)
