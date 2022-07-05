@@ -1390,6 +1390,8 @@ module.exports = class API {
         let environment = process.env.NODE_ENV || 'development';
 
 
+        let SendJson; 
+
         if(environment == 'development'){
             try {
     
@@ -1802,7 +1804,7 @@ module.exports = class API {
                                         ProductoM.pop();
                                         
     
-                                        let SendJson = {
+                                        SendJson = {
                                             Alsacia: jsonTablesAlsacia.results,
                                             Refax: jsonTablesRefax.results,
                                             Mannheim: ProductoM,
@@ -1833,6 +1835,10 @@ module.exports = class API {
                 
                 request(options, callback);
     
+
+                console.log(SendJson, 'here')
+                return res.json(SendJson);
+
             } catch (error) {
                 res.status(200).send(error)
             }
