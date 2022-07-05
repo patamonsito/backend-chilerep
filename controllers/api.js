@@ -1589,17 +1589,46 @@ module.exports = class API {
                                             return e;
                                         })
     
-                                        let SendJson = {
-                                            Alsacia: jsonTablesAlsacia.results,
-                                            Refax: jsonTablesRefax.results,
-                                            Bicimoto: ProductosB,
-                                            Mannheim: ProductoM
-                                        }
+
+                                        
+                                //next Noriega
+                                let headersCinco = {
+                                    'cache-control': 'no-cache',
+                                    'content-type': 'application/x-www-form-urlencoded',
+                                    cookie: CookieNoriega.Cookie };
+                             
+                                 var optionsCinco = {
+                                     method: 'POST',
+                                     url: 'http://ecommerce.noriegavanzulli.cl/b2b/resultado_googleo_texto.jsp',
+                                     cookie: CookieNoriega.Cookie,
+                                     headers: headersCinco,
+                                     form: { texto: Buscar }
+                                 };
+                             
+                                 function callbackCinco(error, response, body) {
+                                if (!error && response.statusCode == 200) {
+                                    const $ = cheerio.load(body);
+                                    console.log('Noriega OK')
+                                    let Noriega = HtmlTableToJson.parse('<table><thead><th>Marca</th><th>Modelo</th><th>Año</th><th>Producto</th><th>Descripcion</th><th>Origen</th><th>Sku</th><th>Precio</th><th>Stock</th></thead>'+$('tbody').html()+'</table>');
     
+                                    let SendJson = {
+                                        Alsacia: jsonTablesAlsacia.results,
+                                        Refax: jsonTablesRefax.results,
+                                        Bicimoto: ProductosB,
+                                        Mannheim: ProductoM,
+                                        Noriega: Noriega.results[0]
+                                    }
+
+                    
+                                    res.status(200).send(SendJson)
+                                
+                                
+                                       }
+
+                                    }
                         
-    
-                                        res.status(200).send(SendJson)
-                        
+                                     
+                                        request(optionsCinco, callbackCinco);
                                         // res.status(200).send($('#repuestos > div.lista > div > div.col-xs-12.col-md-3 > div > h2').text());
                                     }
                                 }
@@ -1781,6 +1810,7 @@ module.exports = class API {
                                             Alsacia: jsonTablesAlsacia.results,
                                             Refax: jsonTablesRefax.results,
                                             Mannheim: ProductoM,
+                                            Bicimoto: [],
                                             Noriega: Noriega._results[0]
                                         }
     
