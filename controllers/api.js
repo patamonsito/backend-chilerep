@@ -1814,11 +1814,8 @@ module.exports = class API {
                                             Noriega: Noriega._results[0]
                                         }
     
-                        
-                                        console.log('go a enviar')
+                                        console.log(SendJson)
                                         return res.status(200).send(SendJson)
-                        
-                                        // res.status(200).send($('#repuestos > div.lista > div > div.col-xs-12.col-md-3 > div > h2').text());
                                     }
                                 }
                                 
