@@ -1363,245 +1363,459 @@ module.exports = class API {
     }
 
     static async POST_API_IMPORTADORA(req, res){
-        try {
-            let { Buscar } = req.body;
-            console.log(Buscar)
-            let CookieAlsacia = await Credenciales.findOne({ Importadora: 'Alsacia' });
-            let CookieRefax = await Credenciales.findOne({Importadora: 'Refax'})
-            let CookieBicimoto = await Credenciales.findOne({Importadora: 'Bicimoto'})
 
-            var headers = {
-                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:97.0) Gecko/20100101 Firefox/97.0',
-                'Accept': '*/*',
-                'Accept-Language': 'en-US,en;q=0.5',
-                'Accept-Encoding': 'gzip, deflate, br',
-                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-                'X-Requested-With': 'XMLHttpRequest',
-                'Origin': 'https://b2b.refaxchile.cl',
-                'Connection': 'keep-alive',
-                'Referer': 'https://b2b.refaxchile.cl/B2BRefax/buscadorA.jsp',
-                'Cookie': CookieRefax.Cookie,
-                'Sec-Fetch-Dest': 'empty',
-                'Sec-Fetch-Mode': 'cors',
-                'Sec-Fetch-Site': 'same-origin'
-            };
-            
-            var dataString = 'html=1&busqueda='+Buscar+'+&usuariop=sasval13&cliente=C77554630';
-            
-            var options = {
-                url: 'https://b2b.refaxchile.cl/B2BRefax/buscadorA',
-                method: 'POST',
-                headers: headers,
-                gzip: true,
-                body: dataString
-            };
-            
-            function callback(error, response, body) {
-                if (!error && response.statusCode == 200) {
-                    let RefaxResult = body;
-                    console.log('Refax OK')
-                    //Init Alsacia Request
-                    var headers2 = {
-                        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:97.0) Gecko/20100101 Firefox/97.0',
-                        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
-                        'Accept-Language': 'en-US,en;q=0.5',
-                        'Accept-Encoding': 'gzip, deflate, br',
-                        'Content-Type': 'application/x-www-form-urlencoded',
-                        'Origin': 'https://www.repuestosalsacia.com',
-                        'Connection': 'keep-alive',
-                        'Referer': 'https://www.repuestosalsacia.com/alsacia/home',
-                        'Cookie': 'csrf_cookie_name=f84a0c09e3eb87ec1a369fd7f8850dbd; ci_session='+ CookieAlsacia.Cookie +'; ssupp.vid=vigpZqvCeuxVY; ssupp.visits=1; _ga=GA1.2.63973752.1656705830; _gid=GA1.2.1828128899.1656705830; _gat_gtag_UA_57096536_1=1',
-                        'Upgrade-Insecure-Requests': '1',
-                        'Sec-Fetch-Dest': 'document',
-                        'Sec-Fetch-Mode': 'navigate',
-                        'Sec-Fetch-Site': 'same-origin',
-                        'Sec-Fetch-User': '?1'
-                    };
-                    
-                    var dataString2 = 'csrf_test_name=f84a0c09e3eb87ec1a369fd7f8850dbd&filter=' + Buscar;
-                    
-                    var options2 = {
-                        url: 'https://www.repuestosalsacia.com/alsacia/buscador/search',
-                        method: 'POST',
-                        headers: headers2,
-                        gzip: true,
-                        body: dataString2
-                    };
-                    
-                    function callback(error, response, body) {
-                        if (!error && response.statusCode == 200) {
-                    
-                            const $ = cheerio.load(body);
-                            console.log('Alsacia OK')
 
-                            const jsonTablesAlsacia = HtmlTableToJson.parse('<table>'+$('table').html().replace(/(\r\n|\n|\r)/gm, "").replace(/(\r\n|\n|\r)/gm, "").replace(/(\r\n|\n|\r)/gm, "").replace(/(\r\n|\n|\r)/gm, "").replace(/(\r\n|\n|\r)/gm, "").replace(/(\r\n|\n|\r)/gm, "").replace(/(\r\n|\n|\r)/gm, "").replace(/(\r\n|\n|\r)/gm, "").replace(/(\r\n|\n|\r)/gm, "").replace(/(\r\n|\n|\r)/gm, "").replace(/(\r\n|\n|\r)/gm, "").replace(/(\r\n|\n|\r)/gm, "").replace(/(\r\n|\n|\r)/gm, "").replace(/(\r\n|\n|\r)/gm, "").replace(/(\r\n|\n|\r)/gm, "").replace(/(\r\n|\n|\r)/gm, "").replace('Descripción', 'Descripcion').replace('Año Ini', 'AñoI').replace('Año Fin', 'AñoT')+'</table>');
-                     
-                            const jsonTablesRefax = HtmlTableToJson.parse('<table>'+RefaxResult.replace('MARCA', 'Marca').replace('MODELO', 'Modelo').replace('AÑO I', 'AñoI').replace('AÑO T', 'AñoT').replace('PRODUCTO', 'Producto').replace('DESCRIPCION', 'Descripcion').replace('ORIGEN', 'Origen').replace('N° REFAX', 'Sku').replace('$ NETO', 'PrecioImportadora').replace('STOCK', 'Stock')+'</table>');
+        let { Buscar } = req.body;
+        console.log(Buscar)
+        
+        let Cookies = await Credenciales.find();
+        
+        var CookieAlsacia = {};
+        var CookieRefax = {};
+        var CookieBicimoto = {};
+        let CookieNoriega = {};
 
-                            //next Bicimoto
-                            let dataStringTres = 'id_category=&id_subcategory=&id_subsubcategory=&option_filter=&search=' + Buscar + '&order=&register=50';
+        for (let i = 0; i < Cookies.length; i++) {
+            if(Cookies[i].Importadora == 'Refax'){
+                CookieRefax.Cookie = Cookies[i].Cookie;
+            }else if(Cookies[i].Importadora == 'Alsacia'){
+                CookieAlsacia.Cookie = Cookies[i].Cookie;
+            }else if(Cookies[i].Importadora == 'Bicimoto'){
+                CookieBicimoto.Cookie = Cookies[i].Cookie;
+            }else if(Cookies[i].Importadora == 'Noriega'){
+                CookieNoriega.Cookie = Cookies[i].Cookie;
+            }
+        }
 
-                            let headersTres = {
-                                'authority': 'www.bicimoto.cl',
-                                'accept': 'application/json, text/javascript, */*; q=0.01',
-                                'accept-language': 'es-ES,es;q=0.9,en;q=0.8',
-                                'cache-control': 'no-cache',
-                                'content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
-                                'origin': 'https://www.bicimoto.cl',
-                                'pragma': 'no-cache',
-                                'referer': 'https://www.bicimoto.cl/busqueda.php?search=' + Buscar,
-                                'sec-ch-ua': '" Not A;Brand";v="99", "Chromium";v="100", "Google Chrome";v="100"',
-                                'sec-ch-ua-mobile': '?0',
-                                'sec-ch-ua-platform': '"Windows"',
-                                'sec-fetch-dest': 'empty',
-                                'sec-fetch-mode': 'cors',
-                                'sec-fetch-site': 'same-origin',
-                                'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.75 Safari/537.36',
-                                'x-requested-with': 'XMLHttpRequest',
-                                'Cookie': CookieBicimoto.Cookie
-                            };
 
-                            var optionsTres = {
-                                url: 'https://www.bicimoto.cl/ajax/load-data-search.php',
-                                method: 'POST',
-                                cookie: CookieBicimoto.Cookie,
-                                headers: headersTres,
-                                body: dataStringTres
-                            };
+        console.log(CookieNoriega.Cookie)
 
-                            function callbackTres(error, response, body) {
+
+        if(process.env.NODE_ENV == 'development'){
+            try {
+    
+                var headers = {
+                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:97.0) Gecko/20100101 Firefox/97.0',
+                    'Accept': '*/*',
+                    'Accept-Language': 'en-US,en;q=0.5',
+                    'Accept-Encoding': 'gzip, deflate, br',
+                    'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Origin': 'https://b2b.refaxchile.cl',
+                    'Connection': 'keep-alive',
+                    'Referer': 'https://b2b.refaxchile.cl/B2BRefax/buscadorA.jsp',
+                    'Cookie': CookieRefax.Cookie,
+                    'Sec-Fetch-Dest': 'empty',
+                    'Sec-Fetch-Mode': 'cors',
+                    'Sec-Fetch-Site': 'same-origin'
+                };
+                
+                var dataString = 'html=1&busqueda='+Buscar+'+&usuariop=sasval13&cliente=C77554630';
+                
+                var options = {
+                    url: 'https://b2b.refaxchile.cl/B2BRefax/buscadorA',
+                    method: 'POST',
+                    headers: headers,
+                    gzip: true,
+                    body: dataString
+                };
+                
+                function callback(error, response, body) {
+                    if (!error && response.statusCode == 200) {
+                        let RefaxResult = body;
+                        console.log('Refax OK')
+                        //Init Alsacia Request
+                        var headers2 = {
+                            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:97.0) Gecko/20100101 Firefox/97.0',
+                            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
+                            'Accept-Language': 'en-US,en;q=0.5',
+                            'Accept-Encoding': 'gzip, deflate, br',
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                            'Origin': 'https://www.repuestosalsacia.com',
+                            'Connection': 'keep-alive',
+                            'Referer': 'https://www.repuestosalsacia.com/alsacia/home',
+                            'Cookie': 'csrf_cookie_name=f84a0c09e3eb87ec1a369fd7f8850dbd; ci_session='+ CookieAlsacia.Cookie +'; ssupp.vid=vigpZqvCeuxVY; ssupp.visits=1; _ga=GA1.2.63973752.1656705830; _gid=GA1.2.1828128899.1656705830; _gat_gtag_UA_57096536_1=1',
+                            'Upgrade-Insecure-Requests': '1',
+                            'Sec-Fetch-Dest': 'document',
+                            'Sec-Fetch-Mode': 'navigate',
+                            'Sec-Fetch-Site': 'same-origin',
+                            'Sec-Fetch-User': '?1'
+                        };
+                        
+                        var dataString2 = 'csrf_test_name=f84a0c09e3eb87ec1a369fd7f8850dbd&filter=' + Buscar;
+                        
+                        var options2 = {
+                            url: 'https://www.repuestosalsacia.com/alsacia/buscador/search',
+                            method: 'POST',
+                            headers: headers2,
+                            gzip: true,
+                            body: dataString2
+                        };
+                        
+                        function callback(error, response, body) {
+                            if (!error && response.statusCode == 200) {
+                        
+                                const $ = cheerio.load(body);
+                                console.log('Alsacia OK')
+    
+                                const jsonTablesAlsacia = HtmlTableToJson.parse('<table>'+$('table').html().replace(/(\r\n|\n|\r)/gm, "").replace(/(\r\n|\n|\r)/gm, "").replace(/(\r\n|\n|\r)/gm, "").replace(/(\r\n|\n|\r)/gm, "").replace(/(\r\n|\n|\r)/gm, "").replace(/(\r\n|\n|\r)/gm, "").replace(/(\r\n|\n|\r)/gm, "").replace(/(\r\n|\n|\r)/gm, "").replace(/(\r\n|\n|\r)/gm, "").replace(/(\r\n|\n|\r)/gm, "").replace(/(\r\n|\n|\r)/gm, "").replace(/(\r\n|\n|\r)/gm, "").replace(/(\r\n|\n|\r)/gm, "").replace(/(\r\n|\n|\r)/gm, "").replace(/(\r\n|\n|\r)/gm, "").replace(/(\r\n|\n|\r)/gm, "").replace('Descripción', 'Descripcion').replace('Año Ini', 'AñoI').replace('Año Fin', 'AñoT')+'</table>');
+                         
+                                const jsonTablesRefax = HtmlTableToJson.parse('<table>'+RefaxResult.replace('MARCA', 'Marca').replace('MODELO', 'Modelo').replace('AÑO I', 'AñoI').replace('AÑO T', 'AñoT').replace('PRODUCTO', 'Producto').replace('DESCRIPCION', 'Descripcion').replace('ORIGEN', 'Origen').replace('N° REFAX', 'Sku').replace('$ NETO', 'PrecioImportadora').replace('STOCK', 'Stock')+'</table>');
+    
+                                //next Bicimoto
+                                let dataStringTres = 'id_category=&id_subcategory=&id_subsubcategory=&option_filter=&search=' + Buscar + '&order=&register=50';
+    
+                                let headersTres = {
+                                    'authority': 'www.bicimoto.cl',
+                                    'accept': 'application/json, text/javascript, */*; q=0.01',
+                                    'accept-language': 'es-ES,es;q=0.9,en;q=0.8',
+                                    'cache-control': 'no-cache',
+                                    'content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                                    'origin': 'https://www.bicimoto.cl',
+                                    'pragma': 'no-cache',
+                                    'referer': 'https://www.bicimoto.cl/busqueda.php?search=' + Buscar,
+                                    'sec-ch-ua': '" Not A;Brand";v="99", "Chromium";v="100", "Google Chrome";v="100"',
+                                    'sec-ch-ua-mobile': '?0',
+                                    'sec-ch-ua-platform': '"Windows"',
+                                    'sec-fetch-dest': 'empty',
+                                    'sec-fetch-mode': 'cors',
+                                    'sec-fetch-site': 'same-origin',
+                                    'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.75 Safari/537.36',
+                                    'x-requested-with': 'XMLHttpRequest',
+                                    'Cookie': CookieBicimoto.Cookie
+                                };
+    
+                                var optionsTres = {
+                                    url: 'https://www.bicimoto.cl/ajax/load-data-search.php',
+                                    method: 'POST',
+                                    cookie: CookieBicimoto.Cookie,
+                                    headers: headersTres,
+                                    body: dataStringTres
+                                };
+    
+                                function callbackTres(error, response, body) {
+                                    if (!error && response.statusCode == 200) {
+                                        var body = JSON.parse(body)
+                                        const $ = cheerio.load(body.data);
+                                        console.log('Bicimoto OK')
+    
+                                        $('strong').remove();
+                                        $('i').remove();
+    
+                                        let cantidadB = $('body > div').length + 1;
+    
+                                        let ProductosB = []
+    
+                                        for(let i = 1; i < cantidadB; i++){
+                                        let Descripcion = $('body > div:nth-child('+ i +') > div > div.producto-box-pack > div.producto-box-datos > h2').text().trim();
+                                        let Sku = $('body > div:nth-child('+i+') > div > div.producto-box-pack > div.producto-box-datos > p:nth-child(2)').text().trim();
+                                        let Marca = $('body > div:nth-child('+i+') > div > div.producto-box-pack > div.producto-box-datos > p:nth-child(3)').text().trim();
+                                        let Modelo = $('body > div:nth-child('+i+') > div > div.producto-box-pack > div.producto-box-datos > p:nth-child(4)').text().trim() + ' ' + $('body > div:nth-child('+i+') > div > div.producto-box-pack > div.producto-box-datos > p:nth-child(5)').text().trim();
+                                        let Oem = $('body > div:nth-child('+i+') > div > div.producto-box-pack > div.producto-box-datos > p:nth-child(6)').text().trim();
+                                        let Origen =  $('body > div:nth-child('+i+') > div > div.producto-box-pack > div.producto-box-datos > p:nth-child(7)').text().trim()
+                                        let PrecioImportadora = $('body > div:nth-child('+i+') > div > div.producto-box-datos-boton > div.producto-box-boton.producto-box-prices > h3').text().replace('$', '').trim()
+                                        let Stock = $('body > div:nth-child('+i+') > div > div.producto-box-datos-boton > div:nth-child(2) > button').text().trim() == 'Comprar' ? 'Disponible' : '0'
+    
+                                        let JsonB = {
+                                            Sku,
+                                            Descripcion,
+                                            Marca,
+                                            Modelo,
+                                            Oem,
+                                            Origen,
+                                            PrecioImportadora,
+                                            Stock
+                                        }
+                                            ProductosB.push(JsonB)
+    
+                                        }
+    
+                                //Next Mannheim
+                                var headersCuatro = {
+                                    'authority': 'repuestos.buscalibre.cl',
+                                    'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
+                                    'accept-language': 'es-ES,es;q=0.9,en;q=0.8',
+                                    'cache-control': 'max-age=0',
+                                    'cookie': '_gcl_au=1.1.917615709.1649083232; _ga_CLZQ407LJG=GS1.1.1649085157.2.0.1649085220.0; bl_session=cag8j2f4ru2hl6u6gbjjdcv2fg; _ga=GA1.3.850693886.1649083233; _gid=GA1.3.1085283071.1649951418; _ga=GA1.2.850693886.1649083233; _gid=GA1.2.1085283071.1649951418; wcsid=1S31TJKS8WgR0nXe1X61q0T6oD6jrb0k; hblid=0jaLLNNB3KonDgMo1X61q0TrY6mA0ajA; _okdetect=%7B%22token%22%3A%2216499514213730%22%2C%22proto%22%3A%22about%3A%22%2C%22host%22%3A%22%22%7D; olfsk=olfsk33225248089623105; _okbk=cd4%3Dtrue%2Cvi5%3D0%2Cvi4%3D1649951423011%2Cvi3%3Dactive%2Cvi2%3Dfalse%2Cvi1%3Dfalse%2Ccd8%3Dchat%2Ccd6%3D0%2Ccd5%3Daway%2Ccd3%3Dfalse%2Ccd2%3D0%2Ccd1%3D0%2C; _ok=3092-520-10-6951; _oklv=1649952998326%2C1S31TJKS8WgR0nXe1X61q0T6oD6jrb0k',
+                                    'sec-ch-ua': '" Not A;Brand";v="99", "Chromium";v="100", "Google Chrome";v="100"',
+                                    'sec-ch-ua-mobile': '?0',
+                                    'sec-ch-ua-platform': '"Windows"',
+                                    'sec-fetch-dest': 'document',
+                                    'sec-fetch-mode': 'navigate',
+                                    'sec-fetch-site': 'none',
+                                    'sec-fetch-user': '?1',
+                                    'token_authorization': 'U2FsdGVkX18/6NBYUPpHoOqljGWMuk7i7hMA8p1gefkEWMINDX7ADGYloRi72f7t',
+                                    'upgrade-insecure-requests': '1',
+                                    'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.75 Safari/537.36'
+                                };
+                                
+                                var optionsCuatro = {
+                                    url: 'https://repuestos.buscalibre.cl/repuestos/search?q=' + Buscar,
+                                    headers: headersCuatro
+                                };
+                                
+                                function callback(error, response, body) {
+                                    if (!error && response.statusCode == 200) {
+                                        const $ = cheerio.load(body);
+                                        console.log('Mannheim OK')
+                                        $('strong').remove()
+                                        let Cantidad =  $('#repuestos > div > div').length + 1;
+                                        console.log(Cantidad)
+                                        let ProductoM = [];
+                                        for(let i = 0; i < Cantidad; i++){
+                                            let Descripcion = $('#repuestos > div > div:nth-child('+i+') > div.col-xs-8.col-md-6 > div > h3 > a').text().trim();
+                                            let Oem = $('#repuestos > div > div:nth-child('+i+') > div.col-xs-8.col-md-6 > div > div:nth-child(2)').text().trim();
+                                            let Fabricante = $('#repuestos > div > div:nth-child('+i+') > div.col-xs-8.col-md-6 > div > div:nth-child(3)').text().trim();
+                                            let Origen = $('#repuestos > div > div:nth-child('+i+') > div.col-xs-8.col-md-6 > div > div:nth-child(4)').text().trim();
+                                            let PrecioImportadora = $('#repuestos > div > div:nth-child('+i+') > div.col-xs-12.col-md-3 > div > h2').text().replace('$', '').trim();
+                                            let Aplicacion = $('#repuestos > div > div:nth-child('+i+') > div.col-xs-8.col-md-6 > div > div.cursor-pointer.ver-aplicaciones.color-dark-gray.margin-bottom-10.margin-top-10').attr('data-part-id')
+                                        
+                                            ProductoM.push({
+                                                Descripcion,
+                                                Oem,
+                                                Fabricante,
+                                                Origen,
+                                                PrecioImportadora,
+                                                Aplicacion
+                                            })                                    
+                                        }
+    
+                                        ProductoM.shift();
+                                        ProductoM.pop();
+                                        ProductoM.pop();
+                                        ProductoM.pop();
+                                        
+                                        jsonTablesAlsacia.results[0] = jsonTablesAlsacia.results[0].map(e => {
+                                            e.Precio = e.Precio.replace('$', '').trim();
+                                            return e;
+                                        })
+    
+                                        let SendJson = {
+                                            Alsacia: jsonTablesAlsacia.results,
+                                            Refax: jsonTablesRefax.results,
+                                            Bicimoto: ProductosB,
+                                            Mannheim: ProductoM
+                                        }
+    
+                        
+    
+                                        res.status(200).send(SendJson)
+                        
+                                        // res.status(200).send($('#repuestos > div.lista > div > div.col-xs-12.col-md-3 > div > h2').text());
+                                    }
+                                }
+                                
+                                request(optionsCuatro, callback);
+                                    }
+                                }
+    
+                                request(optionsTres, callbackTres);
+                            }
+                        }
+                        
+                        request(options2, callback);
+    
+    
+                        // end refax request
+    
+    
+                    }
+                }
+                
+                request(options, callback);
+    
+            } catch (error) {
+                res.status(200).send(error)
+            }
+        }else{
+            try {
+
+                var headers = {
+                    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:97.0) Gecko/20100101 Firefox/97.0',
+                    'Accept': '*/*',
+                    'Accept-Language': 'en-US,en;q=0.5',
+                    'Accept-Encoding': 'gzip, deflate, br',
+                    'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Origin': 'https://b2b.refaxchile.cl',
+                    'Connection': 'keep-alive',
+                    'Referer': 'https://b2b.refaxchile.cl/B2BRefax/buscadorA.jsp',
+                    'Cookie': CookieRefax.Cookie,
+                    'Sec-Fetch-Dest': 'empty',
+                    'Sec-Fetch-Mode': 'cors',
+                    'Sec-Fetch-Site': 'same-origin'
+                };
+                
+                var dataString = 'html=1&busqueda='+Buscar+'+&usuariop=sasval13&cliente=C77554630';
+                
+                var options = {
+                    url: 'https://b2b.refaxchile.cl/B2BRefax/buscadorA',
+                    method: 'POST',
+                    headers: headers,
+                    gzip: true,
+                    body: dataString
+                };
+                
+                function callback(error, response, body) {
+                    if (!error && response.statusCode == 200) {
+                        let RefaxResult = body;
+                        console.log('Refax OK')
+                        //Init Alsacia Request
+                        var headers2 = {
+                            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:97.0) Gecko/20100101 Firefox/97.0',
+                            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
+                            'Accept-Language': 'en-US,en;q=0.5',
+                            'Accept-Encoding': 'gzip, deflate, br',
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                            'Origin': 'https://www.repuestosalsacia.com',
+                            'Connection': 'keep-alive',
+                            'Referer': 'https://www.repuestosalsacia.com/alsacia/home',
+                            'Cookie': 'csrf_cookie_name=f84a0c09e3eb87ec1a369fd7f8850dbd; ci_session='+ CookieAlsacia.Cookie +'; ssupp.vid=vigpZqvCeuxVY; ssupp.visits=1; _ga=GA1.2.63973752.1656705830; _gid=GA1.2.1828128899.1656705830; _gat_gtag_UA_57096536_1=1',
+                            'Upgrade-Insecure-Requests': '1',
+                            'Sec-Fetch-Dest': 'document',
+                            'Sec-Fetch-Mode': 'navigate',
+                            'Sec-Fetch-Site': 'same-origin',
+                            'Sec-Fetch-User': '?1'
+                        };
+                        
+                        var dataString2 = 'csrf_test_name=f84a0c09e3eb87ec1a369fd7f8850dbd&filter=' + Buscar;
+                        
+                        var options2 = {
+                            url: 'https://www.repuestosalsacia.com/alsacia/buscador/search',
+                            method: 'POST',
+                            headers: headers2,
+                            gzip: true,
+                            body: dataString2
+                        };
+                        
+                        function callback(error, response, body) {
+                            if (!error && response.statusCode == 200) {
+                        
+                                const $ = cheerio.load(body);
+                                console.log('Alsacia OK')
+    
+                                const jsonTablesAlsacia = HtmlTableToJson.parse('<table>'+$('table').html().replace(/(\r\n|\n|\r)/gm, "").replace(/(\r\n|\n|\r)/gm, "").replace(/(\r\n|\n|\r)/gm, "").replace(/(\r\n|\n|\r)/gm, "").replace(/(\r\n|\n|\r)/gm, "").replace(/(\r\n|\n|\r)/gm, "").replace(/(\r\n|\n|\r)/gm, "").replace(/(\r\n|\n|\r)/gm, "").replace(/(\r\n|\n|\r)/gm, "").replace(/(\r\n|\n|\r)/gm, "").replace(/(\r\n|\n|\r)/gm, "").replace(/(\r\n|\n|\r)/gm, "").replace(/(\r\n|\n|\r)/gm, "").replace(/(\r\n|\n|\r)/gm, "").replace(/(\r\n|\n|\r)/gm, "").replace(/(\r\n|\n|\r)/gm, "").replace('Descripción', 'Descripcion').replace('Año Ini', 'AñoI').replace('Año Fin', 'AñoT')+'</table>');
+                         
+                                const jsonTablesRefax = HtmlTableToJson.parse('<table>'+RefaxResult.replace('MARCA', 'Marca').replace('MODELO', 'Modelo').replace('AÑO I', 'AñoI').replace('AÑO T', 'AñoT').replace('PRODUCTO', 'Producto').replace('DESCRIPCION', 'Descripcion').replace('ORIGEN', 'Origen').replace('N° REFAX', 'Sku').replace('$ NETO', 'PrecioImportadora').replace('STOCK', 'Stock')+'</table>');
+    
+                                //next Noriega
+                                let headersTres = {
+                                    'cache-control': 'no-cache',
+                                    'content-type': 'application/x-www-form-urlencoded',
+                                    cookie: CookieNoriega.Cookie };
+                             
+                                 var optionsTres = {
+                                     method: 'POST',
+                                     url: 'http://ecommerce.noriegavanzulli.cl/b2b/resultado_googleo_texto.jsp',
+                                     cookie: CookieNoriega.Cookie,
+                                     headers: headersTres,
+                                     form: { texto: Buscar }
+                                 };
+                             
+                                 function callbackTres(error, response, body) {
                                 if (!error && response.statusCode == 200) {
                                     var body = JSON.parse(body)
                                     const $ = cheerio.load(body.data);
-                                    console.log('Bicimoto OK')
-
-                                    $('strong').remove();
-                                    $('i').remove();
-
-                                    let cantidadB = $('body > div').length + 1;
-
-                                    let ProductosB = []
-
-                                    for(let i = 1; i < cantidadB; i++){
-                                    let Descripcion = $('body > div:nth-child('+ i +') > div > div.producto-box-pack > div.producto-box-datos > h2').text().trim();
-                                    let Sku = $('body > div:nth-child('+i+') > div > div.producto-box-pack > div.producto-box-datos > p:nth-child(2)').text().trim();
-                                    let Marca = $('body > div:nth-child('+i+') > div > div.producto-box-pack > div.producto-box-datos > p:nth-child(3)').text().trim();
-                                    let Modelo = $('body > div:nth-child('+i+') > div > div.producto-box-pack > div.producto-box-datos > p:nth-child(4)').text().trim() + ' ' + $('body > div:nth-child('+i+') > div > div.producto-box-pack > div.producto-box-datos > p:nth-child(5)').text().trim();
-                                    let Oem = $('body > div:nth-child('+i+') > div > div.producto-box-pack > div.producto-box-datos > p:nth-child(6)').text().trim();
-                                    let Origen =  $('body > div:nth-child('+i+') > div > div.producto-box-pack > div.producto-box-datos > p:nth-child(7)').text().trim()
-                                    let PrecioImportadora = $('body > div:nth-child('+i+') > div > div.producto-box-datos-boton > div.producto-box-boton.producto-box-prices > h3').text().replace('$', '').trim()
-                                    let Stock = $('body > div:nth-child('+i+') > div > div.producto-box-datos-boton > div:nth-child(2) > button').text().trim() == 'Comprar' ? 'Disponible' : '0'
-
-                                    let JsonB = {
-                                        Sku,
-                                        Descripcion,
-                                        Marca,
-                                        Modelo,
-                                        Oem,
-                                        Origen,
-                                        PrecioImportadora,
-                                        Stock
+                                    console.log('Noriega OK')
+                                    let Noriega = HtmlTableToJson.parse('<table><thead><th>Marca</th><th>Modelo</th><th>Año</th><th>Producto</th><th>Descripcion</th><th>Origen</th><th>Sku</th><th>Precio</th><th>Stock</th></thead>'+$('tbody').html()+'</table>');
+    
+                                //Next Mannheim
+                                var headersCuatro = {
+                                    'authority': 'repuestos.buscalibre.cl',
+                                    'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
+                                    'accept-language': 'es-ES,es;q=0.9,en;q=0.8',
+                                    'cache-control': 'max-age=0',
+                                    'cookie': '_gcl_au=1.1.917615709.1649083232; _ga_CLZQ407LJG=GS1.1.1649085157.2.0.1649085220.0; bl_session=cag8j2f4ru2hl6u6gbjjdcv2fg; _ga=GA1.3.850693886.1649083233; _gid=GA1.3.1085283071.1649951418; _ga=GA1.2.850693886.1649083233; _gid=GA1.2.1085283071.1649951418; wcsid=1S31TJKS8WgR0nXe1X61q0T6oD6jrb0k; hblid=0jaLLNNB3KonDgMo1X61q0TrY6mA0ajA; _okdetect=%7B%22token%22%3A%2216499514213730%22%2C%22proto%22%3A%22about%3A%22%2C%22host%22%3A%22%22%7D; olfsk=olfsk33225248089623105; _okbk=cd4%3Dtrue%2Cvi5%3D0%2Cvi4%3D1649951423011%2Cvi3%3Dactive%2Cvi2%3Dfalse%2Cvi1%3Dfalse%2Ccd8%3Dchat%2Ccd6%3D0%2Ccd5%3Daway%2Ccd3%3Dfalse%2Ccd2%3D0%2Ccd1%3D0%2C; _ok=3092-520-10-6951; _oklv=1649952998326%2C1S31TJKS8WgR0nXe1X61q0T6oD6jrb0k',
+                                    'sec-ch-ua': '" Not A;Brand";v="99", "Chromium";v="100", "Google Chrome";v="100"',
+                                    'sec-ch-ua-mobile': '?0',
+                                    'sec-ch-ua-platform': '"Windows"',
+                                    'sec-fetch-dest': 'document',
+                                    'sec-fetch-mode': 'navigate',
+                                    'sec-fetch-site': 'none',
+                                    'sec-fetch-user': '?1',
+                                    'token_authorization': 'U2FsdGVkX18/6NBYUPpHoOqljGWMuk7i7hMA8p1gefkEWMINDX7ADGYloRi72f7t',
+                                    'upgrade-insecure-requests': '1',
+                                    'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.75 Safari/537.36'
+                                };
+                                
+                                var optionsCuatro = {
+                                    url: 'https://repuestos.buscalibre.cl/repuestos/search?q=' + Buscar,
+                                    headers: headersCuatro
+                                };
+                                
+                                function callback(error, response, body) {
+                                    if (!error && response.statusCode == 200) {
+                                        const $ = cheerio.load(body);
+                                        console.log('Mannheim OK')
+                                        $('strong').remove()
+                                        let Cantidad =  $('#repuestos > div > div').length + 1;
+                                        console.log(Cantidad)
+                                        let ProductoM = [];
+                                        for(let i = 0; i < Cantidad; i++){
+                                            let Descripcion = $('#repuestos > div > div:nth-child('+i+') > div.col-xs-8.col-md-6 > div > h3 > a').text().trim();
+                                            let Oem = $('#repuestos > div > div:nth-child('+i+') > div.col-xs-8.col-md-6 > div > div:nth-child(2)').text().trim();
+                                            let Fabricante = $('#repuestos > div > div:nth-child('+i+') > div.col-xs-8.col-md-6 > div > div:nth-child(3)').text().trim();
+                                            let Origen = $('#repuestos > div > div:nth-child('+i+') > div.col-xs-8.col-md-6 > div > div:nth-child(4)').text().trim();
+                                            let PrecioImportadora = $('#repuestos > div > div:nth-child('+i+') > div.col-xs-12.col-md-3 > div > h2').text().replace('$', '').trim();
+                                            let Aplicacion = $('#repuestos > div > div:nth-child('+i+') > div.col-xs-8.col-md-6 > div > div.cursor-pointer.ver-aplicaciones.color-dark-gray.margin-bottom-10.margin-top-10').attr('data-part-id')
+                                        
+                                            ProductoM.push({
+                                                Descripcion,
+                                                Oem,
+                                                Fabricante,
+                                                Origen,
+                                                PrecioImportadora,
+                                                Aplicacion
+                                            })                                    
+                                        }
+    
+                                        ProductoM.shift();
+                                        ProductoM.pop();
+                                        ProductoM.pop();
+                                        ProductoM.pop();
+                                        
+                                        jsonTablesAlsacia.results[0] = jsonTablesAlsacia.results[0].map(e => {
+                                            e.Precio = e.Precio.replace('$', '').trim();
+                                            return e;
+                                        })
+    
+                                        let SendJson = {
+                                            Alsacia: jsonTablesAlsacia.results,
+                                            Refax: jsonTablesRefax.results,
+                                            Mannheim: ProductoM,
+                                            Noriega: Noriega._results[0]
+                                        }
+    
+                        
+    
+                                        res.status(200).send(SendJson)
+                        
+                                        // res.status(200).send($('#repuestos > div.lista > div > div.col-xs-12.col-md-3 > div > h2').text());
                                     }
-                                        ProductosB.push(JsonB)
-
-                                    }
-
-                            //Next Mannheim
-                            var headersCuatro = {
-                                'authority': 'repuestos.buscalibre.cl',
-                                'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
-                                'accept-language': 'es-ES,es;q=0.9,en;q=0.8',
-                                'cache-control': 'max-age=0',
-                                'cookie': '_gcl_au=1.1.917615709.1649083232; _ga_CLZQ407LJG=GS1.1.1649085157.2.0.1649085220.0; bl_session=cag8j2f4ru2hl6u6gbjjdcv2fg; _ga=GA1.3.850693886.1649083233; _gid=GA1.3.1085283071.1649951418; _ga=GA1.2.850693886.1649083233; _gid=GA1.2.1085283071.1649951418; wcsid=1S31TJKS8WgR0nXe1X61q0T6oD6jrb0k; hblid=0jaLLNNB3KonDgMo1X61q0TrY6mA0ajA; _okdetect=%7B%22token%22%3A%2216499514213730%22%2C%22proto%22%3A%22about%3A%22%2C%22host%22%3A%22%22%7D; olfsk=olfsk33225248089623105; _okbk=cd4%3Dtrue%2Cvi5%3D0%2Cvi4%3D1649951423011%2Cvi3%3Dactive%2Cvi2%3Dfalse%2Cvi1%3Dfalse%2Ccd8%3Dchat%2Ccd6%3D0%2Ccd5%3Daway%2Ccd3%3Dfalse%2Ccd2%3D0%2Ccd1%3D0%2C; _ok=3092-520-10-6951; _oklv=1649952998326%2C1S31TJKS8WgR0nXe1X61q0T6oD6jrb0k',
-                                'sec-ch-ua': '" Not A;Brand";v="99", "Chromium";v="100", "Google Chrome";v="100"',
-                                'sec-ch-ua-mobile': '?0',
-                                'sec-ch-ua-platform': '"Windows"',
-                                'sec-fetch-dest': 'document',
-                                'sec-fetch-mode': 'navigate',
-                                'sec-fetch-site': 'none',
-                                'sec-fetch-user': '?1',
-                                'token_authorization': 'U2FsdGVkX18/6NBYUPpHoOqljGWMuk7i7hMA8p1gefkEWMINDX7ADGYloRi72f7t',
-                                'upgrade-insecure-requests': '1',
-                                'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.75 Safari/537.36'
-                            };
-                            
-                            var optionsCuatro = {
-                                url: 'https://repuestos.buscalibre.cl/repuestos/search?q=' + Buscar,
-                                headers: headersCuatro
-                            };
-                            
-                            function callback(error, response, body) {
-                                if (!error && response.statusCode == 200) {
-                                    const $ = cheerio.load(body);
-                                    console.log('Mannheim OK')
-                                    $('strong').remove()
-                                    let Cantidad =  $('#repuestos > div > div').length + 1;
-                                    console.log(Cantidad)
-                                    let ProductoM = [];
-                                    for(let i = 0; i < Cantidad; i++){
-                                        let Descripcion = $('#repuestos > div > div:nth-child('+i+') > div.col-xs-8.col-md-6 > div > h3 > a').text().trim();
-                                        let Oem = $('#repuestos > div > div:nth-child('+i+') > div.col-xs-8.col-md-6 > div > div:nth-child(2)').text().trim();
-                                        let Fabricante = $('#repuestos > div > div:nth-child('+i+') > div.col-xs-8.col-md-6 > div > div:nth-child(3)').text().trim();
-                                        let Origen = $('#repuestos > div > div:nth-child('+i+') > div.col-xs-8.col-md-6 > div > div:nth-child(4)').text().trim();
-                                        let PrecioImportadora = $('#repuestos > div > div:nth-child('+i+') > div.col-xs-12.col-md-3 > div > h2').text().replace('$', '').trim();
-                                        let Aplicacion = $('#repuestos > div > div:nth-child('+i+') > div.col-xs-8.col-md-6 > div > div.cursor-pointer.ver-aplicaciones.color-dark-gray.margin-bottom-10.margin-top-10').attr('data-part-id')
-                                    
-                                        ProductoM.push({
-                                            Descripcion,
-                                            Oem,
-                                            Fabricante,
-                                            Origen,
-                                            PrecioImportadora,
-                                            Aplicacion
-                                        })                                    
-                                    }
-
-                                    ProductoM.shift();
-                                    ProductoM.pop();
-                                    ProductoM.pop();
-                                    ProductoM.pop();
-                                    
-                                    jsonTablesAlsacia.results[0] = jsonTablesAlsacia.results[0].map(e => {
-                                        e.Precio = e.Precio.replace('$', '').trim();
-                                        return e;
-                                    })
-
-                                    let SendJson = {
-                                        Alsacia: jsonTablesAlsacia.results,
-                                        Refax: jsonTablesRefax.results,
-                                        Bicimoto: ProductosB,
-                                        Mannheim: ProductoM
-                                    }
-
-                    
-
-                                    res.status(200).send(SendJson)
-                    
-                                    // res.status(200).send($('#repuestos > div.lista > div > div.col-xs-12.col-md-3 > div > h2').text());
                                 }
-                            }
-                            
-                            request(optionsCuatro, callback);
+                                
+                                request(optionsCuatro, callback);
+                                    }
                                 }
+    
+                                request(optionsTres, callbackTres);
                             }
-
-                            request(optionsTres, callbackTres);
                         }
+                        
+                        request(options2, callback);
+    
+    
+                        // end refax request
+    
+    
                     }
-                    
-                    request(options2, callback);
-
-
-                    // end refax request
-
-
                 }
+                
+                request(options, callback);
+    
+            } catch (error) {
+                res.status(200).send(error)
             }
-            
-            request(options, callback);
-
-        } catch (error) {
-            res.status(200).send(error)
         }
     }
 
@@ -3933,42 +4147,24 @@ static async EXPORT(req, res){
 
 static async GET_TESTTRES(req, res){
 
-var headers = {
-    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:97.0) Gecko/20100101 Firefox/97.0',
-    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
-    'Accept-Language': 'en-US,en;q=0.5',
-    'Accept-Encoding': 'gzip, deflate, br',
-    'Content-Type': 'application/x-www-form-urlencoded',
-    'Origin': 'https://www.repuestosalsacia.com',
-    'Connection': 'keep-alive',
-    'Referer': 'https://www.repuestosalsacia.com/alsacia/home',
-    'Cookie': 'csrf_cookie_name=f84a0c09e3eb87ec1a369fd7f8850dbd; ci_session=83422ea12f2ad491603529f9fa41a5a3fc74bed0; ssupp.vid=vigpZqvCeuxVY; ssupp.visits=1; _ga=GA1.2.63973752.1656705830; _gid=GA1.2.1828128899.1656705830; _gat_gtag_UA_57096536_1=1',
-    'Upgrade-Insecure-Requests': '1',
-    'Sec-Fetch-Dest': 'document',
-    'Sec-Fetch-Mode': 'navigate',
-    'Sec-Fetch-Site': 'same-origin',
-    'Sec-Fetch-User': '?1'
-};
+    var options = { method: 'POST',
+    url: 'http://ecommerce.noriegavanzulli.cl/b2b/resultado_googleo_texto.jsp',
+    headers:
+    {
+       'cache-control': 'no-cache',
+       'content-type': 'application/x-www-form-urlencoded',
+       cookie: 'JSESSIONID=00001L7bbl91ZjnR9DR2fAUCHbP:-1' },
+    form: { texto: 'metales corsa' } };
+  
+  request(options, function (error, response, body) {
+    if (error) throw new Error(error);
+    const $ = cheerio.load(body);
+    console.log($('tbody').html())
 
-var dataString = 'csrf_test_name=f84a0c09e3eb87ec1a369fd7f8850dbd&filter=parachoque sail 1.4';
+    let Noriega = HtmlTableToJson.parse('<table><thead><th>Marca</th><th>Modelo</th><th>Año</th><th>Producto</th><th>Descripcion</th><th>Origen</th><th>Sku</th><th>Precio</th><th>Stock</th></thead>'+$('tbody').html()+'</table>');
 
-var options = {
-    url: 'https://www.repuestosalsacia.com/alsacia/buscador/search',
-    method: 'POST',
-    headers: headers,
-    gzip: true,
-    body: dataString
-};
-
-function callback(error, response, body) {
-    if (!error && response.statusCode == 200) {
-
-        const $ = cheerio.load(body);
-        res.send($('table').html())
-    }
-}
-
-request(options, callback);
+    res.status(200).send(Noriega._results[0])
+  });
 
 }
 
