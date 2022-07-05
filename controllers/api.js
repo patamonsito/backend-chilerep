@@ -1801,10 +1801,6 @@ module.exports = class API {
                                         ProductoM.pop();
                                         ProductoM.pop();
                                         
-                                        jsonTablesAlsacia.results[0] = jsonTablesAlsacia.results[0].map(e => {
-                                            e.Precio = e.Precio.replace('$', '').trim();
-                                            return e;
-                                        })
     
                                         let SendJson = {
                                             Alsacia: jsonTablesAlsacia.results,
