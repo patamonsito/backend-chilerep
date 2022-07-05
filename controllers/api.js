@@ -1812,7 +1812,7 @@ module.exports = class API {
                                             Noriega: Noriega._results[0]
                                         }
     
-                                           return res.json(SendJson);
+                                        return res.status(200).send(SendJson);
                                     }
                                 }
                                 
@@ -1834,14 +1834,9 @@ module.exports = class API {
                 }
                 
                 request(options, callback);
-    
-
-                setTimeout(() => {
-                    return res.json(SendJson);
-                }, 10000);
 
             } catch (error) {
-                res.status(200).send(error)
+                return res.status(200).send(SendJson);
             }
         }
     }
