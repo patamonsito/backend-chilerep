@@ -1815,8 +1815,8 @@ module.exports = class API {
                                         }
     
                         
-    
-                                        res.status(200).send(SendJson)
+                                        console.log('go a enviar')
+                                        return res.status(200).send(SendJson)
                         
                                         // res.status(200).send($('#repuestos > div.lista > div > div.col-xs-12.col-md-3 > div > h2').text());
                                     }
