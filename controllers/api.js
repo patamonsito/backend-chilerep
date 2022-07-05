@@ -1836,8 +1836,9 @@ module.exports = class API {
                 request(options, callback);
     
 
-                console.log(SendJson, 'here')
-                return res.json(SendJson);
+                setTimeout(() => {
+                    return res.json(SendJson);
+                }, 10000);
 
             } catch (error) {
                 res.status(200).send(error)
