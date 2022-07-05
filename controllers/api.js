@@ -1613,7 +1613,7 @@ module.exports = class API {
                                     console.log('Noriega OK')
                                     let Noriega = HtmlTableToJson.parse('<table><thead><th>Marca</th><th>Modelo</th><th>Año</th><th>Producto</th><th>Descripcion</th><th>Origen</th><th>Sku</th><th>Precio</th><th>Stock</th></thead>'+$('tbody').html()+'</table>');
     
-                                    let SendJson = {
+                                    SendJson = {
                                         Alsacia: jsonTablesAlsacia.results,
                                         Refax: jsonTablesRefax.results,
                                         Bicimoto: ProductosB,
@@ -1622,7 +1622,7 @@ module.exports = class API {
                                     }
 
                     
-                                    res.status(200).send(SendJson)
+                                        return res.status(200).send(SendJson);
                                 
                                 
                                        }
