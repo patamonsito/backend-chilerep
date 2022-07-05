@@ -1814,8 +1814,9 @@ module.exports = class API {
                                             Noriega: Noriega._results[0]
                                         }
     
-                                        console.log(SendJson)
-                                        return res.status(200).send(SendJson)
+                                       setTimeout(() => {
+                                           return res.status(200).send(SendJson)
+                                       }, 1000);
                                     }
                                 }
                                 
