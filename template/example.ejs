@@ -1,0 +1,3087 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<meta name="Description" content="Enter your description here"/>
+<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/css/bootstrap.min.css"> -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<!-- <link rel="stylesheet" href="/style.css"> -->
+<title>Acta de Manifestación</title>
+<style>
+    body{
+
+        font-family:gobCL,"Trebuchet MS"
+    }
+    
+    .container{
+        width:40cm;
+        margin:0 auto;
+    }
+
+    .row{
+        display: flex;
+    }
+    
+    .col-md-1{
+        width:8.3%;
+    }
+
+    .col-md-2{
+        width:16.6%;
+    }
+
+    .col-md-3{
+        width: 25%;
+    }
+    
+    .col-md-4{
+        width: 33.3%;
+    }
+    
+    .col-md-6{
+        width:50%;
+    }
+    
+    .col-md-8{
+        width:66.6%;
+    }
+
+    .col-md-12{
+        width:100%;
+    }
+table{
+    width:100%;
+}
+</style>
+<style>
+        h1, h2, h3, h4, h5{
+            padding:1px;
+        }
+    body{
+
+        font-family:gobCL,"Trebuchet MS";
+        font-size: 12px
+    }
+    
+    .container{
+        width:40cm;
+        margin:0 auto;
+    }
+
+    .row{
+        display: flex;
+    }
+    
+    .col-md-1{
+        width:8.3%;
+    }
+
+    .col-md-2{
+        width:16.6%;
+    }
+
+    .col-md-3{
+        width: 25%;
+    }
+    
+    .col-md-4{
+        width: 33.3%;
+    }
+    
+    .col-md-6{
+        width:50%;
+    }
+    
+    .col-md-8{
+        width:66.6%;
+    }
+
+    .col-md-12{
+        width:100%;
+    }
+table{
+    width:100%;
+}
+
+.div3{
+    display: grid; 
+    grid-template-columns:  1fr 1fr 1fr; 
+    border:solid 1px #888; ; 
+    height: 3rem;
+    font-size: 90%;
+}
+.div4{
+    display: grid; 
+    grid-template-columns:  1fr 1fr 1fr 1fr; 
+    border:solid 1px #888; 
+    height: 3rem;
+    font-size: 90%;
+}
+
+.div3 span{
+    width: 33%
+}
+.div4 span{
+    display: inline-block;
+    padding-left:10px
+}
+
+table.border {
+    border:solid 1px #888;
+    margin:0;
+    padding:0;
+}
+table.border td{
+    margin:0;
+    border-top:solid 1px #888;
+}
+table.border tr:first-child td{
+    border-top:none
+}
+table.nobottom{
+    border-bottom:none;
+}
+
+td{
+    padding-left:6px;
+}
+
+.subray{
+    border-bottom: solid 1px;
+    padding: 0 1rem
+}
+</style>
+
+</head>
+<body style="zoom:76%;">
+    <!-- PAGINA 1 -->
+    <div style='padding-top:5rem'>
+        <table cellspacing="0"   width="100%">
+            <colgroup>
+                <col width="20%">
+                <col width="70%">
+                <col width="10%">
+            </colgroup>
+            <tr>
+                <td align='center'>
+                    SERVICIO DE REGISTRO<br />CIVIL E IDENTIFICACIÓN<br />CHILE
+                </td>
+                <td align='center'>
+                    <h3>
+                        ACTA DE MANIFESTACIÓN 
+                        <br />
+                        <small>Diligencia previa a la celebración de un matrimonio (Art. 9 Ley de Matrimonio Civil)</small>
+                    </h3>
+                </td>
+                <td align='center'>
+                    <div style="padding: 0.5rem 0.3rem; font-size: 12px; border:solid 1px"><small>M -1 M<br />COPIADOR-B</small></div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan='3' align='center'>
+                    
+                </td>
+            </tr>
+        </table>
+        <table cellspacing="0"  class='border'>
+            <tr>
+                <td>
+                    <small>CIRCUNSCRIPCIÓN</small><br />
+                    <%= nombre_oficina %>
+                    <br />
+                </td>
+                <td>
+                    <small>FECHA</small><br />
+                    <%= fecha_solicitud.split("T")[0].split("-").reverse().join("-") %><br />
+                </td>
+                <td>
+                    <small>NÚMERO</small><br /><br />
+                </td>
+            </tr>
+        </table>
+        <div>
+            <small>Ante mí comparecen los/las declarantes que a continuación se individualizan y exponen su intención de contraer matrimonio con arreglo a la Ley, declarando no tener impedimiento ni prohibición alguna y corresponderles a los siguientes hechos y menciones:</small>
+        </div>
+
+        <!--  MANIFESTANTE 1 -->
+        <strong>
+            DATOS DEL/LA MANIFESTANTE
+        </strong>
+        <table cellspacing="0"  class='border nobottom'>
+            <colgroup>
+                <col width='33.3%'>
+                <col width='33.3%'>
+                <col width='33.3%'>
+            </colgroup>
+            <tr>
+                <td>
+                    <span>Nombres</span><br />
+                    <%= contrayentes[0].nombre %>
+                    <br />
+                </td>
+                <td>
+                    <span>Apellido Paterno</span><br />
+                    <%= contrayentes[0].apellido_uno %>
+                    <br />
+                </td>
+                <td>
+                    <span>Apellido Materno</span><br />
+                    <%= contrayentes[0].apellido_dos %>
+                    <br />
+                </td>
+            </tr>
+        </table>
+        <table cellspacing="0"  class="border nobottom">
+            <colgroup>
+                <col width='25%'>
+                <col width='25%'>
+                <col width='25%'>
+                <col width='25%'>
+            </colgroup>
+            <tr>
+                <td>
+                    R.U.N o N° Ident.<br />
+                    <%= contrayentes[0].numero_identificacion %><%= (contrayentes[0].tipo_identificacion == 'r' ? '-' : '') %><%= contrayentes[0].dv_numero_identificacion %>
+                    <br />
+                </td>
+                <td>
+                    Tipo Doc.<br />
+                    <%= (contrayentes[0].tipo_identificacion == 'r' ? 'CÉDULA' : 'PASAPORTE') %><br />
+                </td>
+                <td>
+                    País emisor Doc.<br />
+                    <%= contrayentes[0].pais_identificacion %>
+                    <br />
+                </td>
+                <td>
+                    Nacionalidad<br />
+                    <%= contrayentes[0].nacionalidad %>
+                    <br />
+                </td>
+            </tr>
+        </table>
+        <table cellspacing="0"  class="border nobottom">
+            <colgroup>
+                <col width='25%'>
+                <col width='20%'>
+                <col width='20%'>
+                <col width='35%'>
+            </colgroup>
+            <tr>
+                <td>
+                    Lugar de Nacimiento<br />
+                    <%= contrayentes[0].lugar_nacimiento || '' %>
+                    <br />
+                </td>
+                <td>
+                    Fecha de Nacimiento<br />
+                    <%= contrayentes[0].fecha_nacimiento %>
+                    <br />
+                </td>
+                <td>
+                    Estado Civil<br />
+                    <%= contrayentes[0].estado_civil || '' %>
+                    <br />
+                </td>
+                <td>
+                    Profesión y Oficio<br />
+                    <%= contrayentes[0].profesion || '' %>
+                    <br />
+                </td>
+            </tr>
+            <tr>
+                <td colspan='2'>
+                    DOMICILIO &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Calle<br />
+                    <%= contrayentes[0].calle_nombre %>
+                    <br />
+                </td>
+                <td>
+                    N°<br />
+                    <%= contrayentes[0].calle_numero %>
+                    <br />
+                </td>
+                <td>
+                    Letra<br />
+                    <%= contrayentes[0].calle_letra %>
+                    <br />
+                </td>
+            </tr>
+        </table>
+        <table  cellspacing="0"class="border">
+            <colgroup>
+                <col width="35%">
+                <col width="15%">
+                <col width="35%">
+                <col width="15%">
+            </colgroup>
+            <tr>
+                <td>
+                    Resto de Domicilio (Depto., Villa, Población, Block, etc.) <br />
+                    <%= contrayentes[0].resto_domicilio%>
+                    <br />
+                </td>
+                <td>
+                    Comuna<br />
+                    <%= contrayentes[0].contrayente_comuna.nombre_comuna.toUpperCase() || '' %>
+                    <br />
+                </td>
+                <td>
+                    Región<br />
+                    <%= contrayentes[0].contrayente_region.nombre_region.replace('Region', '').toUpperCase() || '' %>
+                    <br />
+                </td>
+                <td>
+                    Código Postal<br />
+                    <%= contrayentes[0].codigo_postal %>
+                    <br />
+                </td>
+            </tr>
+        </table>
+
+        <strong>
+            DATOS DE LOS PADRES
+        </strong>
+        <table  cellspacing="0" class="border">
+            <colgroup>
+                <col width='25%'>
+                <col width='25%'>
+                <col width='25%'>
+                <col width='25%'>
+            </colgroup>
+            <tr>
+                <td>
+                    <b>Progenitor:</b> Nombres<br />
+                    <%= contrayentes[0].padres[0]?.nombres %>
+                    <br />
+                </td>
+                <td>
+                    Apellido Paterno <br />
+                    <%= contrayentes[0].padres[0]?.apellido_uno %><br />
+                </td>
+                <td>
+                    Apellido Materno<br />
+                    <%= contrayentes[0].padres[0]?.apellido_dos %><br />
+                </td>
+                <td>
+                    R.U.N./N° Ident.<br />
+                    <%= contrayentes[0].padres[0]?.numero_identificacion %><%= (contrayentes[0].padres[0]?.tipo_identificacion == 'r' ? '-' : '') %><%= contrayentes[0].padres[0]?.dv_numero_identificacion %>
+                    <br />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <b>Progenitor:</b> Nombres<br />
+                    <%= contrayentes[0].padres[1]?.nombres %>
+                    <br />
+                </td>
+                <td>
+                    Apellido Paterno <br />
+                    <%= contrayentes[0].padres[1]?.apellido_uno %><br />
+                </td>
+                <td>
+                    Apellido Materno<br />
+                    <%= contrayentes[0].padres[1]?.apellido_dos %><br />
+                </td>
+                <td>
+                    R.U.N./N° Ident.<br />
+                    <%= contrayentes[0].padres[1]?.numero_identificacion %><%= (contrayentes[0].padres[1]?.tipo_identificacion == 'r' ? '-' : '') %><%= contrayentes[0].padres[1]?.dv_numero_identificacion %>
+                    <br />
+                </td>
+            </tr>
+        </table>
+        
+        <strong>
+            DATOS DEL CÓNYUGE ANTERIOR
+        </strong>
+        <table cellspacing="0" class="border nobottom">
+            <colgroup>
+                <col width="25%">
+                <col width="25%">
+                <col width="25%">
+                <col width="25%">
+            </colgroup>
+            <tr>
+                <% cant = contrayentes[0].datos_contrayente_matrimonios[0]; %>
+                <td>
+                    Nombres<br />
+                    <% if(cant){  %>
+                        <%= cant.nombres %>
+                    <% } else { %>
+                        <br />
+                    <% } %>
+                </td>
+                <td>
+                    Apellido Paterno
+                    <br />
+                    <% if(cant){  %>
+                        <%= cant.apellido_uno %>
+                    <% } else { %>
+                        <br />
+                    <% } %>
+                    
+                </td>
+                <td>
+                    Apellido Materno<br />
+                    <% if(cant){  %>
+                        <%= cant.apellido_dos %>
+                    <% } else { %>
+                        <br />
+                    <% } %>
+                    
+                </td>
+                <td>
+                    R.U.N./N° Ident.
+                    <br />
+                    <% if(cant){  %>
+                        <%= cant.numero_identificacion %><%= (cant.tipo_identificacion == 'r' ? '-' + cant.dv_numero_identificacion : '') %>
+                    <% } else { %>
+                        <br />
+                    <% } %>
+                    
+                </td>
+            </tr>
+        </table>
+        <table cellspacing="0" class="border nobottom">
+            <colgroup>
+                <col width='37%'>
+                <col width='12%'>
+                <col width='12%'>
+                <col width='15%'>
+                <col width='12%'>
+                <col width='12%'>
+            </colgroup>
+            <tr>
+                <td>
+                    <b>Defunción del cónyuge anterior:</b> Lugar<br />
+                    <% if(cant && cant.lugar_defuncion){  %>
+                        <%= cant.lugar_defuncion %>
+                    <% } else { %>
+                        <br />
+                    <% } %>
+                </td>
+                <td>
+                    Fecha<br />
+                    <% if(cant && cant.fecha_defuncion && cant.fecha_defuncion.split("-")[0] != "0000"){  %>
+                        <%= cant.fecha_defuncion.split("-").reverse().join("-") %>
+                    <% } else { %>
+                        <br />
+                    <% } %>
+                </td>
+                <td>
+                    Año<br />
+                    <% if(cant && cant.fecha_defuncion && cant.fecha_defuncion.split("-")[0] != "0000"){  %>
+                        <%= cant.fecha_defuncion.split("-")[0] %>
+                    <% } else { %>
+                        <br />
+                    <% } %>
+                </td>
+                <td>
+                    Circunscripción<br />
+                    <% if(cant){  %>
+                        <%= cant.circunscripcion %>
+                    <% } else { %>
+                        <br />
+                    <% } %>
+                </td>
+                <td>
+                    N°<br />
+                    <% if(cant){  %>
+                        <%= cant.numero %>
+                    <% } else { %>
+                        <br />
+                    <% } %>
+                </td>
+                <td>
+                    Registro<br />
+                    <% if(cant){  %>
+                        <%= cant.registro %>
+                    <% } else { %>
+                        <br />
+                    <% } %>
+                </td>
+            </tr>
+        </table>
+        <table cellspacing="0" class="border">
+            <tr>
+                <td>
+                    <b>Divorcio: </b> Tribunal<br />
+                    <% if(cant){  %>
+                        <%= cant.tribunal %>
+                    <% } else { %>
+                        <br />
+                    <% } %>
+                </td>
+                <td>
+                    Causa Rol
+                    <br />
+                    <% if(cant && cant.causa_rol){  %>
+                        <%= cant.causa_rol %>
+                    <% } else { %>
+                        <br />
+                    <% } %>
+                </td>
+                <td>
+                    Fecha 1ª Instancia
+                    <br />
+                    <% if(cant && cant.fecha_instancia_uno && cant.fecha_instancia_uno.split("-")[0] != "0000"){  %>
+                        <%= cant.fecha_instancia_uno.split("-").reverse().join("-") %>
+                    <% } else { %>
+                        <br />
+                    <% } %>
+                </td>
+                <td>
+                    Fecha 2ª Instancia
+                    <br />
+                    <% if(cant && cant.fecha_instancia_dos && cant.fecha_instancia_dos.split("-")[0] != "0000"){  %>
+                        <%= cant.fecha_instancia_dos.split("-").reverse().join("-") %>
+                    <% } else { %>
+                        <br />
+                    <% } %>
+                </td>
+            </tr>
+        </table>
+    
+        <strong>
+            DATOS DE LAS PERSONAS QUE CONSIENTEN EN EL MATRIMONIO (Sólo para los mayores de 16 y menores de 18 años)
+        </strong>
+        <table cellspacing="0" class="border nobottom">
+            <colgroup>
+                <col width="50%">
+                <col width="50%">
+            </colgroup>
+            <tr>
+                <% var cons =  contrayentes[0].contrayente_consentimiento[0];  %>
+                <td>
+                    Consentimiento otorgado por: <br />
+                    <% if(cons){  %>
+                        <%= cons.nombres + " " + cons.apellido_uno + " " + cons.apellido_dos %>
+                    <% } else { %>
+                        <br />
+                    <% } %>
+                </td>
+                <td>
+                    En su calidad de: <br />
+                    <% if(cons){  %>
+                        <%= cons.calidad_consentimiento %>
+                    <% } else { %>
+                        <br />
+                    <% } %>
+                </td>
+            </tr>
+        </table>
+        <table cellspacing="0" class='border nobottom'>
+            <colgroup>
+                <col width="25%">
+                <col width="25%">
+                <col width="25%">
+                <col width="25%">
+            </colgroup>
+            <tr>
+                <td>
+                    R.U.N o N° Ident.<br />
+                    <% if(cons){  %>
+                        <%= cons.numero_identificacion + (cons.tipo_identificacion == 'p' ? '' : '-' + cons.dv_numero_identificacion) %>
+                    <% } else { %>
+                        <br />
+                    <% } %>
+                </td>
+                <td>
+                    Tipo Doc.<br />
+                    <% if(cons){  %>
+                        <%= cons.tipo_identificacion == 'p' ? 'PASAPORTE/DNI' : 'CÉDULA' %>
+                    <% } else { %>
+                        <br />
+                    <% } %>
+                </td>
+                <td>
+                    Pais emisor Doc.<br />
+                    <% if(cons){  %>
+                        <%= cons.pais_identificacion %>
+                    <% } else { %>
+                        <br />
+                    <% } %>
+                </td>
+                <td>
+                    Nacionalidad<br />
+                    <% if(cons){  %>
+                        <%= cons.nacionalidad %>
+                    <% } else { %>
+                        <br />
+                    <% } %>
+                </td>
+            </tr>
+        </table>
+        <table cellspacing="0" class="border nobottom" align="left">
+            <colgroup>
+                <col width="50%">
+                <col width="50%">
+            </colgroup>
+            <tr>
+                <% cons =  contrayentes[0].contrayente_consentimiento[1];  %>
+                <td>
+                    Consentimiento otorgado por: <br />
+                    <% if(cons){  %>
+                        <%= cons.nombres + " " + cons.apellido_uno + " " + cons.apellido_dos %>
+                    <% } else { %>
+                        <br />
+                    <% } %>
+                </td>
+                <td>
+                    En su calidad de: <br />
+                    <% if(cons){  %>
+                        <%= cons.calidad_consentimiento %>
+                    <% } else { %>
+                        <br />
+                    <% } %>
+                </td>
+            </tr>
+        </table>
+        <table cellspacing="0" class='border'>
+            <colgroup>
+                <col width="25%">
+                <col width="25%">
+                <col width="25%">
+                <col width="25%">
+            </colgroup>
+            <tr>
+                <td>
+                    R.U.N o N° Ident.<br />
+                    <% if(cons){  %>
+                        <%= cons.numero_identificacion + (cons.tipo_identificacion == 'p' ? '' : '-' + cons.dv_numero_identificacion) %>
+                    <% } else { %>
+                        <br />
+                    <% } %>
+                </td>
+                <td>
+                    Tipo Doc.<br />
+                    <% if(cons){  %>
+                        <%= cons.tipo_identificacion == 'p' ? 'PASAPORTE/DNI' : 'CÉDULA' %>
+                    <% } else { %>
+                        <br />
+                    <% } %>
+                </td>
+                <td>
+                    Pais emisor Doc.<br />
+                    <% if(cons){  %>
+                        <%= cons.pais_identificacion %>
+                    <% } else { %>
+                        <br />
+                    <% } %>
+                </td>
+                <td>
+                    Nacionalidad<br />
+                    <% if(cons){  %>
+                        <%= cons.nacionalidad %>
+                    <% } else { %>
+                        <br />
+                    <% } %>
+                </td>
+            </tr>
+        </table>
+       
+        <!--  MANIFESTANTE 2 -->
+        <strong>
+            DATOS DEL/LA MANIFESTANTE
+        </strong>
+        <table cellspacing="0"  class='border nobottom'>
+            <colgroup>
+                <col width='33.3%'>
+                <col width='33.3%'>
+                <col width='33.3%'>
+            </colgroup>
+            <tr>
+                <td>
+                    <span>Nombres</span><br />
+                    <%= contrayentes[1].nombre %>
+                    <br />
+                </td>
+                <td>
+                    <span>Apellido Paterno</span><br />
+                    <%= contrayentes[1].apellido_uno %>
+                    <br />
+                </td>
+                <td>
+                    <span>Apellido Materno</span><br />
+                    <%= contrayentes[1].apellido_dos %>
+                    <br />
+                </td>
+            </tr>
+        </table>
+        <table cellspacing="0"  class="border nobottom">
+            <colgroup>
+                <col width='25%'>
+                <col width='25%'>
+                <col width='25%'>
+                <col width='25%'>
+            </colgroup>
+            <tr>
+                <td>
+                    R.U.N o N° Ident.<br />
+                    <%= contrayentes[1].numero_identificacion %><%= (contrayentes[1].tipo_identificacion == 'r' ? '-' : '') %><%= contrayentes[1].dv_numero_identificacion %>
+                    <br />
+                </td>
+                <td>
+                    Tipo Doc.<br />
+                    <%= contrayentes[1].tipo_identificacion == 'r' ? 'CÉDULA' : 'PASAPORTE' %><br />
+                </td>
+                <td>
+                    País emisor Doc.<br />
+                    <%= contrayentes[1].pais_identificacion %>
+                    <br />
+                </td>
+                <td>
+                    Nacionalidad<br />
+                    <%= contrayentes[1].nacionalidad %>
+                    <br />
+                </td>
+            </tr>
+        </table>
+        <table cellspacing="0"  class="border nobottom">
+            <colgroup>
+                <col width='20%'>
+                <col width='20%'>
+                <col width='20%'>
+                <col width='40%'>
+            </colgroup>
+            <tr>
+                <td>
+                    Lugar de Nacimiento<br />
+                    <%= contrayentes[1].lugar_nacimiento || '' %>
+                    <br />
+                </td>
+                <td>
+                    Fecha de Nacimiento<br />
+                    <%= contrayentes[1].fecha_nacimiento %>
+                    <br />
+                </td>
+                <td>
+                    Estado Civil<br />
+                    <%= contrayentes[1].estado_civil || '' %>
+                    <br />
+                </td>
+                <td>
+                    Profesión y Oficio<br />
+                    <%= contrayentes[1].profesion || '' %>
+                    <br />
+                </td>
+            </tr>
+            <tr>
+                <td colspan='2'>
+                    DOMICILIO &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Calle<br />
+                    <%= contrayentes[1].calle_nombre %>
+                    <br />
+                </td>
+                <td>
+                    N°<br />
+                    <%= contrayentes[1].calle_numero %>
+                    <br />
+                </td>
+                <td>
+                    Letra<br />
+                    <%= contrayentes[1].calle_letra %>
+                    <br />
+                </td>
+            </tr>
+        </table>
+        <table cellspacing="0" class="border">
+            <colgroup>
+                <col width="35%">
+                <col width="15%">
+                <col width="35%">
+                <col width="15%">
+            </colgroup>
+            <tr>
+                <td>
+                    Resto de Domicilio (Depto., Villa, Población, Block, etc.) <br />
+                    <%= contrayentes[1].resto_domicilio %>
+                    <br />
+                </td>
+                <td>
+                    Comuna<br />
+                    <%= contrayentes[1].contrayente_comuna.nombre_comuna %>
+                    <br />
+                </td>
+                <td>
+                    Región<br />
+                    <%= contrayentes[1].contrayente_region.nombre_region.replace('Region', '').toUpperCase() || '' %>
+                    <br />
+                </td>
+                <td>
+                    Código Postal<br />
+                    <%= contrayentes[1].codigo_postal %>
+                    <br />
+                </td>
+            </tr>
+        </table>
+
+        <!-- PADRES -->
+        <strong>
+            DATOS DE LOS PADRES
+        </strong>
+        <table cellspacing="0" class="border">
+            <colgroup>
+                <col width='25%'>
+                <col width='25%'>
+                <col width='25%'>
+                <col width='25%'>
+            </colgroup>
+            <tr>
+                <td>
+                    <b>Progenitor:</b> Nombres<br />
+                    <%= contrayentes[1].padres[0]?.nombres %>
+                    <br />
+                </td>
+                <td>
+                    Apellido Paterno <br />
+                    <%= contrayentes[1].padres[0]?.apellido_uno %><br />
+                </td>
+                <td>
+                    Apellido Materno<br />
+                    <%= contrayentes[1].padres[0]?.apellido_dos %><br />
+                </td>
+                <td>
+                    R.U.N./N° Ident.<br />
+                    <%= contrayentes[1].padres[0]?.numero_identificacion %><%= (contrayentes[1].padres[0]?.tipo_identificacion == 'r' ? '-' : '') %><%= contrayentes[1].padres[0]?.dv_numero_identificacion %>
+                    <br />
+                </td>
+            </tr>
+            <tr>
+                <% if(contrayentes[1].padres[1]){ %>
+                    <td>
+                        <b>Progenitor:</b> Nombres<br />
+                        <%= contrayentes[1].padres[1] ? contrayentes[1].padres[1].nombres : '' %>
+                        <br />
+                    </td>
+                    <td>
+                        Apellido Paterno <br />
+                        <%= contrayentes[1].padres[1] ? contrayentes[1].padres[1].apellido_uno : '' %><br />
+                    </td>
+                    <td>
+                        Apellido Materno<br />
+                        <%= contrayentes[1].padres[1] ? contrayentes[1].padres[1].apellido_dos : '' %><br />
+                    </td>
+                    <td>
+                        R.U.N./N° Ident.<br />
+                        <%= contrayentes[1].padres[1].numero_identificacion %><%= (contrayentes[1].padres[1].tipo_identificacion == 'r' ? '-' : '') %><%= contrayentes[1].padres[1].dv_numero_identificacion %>
+                        <br />
+                    </td>
+
+                <% } else { %>
+                    <td>
+                        <b>Progenitor:</b> Nombres<br />
+                        <br />
+                    </td>
+                    <td>
+                        Apellido Paterno <br /><br />
+                    </td>
+                    <td>
+                        Apellido Materno<br />
+                        <br />
+                    </td>
+                    <td>
+                        R.U.N./N° Ident.<br />
+                        <br />
+                    </td>
+
+
+               <%  } %>
+            </tr>
+        </table>
+        
+        <strong>
+            DATOS DEL CÓNYUGE ANTERIOR
+        </strong>
+        
+        <table cellspacing="0" class="border nobottom">
+            <colgroup>
+                <col width="25%">
+                <col width="25%">
+                <col width="25%">
+                <col width="25%">
+            </colgroup>
+            <tr>
+                <% cant = contrayentes[1].datos_contrayente_matrimonios[0]; %>
+                <td>
+                    Nombres<br />
+                    <% if(cant){  %>
+                        <%= cant.nombres %>
+                    <% } else { %>
+                        <br />
+                    <% } %>
+                </td>
+                <td>
+                    Apellido Paterno
+                    <br />
+                    <% if(cant){  %>
+                        <%= cant.apellido_uno %>
+                    <% } else { %>
+                        <br />
+                    <% } %>
+                    
+                </td>
+                <td>
+                    Apellido Materno<br />
+                    <% if(cant){  %>
+                        <%= cant.apellido_dos %>
+                    <% } else { %>
+                        <br />
+                    <% } %>
+                    
+                </td>
+                <td>
+                    R.U.N./N° Ident.
+                    <br />
+                    <% if(cant){  %>
+                        <%= cant.numero_identificacion %><%= (cant.tipo_identificacion == 'r' ? '-' + cant.dv_numero_identificacion : '') %>
+                    <% } else { %>
+                        <br />
+                    <% } %>
+                    
+                </td>
+            </tr>
+        </table>
+        <table cellspacing="0" class="border nobottom">
+            <colgroup>
+                <col width='37%'>
+                <col width='12%'>
+                <col width='12%'>
+                <col width='15%'>
+                <col width='12%'>
+                <col width='12%'>
+            </colgroup>
+            <tr>
+                <td>
+                    <b>Defunción del cónyuge anterior:</b> Lugar<br />
+                    <% if(cant && cant.lugar_defuncion){  %>
+                        <%= cant.lugar_defuncion %>
+                    <% } else { %>
+                        <br />
+                    <% } %>
+                </td>
+                <td>
+                    Fecha<br />
+                    <% if(cant && cant.fecha_defuncion && cant.fecha_defuncion.split("-")[0] != "0000"){  %>
+                        <%= cant.fecha_defuncion.split("-").reverse().join("-") %>
+                    <% } else { %>
+                        <br />
+                    <% } %>
+                </td>
+                <td>
+                    Año<br />
+                    <% if(cant && cant.fecha_defuncion && cant.fecha_defuncion.split("-")[0] != "0000"){  %>
+                        <%= cant.fecha_defuncion.split("-")[0] %>
+                    <% } else { %>
+                        <br />
+                    <% } %>
+                </td>
+                <td>
+                    Circunscripción<br />
+                    <% if(cant){  %>
+                        <%= cant.circunscripcion %>
+                    <% } else { %>
+                        <br />
+                    <% } %>
+                </td>
+                <td>
+                    N°<br />
+                    <% if(cant){  %>
+                        <%= cant.numero %>
+                    <% } else { %>
+                        <br />
+                    <% } %>
+                </td>
+                <td>
+                    Registro<br />
+                    <% if(cant){  %>
+                        <%= cant.registro %>
+                    <% } else { %>
+                        <br />
+                    <% } %>
+                </td>
+            </tr>
+        </table>
+        <table cellspacing="0" class="border">
+            <tr>
+                <td>
+                    <b>Divorcio: </b> Tribunal<br />
+                    <% if(cant){  %>
+                        <%= cant.tribunal %>
+                    <% } else { %>
+                        <br />
+                    <% } %>
+                </td>
+                <td>
+                    Causa Rol
+                    <br />
+                    <% if(cant && cant.causa_rol){  %>
+                        <%= cant.causa_rol %>
+                    <% } else { %>
+                        <br />
+                    <% } %>
+                </td>
+                <td>
+                    Fecha 1ª Instancia
+                    <br />
+                    <% if(cant && cant.fecha_instancia_uno && cant.fecha_instancia_uno.split("-")[0] != "0000"){  %>
+                        <%= cant.fecha_instancia_uno.split("-").reverse().join("-") %>
+                    <% } else { %>
+                        <br />
+                    <% } %>
+                </td>
+                <td>
+                    Fecha 2ª Instancia
+                    <br />
+                    <% if(cant && cant.fecha_instancia_dos && cant.fecha_instancia_dos.split("-")[0] != "0000"){  %>
+                        <%= cant.fecha_instancia_dos.split("-").reverse().join("-") %>
+                    <% } else { %>
+                        <br />
+                    <% } %>
+                </td>
+            </tr>
+        </table>
+
+
+    </div>
+
+    <!-- PAGINA 2 -->
+    <div style='page-break-before:always;'>
+        <strong>
+            DATOS DE LAS PERSONAS QUE CONSIENTEN EN EL MATRIMONIO (Sólo para los mayores de 16 y menores de 18 años)
+        </strong>
+        <table cellspacing="0" class="border nobottom">
+            <colgroup>
+                <col width="50%">
+                <col width="50%">
+            </colgroup>
+            <tr>
+                <% var cons =  contrayentes[1].contrayente_consentimiento[0];  %>
+                <td>
+                    Consentimiento otorgado por: <br />
+                    <% if(cons){  %>
+                        <%= cons.nombres + " " + cons.apellido_uno + " " + cons.apellido_dos %>
+                    <% } else { %>
+                        <br />
+                    <% } %>
+                </td>
+                <td>
+                    En su calidad de: <br />
+                    <% if(cons){  %>
+                        <%= cons.calidad_consentimiento %>
+                    <% } else { %>
+                        <br />
+                    <% } %>
+                </td>
+            </tr>
+        </table>
+        <table cellspacing="0" class='border nobottom'>
+            <colgroup>
+                <col width="25%">
+                <col width="25%">
+                <col width="25%">
+                <col width="25%">
+            </colgroup>
+            <tr>
+                <td>
+                    R.U.N o N° Ident.<br />
+                    <% if(cons){  %>
+                        <%= cons.numero_identificacion + (cons.tipo_identificacion == 'p' ? '' : '-' + cons.dv_numero_identificacion) %>
+                    <% } else { %>
+                        <br />
+                    <% } %>
+                </td>
+                <td>
+                    Tipo Doc.<br />
+                    <% if(cons){  %>
+                        <%= cons.tipo_identificacion == 'p' ? 'PASAPORTE/DNI' : 'CÉDULA' %>
+                    <% } else { %>
+                        <br />
+                    <% } %>
+                </td>
+                <td>
+                    Pais emisor Doc.<br />
+                    <% if(cons){  %>
+                        <%= cons.pais_identificacion %>
+                    <% } else { %>
+                        <br />
+                    <% } %>
+                </td>
+                <td>
+                    Nacionalidad<br />
+                    <% if(cons){  %>
+                        <%= cons.nacionalidad %>
+                    <% } else { %>
+                        <br />
+                    <% } %>
+                </td>
+            </tr>
+        </table>
+        <table cellspacing="0" class="border nobottom" align="left">
+            <colgroup>
+                <col width="50%">
+                <col width="50%">
+            </colgroup>
+            <tr>
+                <% cons =  contrayentes[1].contrayente_consentimiento[1];  %>
+                <td>
+                    Consentimiento otorgado por: <br />
+                    <% if(cons){  %>
+                        <%= cons.nombres + " " + cons.apellido_uno + " " + cons.apellido_dos %>
+                    <% } else { %>
+                        <br />
+                    <% } %>
+                </td>
+                <td>
+                    En su calidad de: <br />
+                    <% if(cons){  %>
+                        <%= cons.calidad_consentimiento %>
+                    <% } else { %>
+                        <br />
+                    <% } %>
+                </td>
+            </tr>
+        </table>
+        <table cellspacing="0" class='border'>
+            <colgroup>
+                <col width="25%">
+                <col width="25%">
+                <col width="25%">
+                <col width="25%">
+            </colgroup>
+            <tr>
+                <td>
+                    R.U.N o N° Ident.<br />
+                    <% if(cons){  %>
+                        <%= cons.numero_identificacion + (cons.tipo_identificacion == 'p' ? '' : '-' + cons.dv_numero_identificacion) %>
+                    <% } else { %>
+                        <br />
+                    <% } %>
+                </td>
+                <td>
+                    Tipo Doc.<br />
+                    <% if(cons){  %>
+                        <%= cons.tipo_identificacion == 'p' ? 'PASAPORTE/DNI' : 'CÉDULA' %>
+                    <% } else { %>
+                        <br />
+                    <% } %>
+                </td>
+                <td>
+                    Pais emisor Doc.<br />
+                    <% if(cons){  %>
+                        <%= cons.pais_identificacion %>
+                    <% } else { %>
+                        <br />
+                    <% } %>
+                </td>
+                <td>
+                    Nacionalidad<br />
+                    <% if(cons){  %>
+                        <%= cons.nacionalidad %>
+                    <% } else { %>
+                        <br />
+                    <% } %>
+                </td>
+            </tr>
+        </table>
+
+    
+        <table cellspacing='0' cellpadding='0'>
+            <tr>
+                <td>Los manifestantes declaran haber recibido información escrita sobre las finalidades del matrimonio; los derechos y deberes reciprocos; los regímenes patrimoniales; la necesidad que el consentimiento que se exprese en la Celebración del Matrimonio sea libre y espontáneo y la existencia de cursos de preparación para el matrimonio.
+                </td>
+            </tr>
+        </table>
+    
+        <table cellspacing='0' cellpadding='0'>
+            <tr>
+                <td class="titulo">CURSOS DE PREPARACIÓN PARA EL MATRIMONIO</td>
+            </tr>
+        </table>
+    
+        <table class='border'>
+            <tr>
+                <td>
+                    <table cellpadding='5' cellspacing='0'>
+                        <tr>
+                            <td>En relación con los Cursos de Preparación para el Matrimonio los manifestantes declaran que:<br>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <% if(gestiones[0].curso_matrimonio_estado.toLowerCase() == 'realizado'){ %>
+                                <input type="checkbox"  checked /> &nbsp;
+                                <% } else { %>
+                                    <input type="checkbox"  /> &nbsp;
+                                <% } %>
+                                    los realizaron en <span class='subray'><%= gestiones[0].curso_matrimonio_lugar %></span> segun consta en Certificado N° <span class="subray"><%= gestiones[0].curso_matrimonio_num_certificado %></span> de fecha <span class="subray"><%= gestiones[0].curso_matrimonio_fecha %></span>  que se tuvo a la vista
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <% if(gestiones[0].curso_matrimonio_estado.toLowerCase() == 'agendado'){ %>
+                                    <input type="checkbox"  checked /> &nbsp;
+                                <% } else { %>
+                                    <input type="checkbox"  /> &nbsp;
+                                <% } %>
+                                Los realizarán previamente a la Celebración del Matrimonio.
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <% if(gestiones[0].curso_matrimonio_estado.toLowerCase() == 'excluye'){ %>
+                                    <input type="checkbox"  checked /> &nbsp;
+                                <% } else { %>
+                                    <input type="checkbox"  /> &nbsp;
+                                <% } %>
+                                De común acuerdo se excluyen de ellos, por conocer suficientemente los deberes y derechos del estado matrimonial.
+                            </td>
+                        </tr>
+
+                    </table>
+                </td>
+            </tr>
+        </table>
+    
+        <table cellspacing='0' cellpadding='0'>
+            <tr>
+                <td class="titulo">LUGAR DE CELEBRACIÓN DEL MATRIMONIO</td>
+            </tr>
+        </table>
+    
+        <table class='border' cellpadding='10'>
+            <colgroup>
+                <col width='25%' >
+                <col width='25%' >
+                <col width='25%' >
+                <col width='25%' >
+            </colgroup>
+            <tr>
+                <td>
+                    <% if(gestiones[0].lugar_celebracion_ante.toLowerCase() == 'oficial civil') { %>
+                        <input type="checkbox"   checked /> &nbsp;
+                    <% } else { %>
+                        <input type="checkbox" /> &nbsp;
+                    <% } %>
+                    Ante Oficial Civil: En
+
+                </td>
+                <td>
+                    <% if(gestiones[0].lugar_celebracion_lugar.toLowerCase() == 'oficina') { %>
+                        <input type="checkbox"   checked /> &nbsp;
+                    <% } else { %>
+                        <input type="checkbox" /> &nbsp;
+                    <% } %>
+                    Oficina
+                </td>
+                <td>
+                    <% if(gestiones[0].lugar_celebracion_lugar.toLowerCase() == 'otro') { %>
+                        <input type="checkbox"   checked /> &nbsp;
+                    <% } else { %>
+                        <input type="checkbox" /> &nbsp;
+                    <% } %>
+                    Otro
+                </td>
+                <td>
+                    <% if(gestiones[0].lugar_celebracion_ante.toLowerCase() == 'ministro culto') { %>
+                        <input type="checkbox"   checked /> &nbsp;
+                    <% } else { %>
+                        <input type="checkbox" /> &nbsp;
+                    <% } %>
+                    Ante Ministro de Culto
+                </td>
+            </tr>
+        </table>
+    
+        
+    
+        <div class="center">
+            <strong>
+                DATOS DE LOS TESTIGOS
+            </strong>
+        </div>
+        
+        <strong>
+            TESTIGO 1
+        </strong>
+        <table class="border">
+            <tr>
+                <td>
+                    <table cellspacing='0' cellpadding='0'>
+                        <colgroup>
+                            <col width="33%">
+                            <col width="33%">
+                            <col width="33%">
+                        </colgroup>
+                        <tr>
+                            <td>
+                                Nombres <br>
+                                <%= testigos[0].nombre %>
+                                <br>
+                            </td>
+                            <td>
+                                Apellido Paterno <br>
+                                <%= testigos[0].apellido_uno %>
+                                <br>
+                            </td>
+                            <td>
+                                Apellido Materno <br>
+                                <%= testigos[0].apellido_dos %>
+                                <br>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <table cellspacing='0' cellpadding='0'>
+                        <colgroup>
+                            <col width="25%">
+                            <col width="25%">
+                            <col width="25%">
+                            <col width="25%">
+                        </colgroup>
+                        <tr>
+                            <td>
+                                RUN o N° Ident. <br>
+                                <%= testigos[0].run + "-" + testigos[0].dv_run %>
+                                <br>
+                            </td>
+                            <td>
+                                Tipo Documento <br>
+                                CÉDULA
+                                <br>
+                            </td>
+                            <td>
+                                País Emisor Documento <br>
+                                CHILE
+                                <br>
+                            </td>
+                            <td>
+                                Nacionalidad <br>
+                                <%= testigos[0].nacionalidad %>
+                                <br>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <table cellspacing='0' cellpadding='0'>
+                        <tr>
+                            <td colspan='2'>
+                                DOMICILIO &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Calle<br />
+                                <%= testigos[0].calle_nombre %>
+                                <br />
+                            </td>
+                            <td>
+                                N°<br />
+                                <%= testigos[0].calle_numero %>
+                                <br />
+                            </td>
+                            <td>
+                                Letra<br />
+                                <%= testigos[0].calle_letra %>
+                                <br />
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <table cellspacing='0' cellpadding='0'>
+                        <colgroup>
+                            <col width='40%'>
+                            <col width='20%'>
+                            <col  width='25%'>
+                            <col  width='15%'>
+                        </colgroup>
+                        <tr>
+                            <td>
+                                Resto de Domicilio (Depto., Villa, Población, Block, etc.<br />
+                                <%= testigos[0].resto_domicilio %>
+                                <br />
+                            </td>
+                            <td>
+                                Comuna<br />
+                                <%= testigos[0].testigo_comuna.nombre_comuna.toUpperCase() || '' %>
+                                <br />
+                            </td>
+                            <td>
+                                Región<br />
+                                <%= testigos[0].testigo_region.nombre_region.replace('Region', '').toUpperCase() || '' %>
+                                <br />
+                            </td>
+                            <td>
+                                Código Postal<br />
+                                <%= testigos[0].codigo_postal %>
+                                <br />
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+        
+        <strong>
+            TESTIGO 2
+        </strong>
+        <table class="border">
+            <tr>
+                <td>
+                    <table cellspacing='0' cellpadding='0'>
+                        <colgroup>
+                            <col width="33%">
+                            <col width="33%">
+                            <col width="33%">
+                        </colgroup>
+                        <tr>
+                            <td>
+                                Nombres <br>
+                                <%= testigos[1].nombre %>
+                                <br>
+                            </td>
+                            <td>
+                                Apellido Paterno <br>
+                                <%= testigos[1].apellido_uno %>
+                                <br>
+                            </td>
+                            <td>
+                                Apellido Materno <br>
+                                <%= testigos[1].apellido_dos %>
+                                <br>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <table cellspacing='0' cellpadding='0'>
+                        <colgroup>
+                            <col width="25%">
+                            <col width="25%">
+                            <col width="25%">
+                            <col width="25%">
+                        </colgroup>
+                        <tr>
+                            <td>
+                                RUN o N° Ident. <br>
+                                <%= testigos[1].run + "-" + testigos[1].dv_run %>
+                                <br>
+                            </td>
+                            <td>
+                                Tipo Documento <br>
+                                RUN
+                                <br>
+                            </td>
+                            <td>
+                                País Emisor Documento <br><br>
+                            </td>
+                            <td>
+                                Nacionalidad <br>
+                                <%= testigos[1].nacionalidad %>
+                                <br>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <table cellspacing='0' cellpadding='0'>
+                        <tr>
+                            <td colspan='2'>
+                                DOMICILIO &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Calle<br />
+                                <%= testigos[1].calle_nombre %>
+                                <br />
+                            </td>
+                            <td>
+                                N°<br />
+                                <%= testigos[1].calle_numero %>
+                                <br />
+                            </td>
+                            <td>
+                                Letra<br />
+                                <%= testigos[1].calle_letra %>
+                                <br />
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <table cellspacing='0' cellpadding='0'>
+                        <colgroup>
+                            <col width='40%'>
+                            <col width='20%'>
+                            <col  width='25%'>
+                            <col  width='15%'>
+                        </colgroup>
+                        <tr>
+                            <td>
+                                Resto de Domicilio (Depto., Villa, Población, Block, etc.<br />
+                                <%= testigos[1].resto_domicilio %>
+                                <br />
+                            </td>
+                            <td>
+                                Comuna<br />
+                                <%= testigos[1].testigo_comuna.nombre_comuna.toUpperCase() || '' %>
+                                <br />
+                            </td>
+                            <td>
+                                Región<br />
+                                <%= testigos[1].testigo_region.nombre_region.replace('Region', '').toUpperCase() || '' %>
+                                <br />
+                            </td>
+                            <td>
+                                Código Postal<br />
+                                <%= testigos[1].codigo_postal %>
+                                <br />
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    
+        <table cellspacing='0' cellpadding='0'>
+            <tr>
+                <td class="col-md-12">
+                    <b><br>&nbsp;&nbsp;&nbsp;OBSERVACIONES:</b>
+                    <p>
+                        <%= gestiones[0].observacion_subinscripciones %>
+                    </p>
+                </td>
+
+            </tr>
+        </table>
+    
+        <table cellspacing='0' cellpadding='0'>
+            <td>
+                <td>
+                    Los/Las manifestantes bajo juramento o promesa de decir verdad, señalan no tener incapacidad ni prohibición legal para contraer matrimonio. Del mismo modo los testigos bajo juramento o promesa de decir verdad señalan que les consta que los/las manifestantes no tienen las incapacidades o prohibiciones legales para contraer matrimonio establecidas en la ley. Se dio lectura a los articulos 5° al 7° de la Ley de Matrimonio Civil.<br>Además, los testigos declaran bajo juramento o promesa de decir verdad, no encontrarse en ninguna de las situaciones descritas en el articulo 16 de la Ley de Matrimonio Civil.
+                </td>
+
+            </td>
+        </table>
+        
+        <table class='border'  cellspacing='0' cellpadding='0'>
+            <colgroup>
+                <col width='75%'>
+                <col width='25%'>
+            </colgroup>
+            <tr>
+                <td>
+                    <strong>FIRMAS</strong>
+                    <table cellspacing='0' cellpadding='0'>
+                        <tr>
+                            <td>
+                                <div style='border-bottom:solid 1px; width:90%; height:60px'></div>
+                                RUN Conyuge 1:  <%= contrayentes[0].numero_identificacion %>-<%= contrayentes[0].dv_numero_identificacion %>
+                            </td>
+                            <td>
+                                <div style='border-bottom:solid 1px; width:90%; height:60px'></div>
+                                RUN Conyuge 2:  <%= contrayentes[1].numero_identificacion %>-<%= contrayentes[1].dv_numero_identificacion %>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div style='border-bottom:solid 1px; width:90%; height:60px'></div>
+                                RUN Testigo 1:  <%= testigos[0].run %>-<%= testigos[0].dv_run %> </td>
+                            <td>
+                                <div style='border-bottom:solid 1px; width:90%; height:60px'></div>
+                                RUN Testigo 2:  <%= testigos[1].run %>-<%= testigos[1].dv_run %></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div style='border-bottom:solid 1px; width:90%; height:60px'></div>
+                                RUN:</td>
+                            <td>
+                                <div style='border-bottom:solid 1px; width:90%; height:60px'></div>
+                                RUN:</td>
+                        </tr>
+                    </table>
+                </td>
+                <td valign="bottom" style='border-left: solid 1px;' align="center">
+                    <span>
+                        <div style='border-bottom:solid 1px; width:90%; height:60px'></div>
+                        Firma y sello<br />Oficial Civil
+                    </span>
+                </td>
+            </tr>
+        </table>
+    
+
+    </div>
+
+    <!-- PAGINA 3 -->
+    <div style='page-break-before:always; padding-top:5rem'>
+        <table cellspacing="0"   width="100%">
+            <colgroup>
+                <col width="20%">
+                <col width="70%">
+                <col width="10%">
+            </colgroup>
+            <tr>
+                <td align='center'>
+                    SERVICIO DE REGISTRO<br />CIVIL E IDENTIFICACIÓN<br />CHILE
+                </td>
+                <td align='center'>
+                    <h3>
+                        ACTA DE MANIFESTACIÓN 
+                        <br />
+                        <small>Diligencia previa a la celebración de un matrimonio (Art. 9 Ley de Matrimonio Civil)</small>
+                    </h3>
+                </td>
+                <td align='center'>
+                    <div style="padding: 0.5rem 0.3rem; font-size: 12px; border:solid 1px"><small>M -1 M<br />COPIADOR-A</small></div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan='3' align='center'>
+                    
+                </td>
+            </tr>
+        </table>
+        <table cellspacing="0"  class='border'>
+            <tr>
+                <td>
+                    <small>CIRCUNSCRIPCIÓN</small><br />
+                    <%= nombre_oficina %>
+                    <br />
+                </td>
+                <td>
+                    <small>FECHA</small><br />
+                    <%= fecha_solicitud.split("T")[0].split("-").reverse().join("-") %><br />
+                </td>
+                <td>
+                    <small>NÚMERO</small><br /><br />
+                </td>
+            </tr>
+        </table>
+        <div>
+            <small>Ante mí comparecen los/las declarantes que a continuación se individualizan y exponen su intención de contraer matrimonio con arreglo a la Ley, declarando no tener impedimiento ni prohibición alguna y corresponderles a los siguientes hechos y menciones:</small>
+        </div>
+
+        <!--  MANIFESTANTE 1 -->
+        <strong>
+            DATOS DEL/LA MANIFESTANTE
+        </strong>
+        <table cellspacing="0"  class='border nobottom'>
+            <colgroup>
+                <col width='33.3%'>
+                <col width='33.3%'>
+                <col width='33.3%'>
+            </colgroup>
+            <tr>
+                <td>
+                    <span>Nombres</span><br />
+                    <%= contrayentes[0].nombre %>
+                    <br />
+                </td>
+                <td>
+                    <span>Apellido Paterno</span><br />
+                    <%= contrayentes[0].apellido_uno %>
+                    <br />
+                </td>
+                <td>
+                    <span>Apellido Materno</span><br />
+                    <%= contrayentes[0].apellido_dos %>
+                    <br />
+                </td>
+            </tr>
+        </table>
+        <table cellspacing="0"  class="border nobottom">
+            <colgroup>
+                <col width='25%'>
+                <col width='25%'>
+                <col width='25%'>
+                <col width='25%'>
+            </colgroup>
+            <tr>
+                <td>
+                    R.U.N o N° Ident.<br />
+                    <%= contrayentes[0].numero_identificacion %><%= (contrayentes[0].tipo_identificacion == 'r' ? '-' : '') %><%= contrayentes[0].dv_numero_identificacion %>
+                    <br />
+                </td>
+                <td>
+                    Tipo Doc.<br />
+                    <%= (contrayentes[0].tipo_identificacion == 'r' ? 'CÉDULA' : 'PASAPORTE') %><br />
+                </td>
+                <td>
+                    País emisor Doc.<br />
+                    <%= contrayentes[0].pais_identificacion %>
+                    <br />
+                </td>
+                <td>
+                    Nacionalidad<br />
+                    <%= contrayentes[0].nacionalidad %>
+                    <br />
+                </td>
+            </tr>
+        </table>
+        <table cellspacing="0"  class="border nobottom">
+            <colgroup>
+                <col width='25%'>
+                <col width='20%'>
+                <col width='20%'>
+                <col width='35%'>
+            </colgroup>
+            <tr>
+                <td>
+                    Lugar de Nacimiento<br />
+                    <%= contrayentes[0].lugar_nacimiento || '' %>
+                    <br />
+                </td>
+                <td>
+                    Fecha de Nacimiento<br />
+                    <%= contrayentes[0].fecha_nacimiento %>
+                    <br />
+                </td>
+                <td>
+                    Estado Civil<br />
+                    <%= contrayentes[0].estado_civil || '' %>
+                    <br />
+                </td>
+                <td>
+                    Profesión y Oficio<br />
+                    <%= contrayentes[0].profesion || '' %>
+                    <br />
+                </td>
+            </tr>
+            <tr>
+                <td colspan='2'>
+                    DOMICILIO &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Calle<br />
+                    <%= contrayentes[0].calle_nombre %>
+                    <br />
+                </td>
+                <td>
+                    N°<br />
+                    <%= contrayentes[0].calle_numero %>
+                    <br />
+                </td>
+                <td>
+                    Letra<br />
+                    <%= contrayentes[0].calle_letra %>
+                    <br />
+                </td>
+            </tr>
+        </table>
+        <table  cellspacing="0"class="border">
+            <colgroup>
+                <col width='40%'>
+                <col width='20%'>
+                <col  width='25%'>
+                <col  width='15%'>
+            </colgroup>
+            <tr>
+                <td>
+                    Resto de Domicilio (Depto., Villa, Población, Block, etc.) <br />
+                    <%= contrayentes[0].resto_domicilio%>
+                    <br />
+                </td>
+                <td>
+                    Comuna<br />
+                    <%= contrayentes[0].contrayente_comuna.nombre_comuna.toUpperCase() || '' %>
+                    <br />
+                </td>
+                <td>
+                    Región<br />
+                    <%= contrayentes[0].contrayente_region.nombre_region.replace('Region', '').toUpperCase() || '' %>
+                    <br />
+                </td>
+                <td>
+                    Código Postal<br />
+                    <%= contrayentes[0].codigo_postal %>
+                    <br />
+                </td>
+            </tr>
+        </table>
+
+        <strong>
+            DATOS DE LOS PADRES
+        </strong>
+        <table  cellspacing="0" class="border">
+            <colgroup>
+                <col width='25%'>
+                <col width='25%'>
+                <col width='25%'>
+                <col width='25%'>
+            </colgroup>
+            <tr>
+                <td>
+                    <b>Progenitor:</b> Nombres<br />
+                    <%= contrayentes[0].padres[0]?.nombres %>
+                    <br />
+                </td>
+                <td>
+                    Apellido Paterno <br />
+                    <%= contrayentes[0].padres[0]?.apellido_uno %><br />
+                </td>
+                <td>
+                    Apellido Materno<br />
+                    <%= contrayentes[0].padres[0]?.apellido_dos %><br />
+                </td>
+                <td>
+                    R.U.N./N° Ident.<br />
+                    <%= contrayentes[0].padres[0]?.numero_identificacion %><%= (contrayentes[0].padres[0]?.tipo_identificacion == 'r' ? '-' : '') %><%= contrayentes[0].padres[0]?.dv_numero_identificacion %>
+                    <br />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <b>Progenitor:</b> Nombres<br />
+                    <%= contrayentes[0].padres[1]?.nombres %>
+                    <br />
+                </td>
+                <td>
+                    Apellido Paterno <br />
+                    <%= contrayentes[0].padres[1]?.apellido_uno %><br />
+                </td>
+                <td>
+                    Apellido Materno<br />
+                    <%= contrayentes[0].padres[1]?.apellido_dos %><br />
+                </td>
+                <td>
+                    R.U.N./N° Ident.<br />
+                    <%= contrayentes[0].padres[1]?.numero_identificacion %><%= (contrayentes[0].padres[1]?.tipo_identificacion == 'r' ? '-' : '') %><%= contrayentes[0].padres[1]?.dv_numero_identificacion %>
+                    <br />
+                </td>
+            </tr>
+        </table>
+        
+        <strong>
+            DATOS DEL CÓNYUGE ANTERIOR
+        </strong>
+        <table cellspacing="0" class="border nobottom">
+            <colgroup>
+                <col width="25%">
+                <col width="25%">
+                <col width="25%">
+                <col width="25%">
+            </colgroup>
+            <tr>
+                <% cant = contrayentes[0].datos_contrayente_matrimonios[0]; %>
+                <td>
+                    Nombres<br />
+                    <% if(cant){  %>
+                        <%= cant.nombres %>
+                    <% } else { %>
+                        <br />
+                    <% } %>
+                </td>
+                <td>
+                    Apellido Paterno
+                    <br />
+                    <% if(cant){  %>
+                        <%= cant.apellido_uno %>
+                    <% } else { %>
+                        <br />
+                    <% } %>
+                    
+                </td>
+                <td>
+                    Apellido Materno<br />
+                    <% if(cant){  %>
+                        <%= cant.apellido_dos %>
+                    <% } else { %>
+                        <br />
+                    <% } %>
+                    
+                </td>
+                <td>
+                    R.U.N./N° Ident.
+                    <br />
+                    <% if(cant){  %>
+                        <%= cant.numero_identificacion %><%= (cant.tipo_identificacion == 'r' ? '-' + cant.dv_numero_identificacion : '') %>
+                    <% } else { %>
+                        <br />
+                    <% } %>
+                    
+                </td>
+            </tr>
+        </table>
+        <table cellspacing="0" class="border nobottom">
+            <colgroup>
+                <col width='37%'>
+                <col width='12%'>
+                <col width='12%'>
+                <col width='15%'>
+                <col width='12%'>
+                <col width='12%'>
+            </colgroup>
+            <tr>
+                <td>
+                    <b>Defunción del cónyuge anterior:</b> Lugar<br />
+                    <% if(cant && cant.lugar_defuncion){  %>
+                        <%= cant.lugar_defuncion %>
+                    <% } else { %>
+                        <br />
+                    <% } %>
+                </td>
+                <td>
+                    Fecha<br />
+                    <% if(cant && cant.fecha_defuncion && cant.fecha_defuncion.split("-")[0] != "0000"){  %>
+                        <%= cant.fecha_defuncion.split("-").reverse().join("-") %>
+                    <% } else { %>
+                        <br />
+                    <% } %>
+                </td>
+                <td>
+                    Año<br />
+                    <% if(cant && cant.fecha_defuncion && cant.fecha_defuncion.split("-")[0] != "0000"){  %>
+                        <%= cant.fecha_defuncion.split("-")[0] %>
+                    <% } else { %>
+                        <br />
+                    <% } %>
+                </td>
+                <td>
+                    Circunscripción<br />
+                    <% if(cant){  %>
+                        <%= cant.circunscripcion %>
+                    <% } else { %>
+                        <br />
+                    <% } %>
+                </td>
+                <td>
+                    N°<br />
+                    <% if(cant){  %>
+                        <%= cant.numero %>
+                    <% } else { %>
+                        <br />
+                    <% } %>
+                </td>
+                <td>
+                    Registro<br />
+                    <% if(cant){  %>
+                        <%= cant.registro %>
+                    <% } else { %>
+                        <br />
+                    <% } %>
+                </td>
+            </tr>
+        </table>
+        <table cellspacing="0" class="border">
+            <tr>
+                <td>
+                    <b>Divorcio: </b> Tribunal<br />
+                    <% if(cant){  %>
+                        <%= cant.tribunal %>
+                    <% } else { %>
+                        <br />
+                    <% } %>
+                </td>
+                <td>
+                    Causa Rol
+                    <br />
+                    <% if(cant && cant.causa_rol){  %>
+                        <%= cant.causa_rol %>
+                    <% } else { %>
+                        <br />
+                    <% } %>
+                </td>
+                <td>
+                    Fecha 1ª Instancia
+                    <br />
+                    <% if(cant && cant.fecha_instancia_uno && cant.fecha_instancia_uno.split("-")[0] != "0000"){  %>
+                        <%= cant.fecha_instancia_uno.split("-").reverse().join("-") %>
+                    <% } else { %>
+                        <br />
+                    <% } %>
+                </td>
+                <td>
+                    Fecha 2ª Instancia
+                    <br />
+                    <% if(cant && cant.fecha_instancia_dos && cant.fecha_instancia_dos.split("-")[0] != "0000"){  %>
+                        <%= cant.fecha_instancia_dos.split("-").reverse().join("-") %>
+                    <% } else { %>
+                        <br />
+                    <% } %>
+                </td>
+            </tr>
+        </table>
+    
+        <strong>
+            DATOS DE LAS PERSONAS QUE CONSIENTEN EN EL MATRIMONIO (Sólo para los mayores de 16 y menores de 18 años)
+        </strong>
+        <table cellspacing="0" class="border nobottom">
+            <colgroup>
+                <col width="50%">
+                <col width="50%">
+            </colgroup>
+            <tr>
+                <% var cons =  contrayentes[0].contrayente_consentimiento[0];  %>
+                <td>
+                    Consentimiento otorgado por: <br />
+                    <% if(cons){  %>
+                        <%= cons.nombres + " " + cons.apellido_uno + " " + cons.apellido_dos %>
+                    <% } else { %>
+                        <br />
+                    <% } %>
+                </td>
+                <td>
+                    En su calidad de: <br />
+                    <% if(cons){  %>
+                        <%= cons.calidad_consentimiento %>
+                    <% } else { %>
+                        <br />
+                    <% } %>
+                </td>
+            </tr>
+        </table>
+        <table cellspacing="0" class='border nobottom'>
+            <colgroup>
+                <col width="25%">
+                <col width="25%">
+                <col width="25%">
+                <col width="25%">
+            </colgroup>
+            <tr>
+                <td>
+                    R.U.N o N° Ident.<br />
+                    <% if(cons){  %>
+                        <%= cons.numero_identificacion + (cons.tipo_identificacion == 'p' ? '' : '-' + cons.dv_numero_identificacion) %>
+                    <% } else { %>
+                        <br />
+                    <% } %>
+                </td>
+                <td>
+                    Tipo Doc.<br />
+                    <% if(cons){  %>
+                        <%= cons.tipo_identificacion == 'p' ? 'PASAPORTE/DNI' : 'CÉDULA' %>
+                    <% } else { %>
+                        <br />
+                    <% } %>
+                </td>
+                <td>
+                    Pais emisor Doc.<br />
+                    <% if(cons){  %>
+                        <%= cons.pais_identificacion %>
+                    <% } else { %>
+                        <br />
+                    <% } %>
+                </td>
+                <td>
+                    Nacionalidad<br />
+                    <% if(cons){  %>
+                        <%= cons.nacionalidad %>
+                    <% } else { %>
+                        <br />
+                    <% } %>
+                </td>
+            </tr>
+        </table>
+        <table cellspacing="0" class="border nobottom" align="left">
+            <colgroup>
+                <col width="50%">
+                <col width="50%">
+            </colgroup>
+            <tr>
+                <% cons =  contrayentes[0].contrayente_consentimiento[1];  %>
+                <td>
+                    Consentimiento otorgado por: <br />
+                    <% if(cons){  %>
+                        <%= cons.nombres + " " + cons.apellido_uno + " " + cons.apellido_dos %>
+                    <% } else { %>
+                        <br />
+                    <% } %>
+                </td>
+                <td>
+                    En su calidad de: <br />
+                    <% if(cons){  %>
+                        <%= cons.calidad_consentimiento %>
+                    <% } else { %>
+                        <br />
+                    <% } %>
+                </td>
+            </tr>
+        </table>
+        <table cellspacing="0" class='border'>
+            <colgroup>
+                <col width="25%">
+                <col width="25%">
+                <col width="25%">
+                <col width="25%">
+            </colgroup>
+            <tr>
+                <td>
+                    R.U.N o N° Ident.<br />
+                    <% if(cons){  %>
+                        <%= cons.numero_identificacion + (cons.tipo_identificacion == 'p' ? '' : '-' + cons.dv_numero_identificacion) %>
+                    <% } else { %>
+                        <br />
+                    <% } %>
+                </td>
+                <td>
+                    Tipo Doc.<br />
+                    <% if(cons){  %>
+                        <%= cons.tipo_identificacion == 'p' ? 'PASAPORTE/DNI' : 'CÉDULA' %>
+                    <% } else { %>
+                        <br />
+                    <% } %>
+                </td>
+                <td>
+                    Pais emisor Doc.<br />
+                    <% if(cons){  %>
+                        <%= cons.pais_identificacion %>
+                    <% } else { %>
+                        <br />
+                    <% } %>
+                </td>
+                <td>
+                    Nacionalidad<br />
+                    <% if(cons){  %>
+                        <%= cons.nacionalidad %>
+                    <% } else { %>
+                        <br />
+                    <% } %>
+                </td>
+            </tr>
+        </table>
+       
+        <!--  MANIFESTANTE 2 -->
+        <strong>
+            DATOS DEL/LA MANIFESTANTE
+        </strong>
+        <table cellspacing="0"  class='border nobottom'>
+            <colgroup>
+                <col width='33.3%'>
+                <col width='33.3%'>
+                <col width='33.3%'>
+            </colgroup>
+            <tr>
+                <td>
+                    <span>Nombres</span><br />
+                    <%= contrayentes[1].nombre %>
+                    <br />
+                </td>
+                <td>
+                    <span>Apellido Paterno</span><br />
+                    <%= contrayentes[1].apellido_uno %>
+                    <br />
+                </td>
+                <td>
+                    <span>Apellido Materno</span><br />
+                    <%= contrayentes[1].apellido_dos %>
+                    <br />
+                </td>
+            </tr>
+        </table>
+        <table cellspacing="0"  class="border nobottom">
+            <colgroup>
+                <col width='25%'>
+                <col width='25%'>
+                <col width='25%'>
+                <col width='25%'>
+            </colgroup>
+            <tr>
+                <td>
+                    R.U.N o N° Ident.<br />
+                    <%= contrayentes[1].numero_identificacion %><%= (contrayentes[1].tipo_identificacion == 'r' ? '-' : '') %><%= contrayentes[1].dv_numero_identificacion %>
+                    <br />
+                </td>
+                <td>
+                    Tipo Doc.<br />
+                    <%= contrayentes[1].tipo_identificacion == 'r' ? 'CÉDULA' : 'PASAPORTE' %><br />
+                </td>
+                <td>
+                    País emisor Doc.<br />
+                    <%= contrayentes[1].pais_identificacion %>
+                    <br />
+                </td>
+                <td>
+                    Nacionalidad<br />
+                    <%= contrayentes[1].nacionalidad %>
+                    <br />
+                </td>
+            </tr>
+        </table>
+        <table cellspacing="0"  class="border nobottom">
+            <colgroup>
+                <col width='20%'>
+                <col width='20%'>
+                <col width='20%'>
+                <col width='40%'>
+            </colgroup>
+            <tr>
+                <td>
+                    Lugar de Nacimiento<br />
+                    <%= contrayentes[1].lugar_nacimiento || '' %>
+                    <br />
+                </td>
+                <td>
+                    Fecha de Nacimiento<br />
+                    <%= contrayentes[1].fecha_nacimiento %>
+                    <br />
+                </td>
+                <td>
+                    Estado Civil<br />
+                    <%= contrayentes[1].estado_civil || '' %>
+                    <br />
+                </td>
+                <td>
+                    Profesión y Oficio<br />
+                    <%= contrayentes[1].profesion || '' %>
+                    <br />
+                </td>
+            </tr>
+            <tr>
+                <td colspan='2'>
+                    DOMICILIO &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Calle<br />
+                    <%= contrayentes[1].calle_nombre %>
+                    <br />
+                </td>
+                <td>
+                    N°<br />
+                    <%= contrayentes[1].calle_numero %>
+                    <br />
+                </td>
+                <td>
+                    Letra<br />
+                    <%= contrayentes[1].calle_letra %>
+                    <br />
+                </td>
+            </tr>
+        </table>
+        <table cellspacing="0" class="border">
+            <colgroup>
+                <col width='49.8%'>
+                <col width='16.6%'>
+                <col  width='16.6%'>
+                <col  width='16.6%'>
+            </colgroup>
+            <tr>
+                <td>
+                    Resto de Domicilio (Depto., Villa, Población, Block, etc.) <br />
+                    <%= contrayentes[1].resto_domicilio %>
+                    <br />
+                </td>
+                <td>
+                    Comuna<br />
+                    <%= contrayentes[1].contrayente_comuna.nombre_comuna.toUpperCase() %>
+                    <br />
+                </td>
+                <td>
+                    Región<br />
+                    <%= contrayentes[1].contrayente_region.nombre_region.replace('Region', '').toUpperCase() || '' %>
+                    <br />
+                </td>
+                <td>
+                    Código Postal<br />
+                    <%= contrayentes[1].codigo_postal %>
+                    <br />
+                </td>
+            </tr>
+        </table>
+
+        <!-- PADRES -->
+        <strong>
+            DATOS DE LOS PADRES
+        </strong>
+        <table cellspacing="0" class="border">
+            <colgroup>
+                <col width='25%'>
+                <col width='25%'>
+                <col width='25%'>
+                <col width='25%'>
+            </colgroup>
+            <tr>
+                <td>
+                    <b>Progenitor:</b> Nombres<br />
+                    <%= contrayentes[1].padres[0]?.nombres %>
+                    <br />
+                </td>
+                <td>
+                    Apellido Paterno <br />
+                    <%= contrayentes[1].padres[0]?.apellido_uno %><br />
+                </td>
+                <td>
+                    Apellido Materno<br />
+                    <%= contrayentes[1].padres[0]?.apellido_dos %><br />
+                </td>
+                <td>
+                    R.U.N./N° Ident.<br />
+                    <%= contrayentes[1].padres[0]?.numero_identificacion %><%= (contrayentes[1].padres[0]?.tipo_identificacion == 'r' ? '-' : '') %><%= contrayentes[1].padres[0]?.dv_numero_identificacion %>
+                    <br />
+                </td>
+            </tr>
+            <tr>
+                <% if(contrayentes[1].padres[1]){ %>
+                    <td>
+                        <b>Progenitor:</b> Nombres<br />
+                        <%= contrayentes[1].padres[1] ? contrayentes[1].padres[1].nombres : '' %>
+                        <br />
+                    </td>
+                    <td>
+                        Apellido Paterno <br />
+                        <%= contrayentes[1].padres[1] ? contrayentes[1].padres[1].apellido_uno : '' %><br />
+                    </td>
+                    <td>
+                        Apellido Materno<br />
+                        <%= contrayentes[1].padres[1] ? contrayentes[1].padres[1].apellido_dos : '' %><br />
+                    </td>
+                    <td>
+                        R.U.N./N° Ident.<br />
+                        <%= contrayentes[1].padres[1].numero_identificacion %><%= (contrayentes[1].padres[1].tipo_identificacion == 'r' ? '-' : '') %><%= contrayentes[1].padres[1].dv_numero_identificacion %>
+                        <br />
+                    </td>
+
+                <% } else { %>
+                    <td>
+                        <b>Progenitor:</b> Nombres<br />
+                        <br />
+                    </td>
+                    <td>
+                        Apellido Paterno <br /><br />
+                    </td>
+                    <td>
+                        Apellido Materno<br />
+                        <br />
+                    </td>
+                    <td>
+                        R.U.N./N° Ident.<br />
+                        <br />
+                    </td>
+
+
+               <%  } %>
+            </tr>
+        </table>
+        
+        <strong>
+            DATOS DEL CÓNYUGE ANTERIOR
+        </strong>
+        
+        <table cellspacing="0" class="border nobottom">
+            <colgroup>
+                <col width="25%">
+                <col width="25%">
+                <col width="25%">
+                <col width="25%">
+            </colgroup>
+            <tr>
+                <% cant = contrayentes[1].datos_contrayente_matrimonios[0]; %>
+                <td>
+                    Nombres<br />
+                    <% if(cant){  %>
+                        <%= cant.nombres %>
+                    <% } else { %>
+                        <br />
+                    <% } %>
+                </td>
+                <td>
+                    Apellido Paterno
+                    <br />
+                    <% if(cant){  %>
+                        <%= cant.apellido_uno %>
+                    <% } else { %>
+                        <br />
+                    <% } %>
+                    
+                </td>
+                <td>
+                    Apellido Materno<br />
+                    <% if(cant){  %>
+                        <%= cant.apellido_dos %>
+                    <% } else { %>
+                        <br />
+                    <% } %>
+                    
+                </td>
+                <td>
+                    R.U.N./N° Ident.
+                    <br />
+                    <% if(cant){  %>
+                        <%= cant.numero_identificacion %><%= (cant.tipo_identificacion == 'r' ? '-' + cant.dv_numero_identificacion : '') %>
+                    <% } else { %>
+                        <br />
+                    <% } %>
+                    
+                </td>
+            </tr>
+        </table>
+        <table cellspacing="0" class="border nobottom">
+            <colgroup>
+                <col width='37%'>
+                <col width='12%'>
+                <col width='12%'>
+                <col width='15%'>
+                <col width='12%'>
+                <col width='12%'>
+            </colgroup>
+            <tr>
+                <td>
+                    <b>Defunción del cónyuge anterior:</b> Lugar<br />
+                    <% if(cant && cant.lugar_defuncion){  %>
+                        <%= cant.lugar_defuncion %>
+                    <% } else { %>
+                        <br />
+                    <% } %>
+                </td>
+                <td>
+                    Fecha<br />
+                    <% if(cant && cant.fecha_defuncion && cant.fecha_defuncion.split("-")[0] != "0000"){  %>
+                        <%= cant.fecha_defuncion.split("-").reverse().join("-") %>
+                    <% } else { %>
+                        <br />
+                    <% } %>
+                </td>
+                <td>
+                    Año<br />
+                    <% if(cant && cant.fecha_defuncion && cant.fecha_defuncion.split("-")[0] != "0000"){  %>
+                        <%= cant.fecha_defuncion.split("-")[0] %>
+                    <% } else { %>
+                        <br />
+                    <% } %>
+                </td>
+                <td>
+                    Circunscripción<br />
+                    <% if(cant){  %>
+                        <%= cant.circunscripcion %>
+                    <% } else { %>
+                        <br />
+                    <% } %>
+                </td>
+                <td>
+                    N°<br />
+                    <% if(cant){  %>
+                        <%= cant.numero %>
+                    <% } else { %>
+                        <br />
+                    <% } %>
+                </td>
+                <td>
+                    Registro<br />
+                    <% if(cant){  %>
+                        <%= cant.registro %>
+                    <% } else { %>
+                        <br />
+                    <% } %>
+                </td>
+            </tr>
+        </table>
+        <table cellspacing="0" class="border">
+            <tr>
+                <td>
+                    <b>Divorcio: </b> Tribunal<br />
+                    <% if(cant){  %>
+                        <%= cant.tribunal %>
+                    <% } else { %>
+                        <br />
+                    <% } %>
+                </td>
+                <td>
+                    Causa Rol
+                    <br />
+                    <% if(cant && cant.causa_rol){  %>
+                        <%= cant.causa_rol %>
+                    <% } else { %>
+                        <br />
+                    <% } %>
+                </td>
+                <td>
+                    Fecha 1ª Instancia
+                    <br />
+                    <% if(cant && cant.fecha_instancia_uno && cant.fecha_instancia_uno.split("-")[0] != "0000"){  %>
+                        <%= cant.fecha_instancia_uno.split("-").reverse().join("-") %>
+                    <% } else { %>
+                        <br />
+                    <% } %>
+                </td>
+                <td>
+                    Fecha 2ª Instancia
+                    <br />
+                    <% if(cant && cant.fecha_instancia_dos && cant.fecha_instancia_dos.split("-")[0] != "0000"){  %>
+                        <%= cant.fecha_instancia_dos.split("-").reverse().join("-") %>
+                    <% } else { %>
+                        <br />
+                    <% } %>
+                </td>
+            </tr>
+        </table>
+
+
+    </div>
+
+    <!-- PAGINA 4 -->
+    <div style='page-break-before:always;'>
+        <strong>
+            DATOS DE LAS PERSONAS QUE CONSIENTEN EN EL MATRIMONIO (Sólo para los mayores de 16 y menores de 18 años)
+        </strong>
+        <table cellspacing="0" class="border nobottom">
+            <colgroup>
+                <col width="50%">
+                <col width="50%">
+            </colgroup>
+            <tr>
+                <% var cons =  contrayentes[1].contrayente_consentimiento[0];  %>
+                <td>
+                    Consentimiento otorgado por: <br />
+                    <% if(cons){  %>
+                        <%= cons.nombres + " " + cons.apellido_uno + " " + cons.apellido_dos %>
+                    <% } else { %>
+                        <br />
+                    <% } %>
+                </td>
+                <td>
+                    En su calidad de: <br />
+                    <% if(cons){  %>
+                        <%= cons.calidad_consentimiento %>
+                    <% } else { %>
+                        <br />
+                    <% } %>
+                </td>
+            </tr>
+        </table>
+        <table cellspacing="0" class='border nobottom'>
+            <colgroup>
+                <col width="25%">
+                <col width="25%">
+                <col width="25%">
+                <col width="25%">
+            </colgroup>
+            <tr>
+                <td>
+                    R.U.N o N° Ident.<br />
+                    <% if(cons){  %>
+                        <%= cons.numero_identificacion + (cons.tipo_identificacion == 'p' ? '' : '-' + cons.dv_numero_identificacion) %>
+                    <% } else { %>
+                        <br />
+                    <% } %>
+                </td>
+                <td>
+                    Tipo Doc.<br />
+                    <% if(cons){  %>
+                        <%= cons.tipo_identificacion == 'p' ? 'PASAPORTE/DNI' : 'CÉDULA' %>
+                    <% } else { %>
+                        <br />
+                    <% } %>
+                </td>
+                <td>
+                    Pais emisor Doc.<br />
+                    <% if(cons){  %>
+                        <%= cons.pais_identificacion %>
+                    <% } else { %>
+                        <br />
+                    <% } %>
+                </td>
+                <td>
+                    Nacionalidad<br />
+                    <% if(cons){  %>
+                        <%= cons.nacionalidad %>
+                    <% } else { %>
+                        <br />
+                    <% } %>
+                </td>
+            </tr>
+        </table>
+        <table cellspacing="0" class="border nobottom" align="left">
+            <colgroup>
+                <col width="50%">
+                <col width="50%">
+            </colgroup>
+            <tr>
+                <% cons =  contrayentes[1].contrayente_consentimiento[1];  %>
+                <td>
+                    Consentimiento otorgado por: <br />
+                    <% if(cons){  %>
+                        <%= cons.nombres + " " + cons.apellido_uno + " " + cons.apellido_dos %>
+                    <% } else { %>
+                        <br />
+                    <% } %>
+                </td>
+                <td>
+                    En su calidad de: <br />
+                    <% if(cons){  %>
+                        <%= cons.calidad_consentimiento %>
+                    <% } else { %>
+                        <br />
+                    <% } %>
+                </td>
+            </tr>
+        </table>
+        <table cellspacing="0" class='border'>
+            <colgroup>
+                <col width="25%">
+                <col width="25%">
+                <col width="25%">
+                <col width="25%">
+            </colgroup>
+            <tr>
+                <td>
+                    R.U.N o N° Ident.<br />
+                    <% if(cons){  %>
+                        <%= cons.numero_identificacion + (cons.tipo_identificacion == 'p' ? '' : '-' + cons.dv_numero_identificacion) %>
+                    <% } else { %>
+                        <br />
+                    <% } %>
+                </td>
+                <td>
+                    Tipo Doc.<br />
+                    <% if(cons){  %>
+                        <%= cons.tipo_identificacion == 'p' ? 'PASAPORTE/DNI' : 'CÉDULA' %>
+                    <% } else { %>
+                        <br />
+                    <% } %>
+                </td>
+                <td>
+                    Pais emisor Doc.<br />
+                    <% if(cons){  %>
+                        <%= cons.pais_identificacion %>
+                    <% } else { %>
+                        <br />
+                    <% } %>
+                </td>
+                <td>
+                    Nacionalidad<br />
+                    <% if(cons){  %>
+                        <%= cons.nacionalidad %>
+                    <% } else { %>
+                        <br />
+                    <% } %>
+                </td>
+            </tr>
+        </table>
+
+    
+        <table cellspacing='0' cellpadding='0'>
+            <tr>
+                <td>Los manifestantes declaran haber recibido información escrita sobre las finalidades del matrimonio; los derechos y deberes reciprocos; los regímenes patrimoniales; la necesidad que el consentimiento que se exprese en la Celebración del Matrimonio sea libre y espontáneo y la existencia de cursos de preparación para el matrimonio.
+                </td>
+            </tr>
+        </table>
+    
+        <table cellspacing='0' cellpadding='0'>
+            <tr>
+                <td class="titulo">CURSOS DE PREPARACIÓN PARA EL MATRIMONIO</td>
+            </tr>
+        </table>
+    
+        <table class='border'>
+            <tr>
+                <td>
+                    <table cellpadding='5' cellspacing='0'>
+                        <tr>
+                            <td>En relación con los Cursos de Preparación para el Matrimonio los manifestantes declaran que:<br>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <% if(gestiones[0].curso_matrimonio_estado.toLowerCase() == 'realizado'){ %>
+                                <input type="checkbox"  checked /> &nbsp;
+                                <% } else { %>
+                                    <input type="checkbox"  /> &nbsp;
+                                <% } %>
+                                    los realizaron en <span class='subray'><%= gestiones[0].curso_matrimonio_lugar %></span> segun consta en Certificado N° <span class="subray"><%= gestiones[0].curso_matrimonio_num_certificado %></span> de fecha <span class="subray"><%= gestiones[0].curso_matrimonio_fecha %></span>  que se tuvo a la vista
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <% if(gestiones[0].curso_matrimonio_estado.toLowerCase() == 'agendado'){ %>
+                                    <input type="checkbox"  checked /> &nbsp;
+                                <% } else { %>
+                                    <input type="checkbox"  /> &nbsp;
+                                <% } %>
+                                Los realizarán previamente a la Celebración del Matrimonio.
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <% if(gestiones[0].curso_matrimonio_estado.toLowerCase() == 'excluye'){ %>
+                                    <input type="checkbox"  checked /> &nbsp;
+                                <% } else { %>
+                                    <input type="checkbox"  /> &nbsp;
+                                <% } %>
+                                De común acuerdo se excluyen de ellos, por conocer suficientemente los deberes y derechos del estado matrimonial.
+                            </td>
+                        </tr>
+
+                    </table>
+                </td>
+            </tr>
+        </table>
+    
+        <table cellspacing='0' cellpadding='0'>
+            <tr>
+                <td class="titulo">LUGAR DE CELEBRACIÓN DEL MATRIMONIO</td>
+            </tr>
+        </table>
+    
+        <table class='border' cellpadding='10'>
+            <colgroup>
+                <col width='25%' >
+                <col width='25%' >
+                <col width='25%' >
+                <col width='25%' >
+            </colgroup>
+            <tr>
+                <td>
+                    <% if(gestiones[0].lugar_celebracion_ante.toLowerCase() == 'oficial civil') { %>
+                        <input type="checkbox"   checked /> &nbsp;
+                    <% } else { %>
+                        <input type="checkbox" /> &nbsp;
+                    <% } %>
+                    Ante Oficial Civil: En
+
+                </td>
+                <td>
+                    <% if(gestiones[0].lugar_celebracion_lugar.toLowerCase() == 'oficina') { %>
+                        <input type="checkbox"   checked /> &nbsp;
+                    <% } else { %>
+                        <input type="checkbox" /> &nbsp;
+                    <% } %>
+                    Oficina
+                </td>
+                <td>
+                    <% if(gestiones[0].lugar_celebracion_lugar.toLowerCase() == 'otro') { %>
+                        <input type="checkbox"   checked /> &nbsp;
+                    <% } else { %>
+                        <input type="checkbox" /> &nbsp;
+                    <% } %>
+                    Otro
+                </td>
+                <td>
+                    <% if(gestiones[0].lugar_celebracion_ante.toLowerCase() == 'ministro culto') { %>
+                        <input type="checkbox"   checked /> &nbsp;
+                    <% } else { %>
+                        <input type="checkbox" /> &nbsp;
+                    <% } %>
+                    Ante Ministro de Culto
+                </td>
+            </tr>
+        </table>
+    
+        
+    
+        <div class="center">
+            <strong>
+                DATOS DE LOS TESTIGOS
+            </strong>
+        </div>
+        
+        <strong>
+            TESTIGO 1
+        </strong>
+        <table class="border">
+            <tr>
+                <td>
+                    <table cellspacing='0' cellpadding='0'>
+                        <colgroup>
+                            <col width="33%">
+                            <col width="33%">
+                            <col width="33%">
+                        </colgroup>
+                        <tr>
+                            <td>
+                                Nombres <br>
+                                <%= testigos[0].nombre %>
+                                <br>
+                            </td>
+                            <td>
+                                Apellido Paterno <br>
+                                <%= testigos[0].apellido_uno %>
+                                <br>
+                            </td>
+                            <td>
+                                Apellido Materno <br>
+                                <%= testigos[0].apellido_dos %>
+                                <br>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <table cellspacing='0' cellpadding='0'>
+                        <colgroup>
+                            <col width="25%">
+                            <col width="25%">
+                            <col width="25%">
+                            <col width="25%">
+                        </colgroup>
+                        <tr>
+                            <td>
+                                RUN o N° Ident. <br>
+                                <%= testigos[0].run + "-" + testigos[0].dv_run %>
+                                <br>
+                            </td>
+                            <td>
+                                Tipo Documento <br>
+                                CÉDULA
+                                <br>
+                            </td>
+                            <td>
+                                País Emisor Documento <br>
+                                CHILE
+                                <br>
+                            </td>
+                            <td>
+                                Nacionalidad <br>
+                                <%= testigos[0].nacionalidad %>
+                                <br>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <table cellspacing='0' cellpadding='0'>
+                        <tr>
+                            <td colspan='2'>
+                                DOMICILIO &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Calle<br />
+                                <%= testigos[0].calle_nombre %>
+                                <br />
+                            </td>
+                            <td>
+                                N°<br />
+                                <%= testigos[0].calle_numero %>
+                                <br />
+                            </td>
+                            <td>
+                                Letra<br />
+                                <%= testigos[0].calle_letra %>
+                                <br />
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <table cellspacing='0' cellpadding='0'>
+                        <colgroup>
+                            <col width='40%'>
+                            <col width='20%'>
+                            <col  width='25%'>
+                            <col  width='15%'>
+                        </colgroup>
+                        <tr>
+                            <td>
+                                Resto de Domicilio (Depto., Villa, Población, Block, etc.<br />
+                                <%= testigos[0].resto_domicilio %>
+                                <br />
+                            </td>
+                            <td>
+                                Comuna<br />
+                                <%= testigos[0].testigo_comuna.nombre_comuna.toUpperCase() || '' %>
+                                <br />
+                            </td>
+                            <td>
+                                Región<br />
+                                <%= testigos[0].testigo_region.nombre_region.replace('Region', '').toUpperCase() || '' %>
+                                <br />
+                            </td>
+                            <td>
+                                Código Postal<br />
+                                <%= testigos[0].codigo_postal %>
+                                <br />
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+        
+        <strong>
+            TESTIGO 2
+        </strong>
+        <table class="border">
+            <tr>
+                <td>
+                    <table cellspacing='0' cellpadding='0'>
+                        <colgroup>
+                            <col width="33%">
+                            <col width="33%">
+                            <col width="33%">
+                        </colgroup>
+                        <tr>
+                            <td>
+                                Nombres <br>
+                                <%= testigos[1].nombre %>
+                                <br>
+                            </td>
+                            <td>
+                                Apellido Paterno <br>
+                                <%= testigos[1].apellido_uno %>
+                                <br>
+                            </td>
+                            <td>
+                                Apellido Materno <br>
+                                <%= testigos[1].apellido_dos %>
+                                <br>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <table cellspacing='0' cellpadding='0'>
+                        <colgroup>
+                            <col width="25%">
+                            <col width="25%">
+                            <col width="25%">
+                            <col width="25%">
+                        </colgroup>
+                        <tr>
+                            <td>
+                                RUN o N° Ident. <br>
+                                <%= testigos[1].run + "-" + testigos[1].dv_run %>
+                                <br>
+                            </td>
+                            <td>
+                                Tipo Documento <br>
+                                RUN
+                                <br>
+                            </td>
+                            <td>
+                                País Emisor Documento <br><br>
+                            </td>
+                            <td>
+                                Nacionalidad <br>
+                                <%= testigos[1].nacionalidad %>
+                                <br>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <table cellspacing='0' cellpadding='0'>
+                        <tr>
+                            <td colspan='2'>
+                                DOMICILIO &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Calle<br />
+                                <%= testigos[1].calle_nombre %>
+                                <br />
+                            </td>
+                            <td>
+                                N°<br />
+                                <%= testigos[1].calle_numero %>
+                                <br />
+                            </td>
+                            <td>
+                                Letra<br />
+                                <%= testigos[1].calle_letra %>
+                                <br />
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <table cellspacing='0' cellpadding='0'>
+                        <colgroup>
+                            <col width='40%'>
+                            <col width='20%'>
+                            <col  width='25%'>
+                            <col  width='15%'>
+                        </colgroup>
+                        <tr>
+                            <td>
+                                Resto de Domicilio (Depto., Villa, Población, Block, etc.<br />
+                                <%= testigos[1].resto_domicilio %>
+                                <br />
+                            </td>
+                            <td>
+                                Comuna<br />
+                                <%= testigos[1].testigo_comuna.nombre_comuna.toUpperCase() || '' %>
+                                <br />
+                            </td>
+                            <td>
+                                Región<br />
+                                <%= testigos[1].testigo_region.nombre_region.replace('Region', '').toUpperCase() || '' %>
+                                <br />
+                            </td>
+                            <td>
+                                Código Postal<br />
+                                <%= testigos[1].codigo_postal %>
+                                <br />
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    
+        <table cellspacing='0' cellpadding='0'>
+            <tr>
+                <td class="col-md-12">
+                    <b><br>&nbsp;&nbsp;&nbsp;OBSERVACIONES:</b>
+                    <p>
+                        <%= gestiones[0].observacion_subinscripciones %>
+                    </p>
+                </td>
+
+            </tr>
+        </table>
+    
+        <table cellspacing='0' cellpadding='0'>
+            <td>
+                <td>
+                    Los/Las manifestantes bajo juramento o promesa de decir verdad, señalan no tener incapacidad ni prohibición legal para contraer matrimonio. Del mismo modo los testigos bajo juramento o promesa de decir verdad señalan que les consta que los/las manifestantes no tienen las incapacidades o prohibiciones legales para contraer matrimonio establecidas en la ley. Se dio lectura a los articulos 5° al 7° de la Ley de Matrimonio Civil.<br>Además, los testigos declaran bajo juramento o promesa de decir verdad, no encontrarse en ninguna de las situaciones descritas en el articulo 16 de la Ley de Matrimonio Civil.
+                </td>
+
+            </td>
+        </table>
+        
+        <table class='border'  cellspacing='0' cellpadding='0'>
+            <colgroup>
+                <col width='75%'>
+                <col width='25%'>
+            </colgroup>
+            <tr>
+                <td>
+                    <strong>FIRMAS</strong>
+                    <table cellspacing='0' cellpadding='0'>
+                        <tr>
+                            <td>
+                                <div style='border-bottom:solid 1px; width:90%; height:60px'></div>
+                                RUN Conyuge 1:  <%= contrayentes[0].numero_identificacion %>-<%= contrayentes[0].dv_numero_identificacion %>
+                            </td>
+                            <td>
+                                <div style='border-bottom:solid 1px; width:90%; height:60px'></div>
+                                RUN Conyuge 2:  <%= contrayentes[1].numero_identificacion %>-<%= contrayentes[1].dv_numero_identificacion %>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div style='border-bottom:solid 1px; width:90%; height:60px'></div>
+                                RUN Testigo 1:  <%= testigos[0].run %>-<%= testigos[0].dv_run %> </td>
+                            <td>
+                                <div style='border-bottom:solid 1px; width:90%; height:60px'></div>
+                                RUN Testigo 2:  <%= testigos[1].run %>-<%= testigos[1].dv_run %></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div style='border-bottom:solid 1px; width:90%; height:60px'></div>
+                                RUN:</td>
+                            <td>
+                                <div style='border-bottom:solid 1px; width:90%; height:60px'></div>
+                                RUN:</td>
+                        </tr>
+                    </table>
+                </td>
+                <td valign="bottom" style='border-left: solid 1px;' align="center">
+                    <span>
+                        <div style='border-bottom:solid 1px; width:90%; height:60px'></div>
+                        Firma y sello<br />Oficial Civil
+                    </span>
+                </td>
+            </tr>
+        </table>
+    
+
+    </div>
+
+   
+   
+    
+</body>
+</html>

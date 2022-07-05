@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<meta name="Description" content="Enter your description here"/>
+<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.0/css/bootstrap.min.css"> -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<!-- <link rel="stylesheet" href="/style.css"> -->
+<title>Letter</title>
+<style>
+    body{
+
+        font-family:gobCL,"Trebuchet MS"
+    }
+    
+    .container{
+        width:40cm;
+        margin:0 auto;
+    }
+
+    .row{
+        display: flex;
+    }
+    
+    .col-md-1{
+        width:8.3%;
+    }
+
+    .col-md-2{
+        width:16.6%;
+    }
+
+    .col-md-3{
+        width: 25%;
+    }
+    
+    .col-md-4{
+        width: 33.3%;
+    }
+    
+    .col-md-6{
+        width:50%;
+    }
+    
+    .col-md-8{
+        width:66.6%;
+    }
+
+    .col-md-12{
+        width:100%;
+    }
+table{
+    width:100%;
+}
+</style>
+<style>
+        h1, h2, h3, h4, h5{
+            padding:1px;
+        }
+    body{
+
+        font-family:gobCL,"Trebuchet MS";
+        font-size: 12px
+    }
+    
+    .container{
+        width:40cm;
+        margin:0 auto;
+    }
+
+    .row{
+        display: flex;
+    }
+    
+    .col-md-1{
+        width:8.3%;
+    }
+
+    .col-md-2{
+        width:16.6%;
+    }
+
+    .col-md-3{
+        width: 25%;
+    }
+    
+    .col-md-4{
+        width: 33.3%;
+    }
+    
+    .col-md-6{
+        width:50%;
+    }
+    
+    .col-md-8{
+        width:66.6%;
+    }
+
+    .col-md-12{
+        width:100%;
+    }
+table{
+    width:100%;
+}
+
+.div3{
+    display: grid; 
+    grid-template-columns:  1fr 1fr 1fr; 
+    border:solid 1px #888; ; 
+    height: 3rem;
+    font-size: 90%;
+}
+.div4{
+    display: grid; 
+    grid-template-columns:  1fr 1fr 1fr 1fr; 
+    border:solid 1px #888; 
+    height: 3rem;
+    font-size: 90%;
+}
+
+.div3 span{
+    width: 33%
+}
+.div4 span{
+    display: inline-block;
+    padding-left:10px
+}
+
+table.border {
+    border:solid 1px #888;
+    margin:0;
+    padding:0;
+}
+table.border td{
+    margin:0;
+    border-top:solid 1px #888;
+}
+table.border tr:first-child td{
+    border-top:none
+}
+table.nobottom{
+    border-bottom:none;
+}
+
+td{
+    padding-left:6px;
+}
+
+.subray{
+    border-bottom: solid 1px;
+    padding: 0 1rem
+}
+</style>
+
+</head>
+<% 
+
+var numeroALetras = (function() {
+
+    // Código basado en https://gist.github.com/alfchee/e563340276f89b22042a
+        function Unidades(num){
+    
+            switch(num)
+            {
+                case 1: return 'UN';
+                case 2: return 'DOS';
+                case 3: return 'TRES';
+                case 4: return 'CUATRO';
+                case 5: return 'CINCO';
+                case 6: return 'SEIS';
+                case 7: return 'SIETE';
+                case 8: return 'OCHO';
+                case 9: return 'NUEVE';
+            }
+    
+            return '';
+        }//Unidades()
+    
+        function Decenas(num){
+    
+            let decena = Math.floor(num/10);
+            let unidad = num - (decena * 10);
+    
+            switch(decena)
+            {
+                case 1:
+                    switch(unidad)
+                    {
+                        case 0: return 'DIEZ';
+                        case 1: return 'ONCE';
+                        case 2: return 'DOCE';
+                        case 3: return 'TRECE';
+                        case 4: return 'CATORCE';
+                        case 5: return 'QUINCE';
+                        default: return 'DIECI' + Unidades(unidad);
+                    }
+                case 2:
+                    switch(unidad)
+                    {
+                        case 0: return 'VEINTE';
+                        default: return 'VEINTI' + Unidades(unidad);
+                    }
+                case 3: return DecenasY('TREINTA', unidad);
+                case 4: return DecenasY('CUARENTA', unidad);
+                case 5: return DecenasY('CINCUENTA', unidad);
+                case 6: return DecenasY('SESENTA', unidad);
+                case 7: return DecenasY('SETENTA', unidad);
+                case 8: return DecenasY('OCHENTA', unidad);
+                case 9: return DecenasY('NOVENTA', unidad);
+                case 0: return Unidades(unidad);
+            }
+        }//Unidades()
+    
+        function DecenasY(strSin, numUnidades) {
+            if (numUnidades > 0)
+                return strSin + ' Y ' + Unidades(numUnidades)
+    
+            return strSin;
+        }//DecenasY()
+    
+        function Centenas(num) {
+            let centenas = Math.floor(num / 100);
+            let decenas = num - (centenas * 100);
+    
+            switch(centenas)
+            {
+                case 1:
+                    if (decenas > 0)
+                        return 'CIENTO ' + Decenas(decenas);
+                    return 'CIEN';
+                case 2: return 'DOSCIENTOS ' + Decenas(decenas);
+                case 3: return 'TRESCIENTOS ' + Decenas(decenas);
+                case 4: return 'CUATROCIENTOS ' + Decenas(decenas);
+                case 5: return 'QUINIENTOS ' + Decenas(decenas);
+                case 6: return 'SEISCIENTOS ' + Decenas(decenas);
+                case 7: return 'SETECIENTOS ' + Decenas(decenas);
+                case 8: return 'OCHOCIENTOS ' + Decenas(decenas);
+                case 9: return 'NOVECIENTOS ' + Decenas(decenas);
+            }
+    
+            return Decenas(decenas);
+        }//Centenas()
+    
+        function Seccion(num, divisor, strSingular, strPlural) {
+            let cientos = Math.floor(num / divisor)
+            let resto = num - (cientos * divisor)
+    
+            let letras = '';
+    
+            if (cientos > 0)
+                if (cientos > 1)
+                    letras = Centenas(cientos) + ' ' + strPlural;
+                else
+                    letras = strSingular;
+    
+            if (resto > 0)
+                letras += '';
+    
+            return letras;
+        }//Seccion()
+    
+        function Miles(num) {
+            let divisor = 1000;
+            let cientos = Math.floor(num / divisor)
+            let resto = num - (cientos * divisor)
+    
+            let strMiles = Seccion(num, divisor, 'UN MIL', 'MIL');
+            let strCentenas = Centenas(resto);
+    
+            if(strMiles == '')
+                return strCentenas;
+    
+            return strMiles + ' ' + strCentenas;
+        }//Miles()
+    
+        function Millones(num) {
+            let divisor = 1000000;
+            let cientos = Math.floor(num / divisor)
+            let resto = num - (cientos * divisor)
+    
+            let strMillones = Seccion(num, divisor, 'UN MILLON DE', 'MILLONES DE');
+            let strMiles = Miles(resto);
+    
+            if(strMillones == '')
+                return strMiles;
+    
+            return strMillones + ' ' + strMiles;
+        }//Millones()
+    
+        return function NumeroALetras(num, currency) {
+            currency = currency || {};
+            let data = {
+                numero: num,
+                enteros: Math.floor(num),
+                centavos: (((Math.round(num * 100)) - (Math.floor(num) * 100))),
+                letrasCentavos: '',
+                letrasMonedaPlural: currency.plural || 'PESOS CHILENOS',//'PESOS', 'Dólares', 'Bolívares', 'etcs'
+                letrasMonedaSingular: currency.singular || 'PESO CHILENO', //'PESO', 'Dólar', 'Bolivar', 'etc'
+                letrasMonedaCentavoPlural: currency.centPlural || 'CHIQUI PESOS CHILENOS',
+                letrasMonedaCentavoSingular: currency.centSingular || 'CHIQUI PESO CHILENO'
+            };
+    
+            if (data.centavos > 0) {
+                data.letrasCentavos = 'CON ' + (function () {
+                        if (data.centavos == 1)
+                            return Millones(data.centavos) + ' ' + data.letrasMonedaCentavoSingular;
+                        else
+                            return Millones(data.centavos) + ' ' + data.letrasMonedaCentavoPlural;
+                    })();
+            };
+    
+            if(data.enteros == 0)
+                return 'CERO ' + data.letrasMonedaPlural + ' ' + data.letrasCentavos;
+            if (data.enteros == 1)
+                return Millones(data.enteros) + ' ' + data.letrasMonedaSingular + ' ' + data.letrasCentavos;
+            else
+                return Millones(data.enteros) + ' ' + data.letrasMonedaPlural + ' ' + data.letrasCentavos;
+        };
+    
+    })();
+
+
+%>
+
+
+<body style="zoom:100%; font-family: 'roboto'; text-transform: uppercase;">
+    <!-- PAGINA 1 -->
+    <div style='padding-top:2rem'>
+        <table cellspacing="0" width="100%">
+            <colgroup>
+                <col width="4%">
+                <col width="90%">
+                <col width="auto">
+            </colgroup>
+            <tr>
+                <td align='center'>
+                </td>
+                <td align='center'>
+                    <div style="padding: 1rem 2.5rem; font-size: 0.8rem; border:solid 1px;text-align: center;font-weight: bold;"><b>R.U.T.: 77177455-5<br /><%= _doc.TipoDocumento %> ELECTRÓNICA<br />Nº <%= _doc.Folio && _doc.Folio != '' ? _doc.Folio : '0' %></b></div>
+                </td>
+                <td align='center'>
+                </td>
+            </tr>
+        </table>
+        <colgroup>
+            <col width="4%">
+            <col width="90%">
+            <col width="auto">
+        </colgroup>
+        <table cellspacing="0" width="100%">
+            <tr>
+                <td align='center'>
+                </td>
+                <td align='center'>
+                    <div style="padding: 0.3rem 0rem;text-align: center;font-weight: bold;"><b>S.I.I. - SANTIAGO CENTRO</b></div>
+                </td>
+                <td align='center'>
+                </td>
+            </tr>
+        </div>
+        <td align='center'>
+        </td>
+        <td align='center'>
+            <div style="padding: 0.2rem, 0rem;text-align: center;font-weight: bold;">
+                <h3>CHILEREPUESTOS SPA</h3>
+            </div>
+        </td>
+        <td align='center'>
+        </td>
+    </tr>
+        </table>
+        <table cellspacing="0" width="100%" style="font-size: 0.5rem;">
+            <colgroup>
+                <col width="100%">
+            </colgroup>
+            <tr>
+                <td><b>GIRO:</b> VENTA DE COMPRA Y PARTE DE REPUESTOS AUTOMOTRIZ</td>
+            </tr>
+            <tr>
+                <td><b>DIRECCION:</b> AV. EJERCITO LIBERTADOR 62, SANTIAGO, RM SANTIAGO</td>
+            </tr>
+            <tr>
+                <td><b>LOCAL:</b> CASA MATRIZ EJERCITO 62</td>
+            </tr>
+        </table>
+        
+        <table cellspacing="0" width="100%" style="margin-top: 0.5rem;font-size: 0.5rem;">
+            <colgroup>
+                <col width="100%">
+            </colgroup>
+            <%  if(_doc.RazonSocialEmpresa && _doc.RazonSocialEmpresa != ''){  %>
+            <tr>
+                <td><b>RAZON SOCIAL:</b> <%= _doc.RazonSocialEmpresa %> </td>
+            </tr>
+            <tr>
+                <td><b>RUT:</b> <%= _doc.RutEmpresa %></td>
+            </tr>
+            <% } %>
+
+            <%  if(_doc.GiroEmpresa && _doc.GiroEmpresa != ''){  %>
+            <tr>
+                <td><b>GIRO:</b> <%= _doc.GiroEmpresa %></td>
+            </tr>
+            <% } %>
+            <%  if(_doc.DireccionEmpresa && _doc.DireccionEmpresa != '' && _doc.DireccionEmpresa && _doc.DireccionEmpresa != ''){  %>
+            <tr>
+                <td><b>DIRECCION:</b> <%= _doc.DireccionEmpresa %></td>
+            </tr>
+            <% } %>
+            <%  if(_doc.ComunaEmpresa && _doc.ComunaEmpresa != '' && _doc.ComunaEmpresa && _doc.ComunaEmpresa != ''){  %>
+            <tr>
+                <td><b>COMUNA:</b> <%= _doc.ComunaEmpresa %></td>
+            </tr>
+            <% } %>
+        </table>
+        
+        <table cellspacing="0" width="100%" style="margin-top: 0.5rem;font-size: 0.5rem;">
+            <colgroup>
+                <col width="100%">
+            </colgroup>
+            <tr>
+                <td><b>FECHA EMISION:</b> <%= (parseInt(new Date(_doc.createdAt).getDate()) >= 10 ? parseInt(new Date(_doc.createdAt).getDate()) : '0' + (parseInt(new Date(_doc.createdAt).getDate()))) + '/' + (parseInt(new Date(_doc.createdAt).getMonth()) + 1 >= 10 ? parseInt(new Date(_doc.createdAt).getMonth()) + 1 : '0' + (parseInt(new Date(_doc.createdAt).getMonth()) + 1)) + '/' + new Date(_doc.createdAt).getFullYear() %></td>
+            </tr>
+            <%  if(_doc.MetodoPagoSeleccionado && _doc.MetodoPagoSeleccionado != ''){  %>
+            <tr>
+                <td><b>FORMA DE PAGO:</b> <%= _doc.MetodoPagoSeleccionado %></td>
+            </tr>
+            <% } %>
+            <%  if(_doc.EntregaSeleccionada && _doc.EntregaSeleccionada != ''){  %>
+            <tr>
+                <td><b>FORMA DE ENTREGA:</b> <%= _doc.EntregaSeleccionada %></td>
+            </tr>
+            
+            <% } %>
+            <tr>
+                <td><b>VENDEDOR:</b> <%= _doc.Usuario %></td>
+            </tr>
+        </table>
+
+
+        <table cellspacing="0" width="100%" style="margin-top: 0.5rem;font-size: 0.5rem;">
+            <colgroup>
+                <col width="55%">
+                <col width="10%">
+                <col width="15%">
+                <col width="15%">
+                <col width="15%">
+            </colgroup>
+            <tr>
+                <th style="font-weight: bold;width: 55%;text-align: left;">PRODUCTO</th>
+                <th style="font-weight: bold;text-align: right;">CANT</th>
+                <th style="font-weight: bold;text-align: right;">P/UNIT</th>
+                <th style="font-weight: bold;">R/D</th>
+                <th style="font-weight: bold;text-align: right;">TOTAL</th>
+            </tr>
+
+            <% for(let i = 0; i < _doc.Detalles.length; i++){ %>
+            <tr>
+                <td style="text-align: left;padding: 0"><%= _doc.Detalles[i].NmbItem.split('').length > 30 ? _doc.Detalles[i].NmbItem.slice(0, 28) + '...' : _doc.Detalles[i].NmbItem %></td>
+                <td style="text-align: right;padding: 0"><%= _doc.Detalles[i].QtyItem %></td>
+                <td style="text-align: right;padding: 0"><%= _doc.Detalles[i].PrcItem %></td>
+                <td style="padding: 0"></td>
+                <td style="text-align: right;padding: 0"><%= _doc.Detalles[i].MontoItem %></td>
+            </tr>
+            <% } %>
+        </table>
+        <table cellspacing="0" width="100%" style="margin-top: 0.5rem;font-size: 0.5rem;">
+            <colgroup>
+                <col width="70%">
+                <col width="15%">
+                <col width="15%">
+            </colgroup>
+            <tr>
+                <td style="font-weight: bold;width: 70%;text-align: left;"></td>
+                <td style="font-weight: bold;text-align: right;">SUBTOTAL</td>
+                <td style="text-align: right;"><%= _doc.Neto %></td>
+            </tr>
+            <tr>
+                <td style="font-weight: bold;width: 70%;text-align: left;"></td>
+                <td style="font-weight: bold;text-align: right;">NETO</td>
+                <td style="text-align: right;"><%= _doc.Neto %></td>
+            </tr>
+            <tr>
+                <td style="font-weight: bold;width: 70%;text-align: left;"></td>
+                <td style="font-weight: bold;text-align: right;">IVA</td>
+                <td style="text-align: right;"><%= _doc.Iva %></td>
+            </tr>
+            <tr>
+                <td style="font-weight: bold;width: 70%;text-align: left;"></td>
+                <td style="font-weight: bold;text-align: right;">TOTAL</td>
+                <td style="text-align: right;"><%= _doc.PrecioTotal %></td>
+            </tr>
+        </table>
+
+        <table cellspacing="0" width="100%" style="margin-top: 0.5rem;font-size: 0.5rem;">
+            <colgroup>
+                <col width="100%">
+            </colgroup>
+            <tr>
+                <td><b>SON: </b> <%= numeroALetras(_doc.PrecioTotal, {}) %>.</td>
+            </tr>
+        </table>
+        <table cellspacing="0" style="font-size: 0.5rem;border-top: 2px solid black;border-left: 2px solid black;border-right: 2px solid black;padding: 0.5rem;">
+            <tr>
+                <td style="width: 10%;">Nombre: </td>
+                <td style="border-bottom: 1px solid black;width: 90%;"></td>
+            </tr>
+        </table>
+        <table cellspacing="0" style="font-size: 0.5rem;border-left: 2px solid black;border-right: 2px solid black;padding-left: 0.5rem;padding-right: 0.5rem;padding-bottom: 0.5rem;">
+            <tr>
+                <td style="width: 10%;">R.U.T.: </td>
+                <td style="border-bottom: 1px solid black;width: 40%;"></td>
+                <td style="width: 10%;">Firma: </td>
+                <td style="border-bottom: 1px solid black;width: 40%;"></td>
+            </tr>
+        </table>
+        <table style="font-size: 0.5rem;border-bottom: 2px solid black;border-left: 2px solid black;border-right: 2px solid black;padding-left: 0.5rem;padding-right: 0.5rem;">
+            <tr>
+                <td style="width: 10%;">Fecha: </td>
+                <td style="border-bottom: 1px solid black;width: 40%;"></td>
+                <td style="width: 10%;">Recinto: </td>
+                <td style="border-bottom: 1px solid black;width: 40%;"></td>
+            </tr>
+        </table>
+        <table  cellspacing="0" width="100%" style="margin-top: 0rem;font-size: 0.5rem;border-left: 2px solid black;border-right: 2px solid black;border-bottom: 2px solid black;padding: 0.3rem;">
+            <td>El acuse de recibo que se declara en este acto, de acuerdo a lo
+                dispuesto en la letra b) del Art. 4°, y la letra c) del Art. 5° de la ley
+                19.983, acredita que la entrega de mercaderías o servicio(s)
+                prestado(s) ha(n) sido recibido(s).</td>
+        </table>
+        <table  cellspacing="0" width="100%" style="margin-top: 0rem;font-size: 0.5rem;border-left: 2px solid black;border-right: 2px solid black;border-bottom: 2px solid black;padding: 0.3rem;text-align: center;">
+            <td>
+                WWW.CHILEREPUESTOS.COM<br>
+                FACEBOOK: Chilerepuestos<br>
+                INSTAGRAM: chile.repuestos
+            </td>
+        </table>
+
+        <table width="100%" style="margin-top: 0.5rem;font-size: 0.6rem">
+            <td><img src="<%= data.img %>" width="100%"></td>
+        </table>
+       
+        <table width="100%" style="margin-top: 0.5rem;font-size: 0.5rem; text-align: center;">
+            <td>Timbre Electrónico S.I.I</td>
+        </table>
+
+        <table width="100%" style="font-size: 0.5rem; text-align: center;">
+            <td>Res. 80 de 2014 - Verifique documento: www.sii.cl</td>
+        </table>
+
+        <table width="100%" style="margin-top: 1rem;font-size: 0.5rem; text-align: right;">
+            <td>IMPRESO <%= new Date().getDate() + '/' + (parseInt(new Date().getMonth()) + 1 >= 10 ? parseInt(new Date().getMonth()) + 1 : '0' + (parseInt(new Date().getMonth()) + 1)) + '/' + new Date().getFullYear() + ' ' + new Date().getHours() + ':' + new Date().getMinutes() + ':' + (parseInt(new Date().getSeconds()) + 1 >= 10 ? parseInt(new Date().getSeconds()) : '0' + (parseInt(new Date().getSeconds()))) %><br> Gracias por su preferencia !</td>
+        </table>
+</body>
+
+
+
+
+
+</html>
