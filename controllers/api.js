@@ -2376,39 +2376,47 @@ module.exports = class API {
 
     static async POST_BICIMOTO_AUTH(req, res){
         
-        request.post({
-            url: 'https://www.bicimoto.cl/ajax/process-login.php',
-            headers: { 
-                'authority': 'www.bicimoto.cl',
-                'sec-ch-ua': '" Not;A Brand";v="99", "Google Chrome";v="97", "Chromium";v="97"',
-                'accept': 'application/json, text/javascript, */*; q=0.01',
-                'content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
-                'x-requested-with': 'XMLHttpRequest',
-                'sec-ch-ua-mobile': '?0',
-                'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.99 Safari/537.36',
-                'sec-ch-ua-platform': '"Windows"',
-                'origin': 'https://www.bicimoto.cl',
-                'sec-fetch-site': 'same-origin',
-                'sec-fetch-mode': 'cors',
-                'sec-fetch-dest': 'empty',
-                'referer': 'https://www.bicimoto.cl/login'
-             },
-            method: 'post',
-            jar: jar,
-            body: 'rut=77.177.455-5&office=0&password=chipto001&remember=1&auth_token=ee806c1a54fdbe221912450f6d483015b5da32b6d57b4ea834cb08ed18eb28a2'
-        }, async function(err, response, body){
-            if(err) {
-              return console.error(err);
-            };
+        let environment = process.env.NODE_ENV || 'development';
 
-            let CookieBicimoto = jar._jar.store.idx["www.bicimoto.cl"]["/"].BICMTO_FRONT.value;
+        console.log(environment)
 
-            await Credenciales.updateOne({ Importadora: 'Bicimoto' }, {$set: { Cookie: 'BICMTO_FRONT='+CookieBicimoto+';' } })
-
-            res.status(200).send('EXITO');
-
-
-        })
+        if(environment == 'development'){
+            request.post({
+                url: 'https://www.bicimoto.cl/ajax/process-login.php',
+                headers: { 
+                    'authority': 'www.bicimoto.cl',
+                    'sec-ch-ua': '" Not;A Brand";v="99", "Google Chrome";v="97", "Chromium";v="97"',
+                    'accept': 'application/json, text/javascript, */*; q=0.01',
+                    'content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                    'x-requested-with': 'XMLHttpRequest',
+                    'sec-ch-ua-mobile': '?0',
+                    'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.99 Safari/537.36',
+                    'sec-ch-ua-platform': '"Windows"',
+                    'origin': 'https://www.bicimoto.cl',
+                    'sec-fetch-site': 'same-origin',
+                    'sec-fetch-mode': 'cors',
+                    'sec-fetch-dest': 'empty',
+                    'referer': 'https://www.bicimoto.cl/login'
+                 },
+                method: 'post',
+                jar: jar,
+                body: 'rut=77.177.455-5&office=0&password=chipto001&remember=1&auth_token=ee806c1a54fdbe221912450f6d483015b5da32b6d57b4ea834cb08ed18eb28a2'
+            }, async function(err, response, body){
+                if(err) {
+                  return console.error(err);
+                };
+    
+                let CookieBicimoto = jar._jar.store.idx["www.bicimoto.cl"]["/"].BICMTO_FRONT.value;
+    
+                await Credenciales.updateOne({ Importadora: 'Bicimoto' }, {$set: { Cookie: 'BICMTO_FRONT='+CookieBicimoto+';' } })
+    
+                res.status(200).send('EXITO');
+    
+    
+            })
+        }else{
+            res.status(200).send('Ok')
+        }
     }
 
 
@@ -4594,19 +4602,23 @@ static async GET_TESTTRES(req, res){
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101 Firefox/102.0',
         'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
         'Accept-Language': 'es-CL,es;q=0.8,en-US;q=0.5,en;q=0.3',
-        'Accept-Encoding': 'gzip, deflate',
+        'Accept-Encoding': 'gzip, deflate, br',
         'Content-Type': 'application/x-www-form-urlencoded',
-        'Origin': 'http://ecommerce.noriegavanzulli.cl',
+        'Origin': 'https://www.cuatroruedas.cl',
         'Connection': 'keep-alive',
-        'Referer': 'http://ecommerce.noriegavanzulli.cl/b2b/login.jsp?Ingresar=Ingresar',
-        // 'Cookie': 'JSESSIONID=00001L7bbl91ZjnR9DR2fAUCHbP:-1; _ga=GA1.2.1749092414.1657119922; _gid=GA1.2.616533797.1657119922; _gat_gtag_UA_48130460_1=1',
-        'Upgrade-Insecure-Requests': '1'
+        'Referer': 'https://www.cuatroruedas.cl/sistema/',
+        'Upgrade-Insecure-Requests': '1',
+        'Sec-Fetch-Dest': 'document',
+        'Sec-Fetch-Mode': 'navigate',
+        'Sec-Fetch-Site': 'same-origin',
+        'Sec-Fetch-User': '?1',
+        jar: jar
     };
     
-    var dataString = 'trut=77177455&tuser=compras&tpass=062&Ingresar=Ingresar';
+    var dataString = '_method=POST&data%5BCliente%5D%5Brut_empresa%5D=77.177.455-5&data%5BCliente%5D%5Bclave%5D=ejercito62';
     
     var options = {
-        url: 'http://ecommerce.noriegavanzulli.cl/b2b/login_conf.jsp',
+        url: 'https://www.cuatroruedas.cl/sistema/clientes/login',
         method: 'POST',
         headers: headers,
         gzip: true,
@@ -4617,7 +4629,48 @@ static async GET_TESTTRES(req, res){
     function callback(error, response, body) {
         if (!error && response.statusCode == 200) {
 
-            res.send(response)
+            var headersdos = {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101 Firefox/102.0',
+                'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
+                'Accept-Language': 'es-CL,es;q=0.8,en-US;q=0.5,en;q=0.3',
+                'Accept-Encoding': 'gzip, deflate, br',
+                'Content-Type': 'multipart/form-data; boundary=---------------------------18915390131068473625871846969',
+                'Origin': 'https://www.cuatroruedas.cl',
+                'Connection': 'keep-alive',
+                'Referer': 'https://www.cuatroruedas.cl/sistema/productos/home_carro',
+                'Cookie': 'CAKEPHP=ngkjmkpjhcl91knop63fh0jh67; _ga=GA1.2.41023893.1657142051; _gid=GA1.2.1390214180.1657142051; _gat=1',
+                'Upgrade-Insecure-Requests': '1',
+                'Sec-Fetch-Dest': 'document',
+                'Sec-Fetch-Mode': 'navigate',
+                'Sec-Fetch-Site': 'same-origin',
+                'Sec-Fetch-User': '?1',
+                jar: jar
+            };
+            
+            var dataStringdos = 'Content-Disposition: form-data; name="data[Producto][modelo_uso]"\n'+
+            'amortiguador\n'+
+            '-----------------------------18915390131068473625871846969--\n';
+            
+            var optionsdos = {
+                url: 'https://www.cuatroruedas.cl/sistema/productos/buscar_catalogo',
+                method: 'POST',
+                headers: headersdos,
+                gzip: true,
+                body: dataStringdos,
+                jar: jar
+            };
+            
+            function callback(error, response, body) {
+                if (!error && response.statusCode == 200) {
+                    res.send(body);
+                }
+            }
+            
+            request(optionsdos, callback);
+
+
+
+
         }
     }
     
