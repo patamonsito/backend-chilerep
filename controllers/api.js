@@ -1515,6 +1515,9 @@ module.exports = class API {
                                     method: 'POST',
                                     headers: headersTres,
                                     body: dataStringTres,
+                                    resolveWithFullResponse: true,
+                                    simple: true,
+                                    followRedirect: true
                                 };
     
             let cf = new CloudflareBypasser();
