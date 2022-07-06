@@ -6,7 +6,6 @@ const HtmlTableToJson = require('html-table-to-json');
 const Sucursales = require("../models/sucursales");
 const Bodegas = require("../models/bodegas");
 const Registros = require("../models/wms");
-const CloudflareBypasser = require('cloudflare-bypasser');
 const Menus = require("../models/menus");
 const Marcas = require("../models/marcas");
 const Lineas = require("../models/lineas");
@@ -1481,9 +1480,9 @@ module.exports = class API {
 
 
        static async POST_API_BICIMOTO(req, res){
-
+        try {
             let { Buscar } = req.body;
-
+   
 
             let CookieBicimoto = await Credenciales.findOne({ Importadora: 'Bicimoto' });
 
@@ -1507,7 +1506,7 @@ module.exports = class API {
                                     'sec-fetch-site': 'same-origin',
                                     'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.75 Safari/537.36',
                                     'x-requested-with': 'XMLHttpRequest',
-                                    'Cookie': CookieBicimoto.Cookie,
+                                    'Cookie': CookieBicimoto.Cookie
                                 };
     
                                 var optionsTres = {
@@ -1515,64 +1514,67 @@ module.exports = class API {
                                     method: 'POST',
                                     headers: headersTres,
                                     body: dataStringTres,
-                                    resolveWithFullResponse: true,
-                                    simple: true,
-                                    followRedirect: true
                                 };
     
-            let cf = new CloudflareBypasser();
+                                function callbackTres(error, response, body) {
+                                    if (!error && response.statusCode == 200) {
+                                        let body = JSON.parse(response.body)
+                                        const $ = cheerio.load(body.data);
+                                        console.log('Bicimoto OK')
+    
+                                        $('strong').remove();
+                                        $('i').remove();
+    
+                                        let cantidadB = $('body > div').length + 1;
+    
+                                        let ProductosB = []
+    
+                                        for(let i = 1; i < cantidadB; i++){
+                                        let Descripcion = $('body > div:nth-child('+ i +') > div > div.producto-box-pack > div.producto-box-datos > h2').text().trim();
+                                        let Sku = $('body > div:nth-child('+i+') > div > div.producto-box-pack > div.producto-box-datos > p:nth-child(2)').text().trim();
+                                        let Marca = $('body > div:nth-child('+i+') > div > div.producto-box-pack > div.producto-box-datos > p:nth-child(3)').text().trim();
+                                        let Modelo = $('body > div:nth-child('+i+') > div > div.producto-box-pack > div.producto-box-datos > p:nth-child(4)').text().trim() + ' ' + $('body > div:nth-child('+i+') > div > div.producto-box-pack > div.producto-box-datos > p:nth-child(5)').text().trim();
+                                        let Oem = $('body > div:nth-child('+i+') > div > div.producto-box-pack > div.producto-box-datos > p:nth-child(6)').text().trim();
+                                        let Origen =  $('body > div:nth-child('+i+') > div > div.producto-box-pack > div.producto-box-datos > p:nth-child(7)').text().trim()
+                                        let PrecioImportadora = $('body > div:nth-child('+i+') > div > div.producto-box-datos-boton > div.producto-box-boton.producto-box-prices > h3').text().replace('$', '').trim()
+                                        let Stock = $('body > div:nth-child('+i+') > div > div.producto-box-datos-boton > div:nth-child(2) > button').text().trim() == 'Comprar' ? 'Disponible' : '0'
+    
+                                        let JsonB = {
+                                            Sku,
+                                            Descripcion,
+                                            Marca,
+                                            Modelo,
+                                            Oem,
+                                            Origen,
+                                            PrecioImportadora,
+                                            Stock
+                                        }
+                                            ProductosB.push(JsonB)
+    
+                                        }
 
-            
-            cf.request(optionsTres)
-            .then(response => {
-                console.log(response)
-                    let body = JSON.parse(response.body)
-                    const $ = cheerio.load(body.data);
+                                        if(ProductosB.length == 0){
+                                            ProductosB = [
+                                                {
+                                                    Descripcion: ''
+                                                }
+                                            ]
+                                        }
 
-                    $('strong').remove();
-                    $('i').remove();
+                   res.status(200).send(ProductosB);
+                   return;
+   
+   
+               }
+                                
+            }
 
-                    let cantidadB = $('body > div').length + 1;
-
-                    let ProductosB = []
-
-                    for(let i = 1; i < cantidadB; i++){
-                    let Descripcion = $('body > div:nth-child('+ i +') > div > div.producto-box-pack > div.producto-box-datos > h2').text().trim();
-                    let Sku = $('body > div:nth-child('+i+') > div > div.producto-box-pack > div.producto-box-datos > p:nth-child(2)').text().trim();
-                    let Marca = $('body > div:nth-child('+i+') > div > div.producto-box-pack > div.producto-box-datos > p:nth-child(3)').text().trim();
-                    let Modelo = $('body > div:nth-child('+i+') > div > div.producto-box-pack > div.producto-box-datos > p:nth-child(4)').text().trim() + ' ' + $('body > div:nth-child('+i+') > div > div.producto-box-pack > div.producto-box-datos > p:nth-child(5)').text().trim();
-                    let Oem = $('body > div:nth-child('+i+') > div > div.producto-box-pack > div.producto-box-datos > p:nth-child(6)').text().trim();
-                    let Origen =  $('body > div:nth-child('+i+') > div > div.producto-box-pack > div.producto-box-datos > p:nth-child(7)').text().trim()
-                    let PrecioImportadora = $('body > div:nth-child('+i+') > div > div.producto-box-datos-boton > div.producto-box-boton.producto-box-prices > h3').text().replace('$', '').trim()
-                    let Stock = $('body > div:nth-child('+i+') > div > div.producto-box-datos-boton > div:nth-child(2) > button').text().trim() == 'Comprar' ? 'Disponible' : '0'
-
-                    let JsonB = {
-                        Sku,
-                        Descripcion,
-                        Marca,
-                        Modelo,
-                        Oem,
-                        Origen,
-                        PrecioImportadora,
-                        Stock
-                    }
-                        ProductosB.push(JsonB)
-
-                    }
-
-                    if(ProductosB.length == 0){
-                        ProductosB = [
-                            {
-                                Descripcion: ''
-                            }
-                        ]
-                    }
-
-                res.status(200).send(ProductosB);
-                return;
-            });
-
-            // request(optionsTres, callbackTres);
+            request(optionsTres, callbackTres);
+                                
+                                
+        } catch (error) {
+           res.status(200).send(error)
+        } 
        }
 
 
