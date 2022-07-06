@@ -49,6 +49,13 @@ router.post('/user_token_admin', API.GET_USER_TOKEN_ADMIN);
 //API IMPORTADORA
 router.post('/products/api-importadora', API.POST_API_IMPORTADORA);
 router.post('/auth-refax', API.POST_REFAX_AUTH);
+router.post('/auth-bicimoto', API.POST_BICIMOTO_AUTH);
+router.post('/auth-noriega', API.POST_NORIEGA_AUTH);
+router.post('/api-refax', API.POST_API_REFAX);
+router.post('/api-alsacia', API.POST_API_ALSACIA);
+router.post('/api-bicimoto', API.POST_API_BICIMOTO);
+router.post('/api-mannheim', API.POST_API_MANNHEIM);
+router.post('/api-noriega', API.POST_API_NORIEGA);
 router.post('/aplicaciones-m', API.POST_APLICACIONESM);
 
 //PRODUCTOS CRUD
