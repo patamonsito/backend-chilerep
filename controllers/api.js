@@ -1506,7 +1506,8 @@ module.exports = class API {
                                     'sec-fetch-site': 'same-origin',
                                     'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.75 Safari/537.36',
                                     'x-requested-with': 'XMLHttpRequest',
-                                    'Cookie': CookieBicimoto.Cookie
+                                    'Cookie': CookieBicimoto.Cookie,
+                                    jar: jar
                                 };
     
                                 var optionsTres = {
@@ -1514,6 +1515,7 @@ module.exports = class API {
                                     method: 'POST',
                                     headers: headersTres,
                                     body: dataStringTres,
+                                    jar: jar
                                 };
     
                                 function callbackTres(error, response, body) {
