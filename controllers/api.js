@@ -1525,6 +1525,7 @@ module.exports = class API {
             
             cf.request(optionsTres)
             .then(response => {
+                console.log(response)
                     let body = JSON.parse(response.body)
                     const $ = cheerio.load(body.data);
 
