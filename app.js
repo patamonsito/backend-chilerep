@@ -35,7 +35,7 @@ app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.static(path.join(__dirname, "uploads")));
 app.use(express.static(path.join(__dirname, "uploads/avatars")));
-app.use(cookieParser())
+app.use(cookieParser('secret'))
 
 // database connection
 const conn = require('./conection');
@@ -51,9 +51,9 @@ let store = new MongoStore({
 app.use(
     session({
         secret: 'Chilerepuestos',
-        resave: false,
+        resave: true,
         store: store,
-        saveUninitialized: false,
+        saveUninitialized: true,
         cookie: { maxAge: 1000 * 60 * 60 * 24 }, // 24 hours
       })
       );
