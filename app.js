@@ -10,7 +10,7 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const path = require('path');
 var json2xls = require('json2xls');
-
+const cookieParser  = require('cookie-parser'); 
 const bodyParser = require("body-parser");
 const fs = require("fs");
 
@@ -35,6 +35,7 @@ app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.static(path.join(__dirname, "uploads")));
 app.use(express.static(path.join(__dirname, "uploads/avatars")));
+app.use(cookieParser())
 
 // database connection
 const conn = require('./conection');
