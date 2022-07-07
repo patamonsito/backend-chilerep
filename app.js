@@ -5,17 +5,17 @@ const app = express();
 const server = require('http').Server(app);
 const io = require('socket.io')(server);
 const socket = require('./socket');
+const cookieParser  = require('cookie-parser'); 
 
 const mongoose = require("mongoose");
 const cors = require("cors");
 const path = require('path');
 var json2xls = require('json2xls');
-const cookieParser  = require('cookie-parser'); 
 const bodyParser = require("body-parser");
 const fs = require("fs");
 
 const session = require('express-session');
-const MongoStore = require('connect-mongo');
+const MongoDbStore = require('connect-mongo');
 mongoose.Promise = global.Promise; 
 const port = process.env.PORT // 3000;
 
@@ -27,24 +27,14 @@ app.use(bodyParser.json({limit: "50mb"}));
 app.use(bodyParser.urlencoded({limit: "50mb", extended: true, parameterLimit:50000}));
 
 
-// middlewares
-app.use(cors());
-app.use(express.json());
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
-app.use(express.static(path.join(__dirname, "public")));
-app.use(express.static(path.join(__dirname, "uploads")));
-app.use(express.static(path.join(__dirname, "uploads/avatars")));
-app.use(cookieParser('secret'))
-
 // database connection
 const conn = require('./conection');
 const { env } = require("process");
 
 
-//configuracion de session
-let store = new MongoStore({
-    mongoUrl: process.env.DB_LOCAL,
+// middlewares
+let store = MongoDbStore.create({
+    mongoUrl: 'mongodb+srv://patamonsito:gatomon22468220@cluster0.6j50p.mongodb.net/solonissan?authSource=admin&replicaSet=atlas-9kgnrk-shard-0&w=majority&readPreference=primary&appname=MongoDB%20Compass%20Community&retryWrites=true&ssl=true',
     collection: "sessions"
  });
 
@@ -57,6 +47,15 @@ app.use(
         cookie: { maxAge: 1000 * 60 * 60 * 24 }, // 24 hours
       })
       );
+app.use(cors());
+app.use(express.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static(path.join(__dirname, "uploads")));
+app.use(express.static(path.join(__dirname, "uploads/avatars")));
+app.use(cookieParser('secret'))
+
 
 
 // router prefix
