@@ -3,24 +3,24 @@ require("dotenv").config();
 const express = require("express");
 const app = express();
 const server = require('http').Server(app);
-const io = require('socket.io')(server);
-const socket = require('./socket');
+// const io = require('socket.io')(server);
+// const socket = require('./socket');
 const cookieParser  = require('cookie-parser'); 
 
+const session = require('express-session');
 const mongoose = require("mongoose");
+const MongoDbStore = require('connect-mongo');
 const cors = require("cors");
 const path = require('path');
 var json2xls = require('json2xls');
 const bodyParser = require("body-parser");
 const fs = require("fs");
 
-const session = require('express-session');
-const MongoDbStore = require('connect-mongo');
 mongoose.Promise = global.Promise; 
 const port = process.env.PORT // 3000;
 
 
-socket.connect(server);
+// socket.connect(server);
 
 
 app.use(bodyParser.json({limit: "50mb"}));
@@ -35,13 +35,13 @@ const { env } = require("process");
 // middlewares
 let store = MongoDbStore.create({
     mongoUrl: 'mongodb+srv://patamonsito:gatomon22468220@cluster0.6j50p.mongodb.net/solonissan?authSource=admin&replicaSet=atlas-9kgnrk-shard-0&w=majority&readPreference=primary&appname=MongoDB%20Compass%20Community&retryWrites=true&ssl=true',
-    collection: "sessions"
+    useMongoClient: true
  });
 
 app.use(
     session({
         secret: 'Chilerepuestos',
-        resave: true,
+        resave: false,
         store: store,
         saveUninitialized: true,
         cookie: { maxAge: 1000 * 60 * 60 * 24 }, // 24 hours
