@@ -3,47 +3,31 @@ require("dotenv").config();
 const express = require("express");
 const app = express();
 const server = require('http').Server(app);
-// const io = require('socket.io')(server);
-// const socket = require('./socket');
-const cookieParser  = require('cookie-parser'); 
+const io = require('socket.io')(server);
+const socket = require('./socket');
 
-const session = require('express-session');
 const mongoose = require("mongoose");
-const MongoStore = require('connect-mongo')(session);
 const cors = require("cors");
 const path = require('path');
 var json2xls = require('json2xls');
+
 const bodyParser = require("body-parser");
 const fs = require("fs");
 
+const session = require('express-session');
+const MongoStore = require('connect-mongo');
 mongoose.Promise = global.Promise; 
 const port = process.env.PORT // 3000;
 
 
-// socket.connect(server);
+socket.connect(server);
 
 
 app.use(bodyParser.json({limit: "50mb"}));
 app.use(bodyParser.urlencoded({limit: "50mb", extended: true, parameterLimit:50000}));
 
 
-// database connection
-const conn = require('./conection');
-const { env } = require("process");
-
- 
-app.set("trust proxy", 1);
-
-// Middlewares
-app.use(session({ 
-    secret: process.env.SESSION_SECRET || 'Chilerepuestos', 
-    resave: false, // investigar mas -> https://www.npmjs.com/package/express-session 
-    saveUninitialized: false, 
-    cookie: { maxAge: 1000 * 60 * 60 * 72 }, // 24 hours
-    store: new MongoStore({ 
-      mongooseConnection: conn,
-    }) 
-  }));
+// middlewares
 app.use(cors());
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -51,8 +35,27 @@ app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.static(path.join(__dirname, "uploads")));
 app.use(express.static(path.join(__dirname, "uploads/avatars")));
-app.use(cookieParser('secret'))
 
+// database connection
+const conn = require('./conection');
+const { env } = require("process");
+
+
+//configuracion de session
+let store = new MongoStore({
+    mongoUrl: process.env.DB_LOCAL,
+    collection: "sessions"
+ });
+
+app.use(
+    session({
+        secret: process.env.SESSION_SECRET || 'Chilerepuestos',
+        resave: false,
+        store: store,
+        saveUninitialized: false,
+        cookie: { maxAge: 1000 * 60 * 60 * 24 }, // 24 hours
+      })
+      );
 
 
 // router prefix
