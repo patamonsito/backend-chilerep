@@ -42,6 +42,9 @@ app.use(
     session({
         secret: 'Chilerepuestos',
         resave: false,
+        sameSite: 'none',
+        httpOnly: true,
+        secure: true,
         store: store,
         saveUninitialized: true,
         cookie: { maxAge: 1000 * 60 * 60 * 24 }, // 24 hours
