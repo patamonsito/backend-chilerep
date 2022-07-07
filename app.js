@@ -9,7 +9,7 @@ const cookieParser  = require('cookie-parser');
 
 const session = require('express-session');
 const mongoose = require("mongoose");
-const MongoDbStore = require('connect-mongo');
+const MongoStore = require('connect-mongo')(session);
 const cors = require("cors");
 const path = require('path');
 var json2xls = require('json2xls');
@@ -31,25 +31,19 @@ app.use(bodyParser.urlencoded({limit: "50mb", extended: true, parameterLimit:500
 const conn = require('./conection');
 const { env } = require("process");
 
+ 
+app.set("trust proxy", 1);
 
-// middlewares
-let store = MongoDbStore.create({
-    mongoUrl: 'mongodb+srv://patamonsito:gatomon22468220@cluster0.6j50p.mongodb.net/solonissan?authSource=admin&replicaSet=atlas-9kgnrk-shard-0&w=majority&readPreference=primary&appname=MongoDB%20Compass%20Community&retryWrites=true&ssl=true',
-    useMongoClient: true
- });
-
-app.use(
-    session({
-        secret: 'Chilerepuestos',
-        resave: false,
-        sameSite: 'none',
-        httpOnly: true,
-        secure: true,
-        store: store,
-        saveUninitialized: true,
-        cookie: { maxAge: 1000 * 60 * 60 * 24 }, // 24 hours
-      })
-      );
+// Middlewares
+app.use(session({ 
+    secret: process.env.SESSION_SECRET || 'Chilerepuestos', 
+    resave: false, // investigar mas -> https://www.npmjs.com/package/express-session 
+    saveUninitialized: false, 
+    cookie: { maxAge: 1000 * 60 * 60 * 72 }, // 24 hours
+    store: new MongoStore({ 
+      mongooseConnection: conn,
+    }) 
+  }));
 app.use(cors());
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: false }));
