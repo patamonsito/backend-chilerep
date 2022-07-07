@@ -49,7 +49,7 @@ let store = new MongoStore({
 
 app.use(
     session({
-        secret: process.env.SESSION_SECRET || 'Chilerepuestos',
+        secret: 'Chilerepuestos',
         resave: false,
         store: store,
         saveUninitialized: false,

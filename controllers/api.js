@@ -1698,6 +1698,116 @@ module.exports = class API {
        }
 
 
+       static async POST_API_CUATRORUEDAS(req, res){
+
+        let { Buscar } = req.body;
+
+        let headers = {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101 Firefox/102.0',
+            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
+            'Accept-Language': 'es-CL,es;q=0.8,en-US;q=0.5,en;q=0.3',
+            'Accept-Encoding': 'gzip, deflate, br',
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'Origin': 'https://www.cuatroruedas.cl',
+            'Connection': 'keep-alive',
+            'Referer': 'https://www.cuatroruedas.cl/sistema/',
+            'Upgrade-Insecure-Requests': '1',
+            'Sec-Fetch-Dest': 'document',
+            'Sec-Fetch-Mode': 'navigate',
+            'Sec-Fetch-Site': 'same-origin',
+            'Sec-Fetch-User': '?1',
+            jar: jar
+        };
+        
+        let dataString = '_method=POST&data%5BCliente%5D%5Brut_empresa%5D=77.177.455-5&data%5BCliente%5D%5Bclave%5D=ejercito62';
+        
+        let options = {
+            url: 'https://www.cuatroruedas.cl/sistema/clientes/login',
+            method: 'POST',
+            headers: headers,
+            gzip: true,
+            body: dataString,
+            jar: jar
+        };
+        
+        function callback(error, response, body) {
+            if (!error && response.statusCode == 200) {
+    
+                let headersdos = {
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101 Firefox/102.0",
+                "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
+                "Accept-Language": "es-CL,es;q=0.8,en-US;q=0.5,en;q=0.3",
+                "Content-Type": "multipart/form-data; boundary=---------------------------285243982628837725834080908036",
+                "Upgrade-Insecure-Requests": "1",
+                "Sec-Fetch-Dest": "document",
+                "Sec-Fetch-Mode": "navigate",
+                "Sec-Fetch-Site": "same-origin",
+                "Sec-Fetch-User": "?1",
+                    jar: jar
+                };
+    
+    
+                let dataStringdos = `-----------------------------285243982628837725834080908036\r\nContent-Disposition: form-data; name=\"_method\"\r\n\r\nPOST\r\n-----------------------------285243982628837725834080908036\r\nContent-Disposition: form-data; name=\"data[Producto][modelo_uso]\"\r\n\r\n${Buscar}\r\n-----------------------------285243982628837725834080908036--\r\n`;            
+
+                let optionsdos = {
+                    url: 'https://www.cuatroruedas.cl/sistema/productos/buscar_catalogo',
+                    method: 'POST',
+                    headers: headersdos,
+                    body: dataStringdos,
+                    jar: jar
+                };
+                
+                function callback(error, response, body) {
+                    if (!error && response.statusCode == 200) {
+    
+                        const $ = cheerio.load(body);
+                        
+                        let prueba = $('div > div.content > table > tbody > tr:nth-child(4) > td > table > tbody > tr:nth-child(2) > td > table > tbody').html();
+
+                        const jsonTablesCuatroRuedas = HtmlTableToJson.parse('<table><thead><th>1</th><th>2</th><th>3</th><th>Sku</th><th>3</th><th>Descripcion</th><th>4</th><th>Stock</th><th>5</th><th>6</th><th>7</th><th>Precio</th><th>8</th></thead><tbody>'+prueba+'</tbody></table>');
+    
+                        jsonTablesCuatroRuedas.results[0] = jsonTablesCuatroRuedas.results[0].filter(e => {
+                            if(e.Sku != '' && e.Descripcion != '' && e.Precio != ''){
+                                delete e[1]
+                                delete e[2]
+                                delete e[3]
+                                delete e[4]
+                                delete e[5]
+                                delete e[6]
+                                delete e[7]
+                                delete e[8]
+                                delete e[14]
+                                return e;
+                            }
+                        })
+    
+    
+                        jsonTablesCuatroRuedas.results[0] = jsonTablesCuatroRuedas.results[0].filter(e => {
+                            if(Object.keys(e).length != 0){
+                                return e;
+                            }
+                        })
+    
+    
+                        return res.send(jsonTablesCuatroRuedas.results[0]);
+                    }
+                }
+                
+                request(optionsdos, callback);
+    
+    
+    
+    
+            }
+        }
+        
+        request(options, callback);
+    
+    
+    }
+
+
+
     static async POST_API_IMPORTADORA(req, res){
 
 
@@ -4630,39 +4740,62 @@ static async GET_TESTTRES(req, res){
         if (!error && response.statusCode == 200) {
 
             var headersdos = {
-                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101 Firefox/102.0',
-                'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
-                'Accept-Language': 'es-CL,es;q=0.8,en-US;q=0.5,en;q=0.3',
-                'Accept-Encoding': 'gzip, deflate, br',
-                'Content-Type': 'multipart/form-data; boundary=---------------------------18915390131068473625871846969',
-                'Origin': 'https://www.cuatroruedas.cl',
-                'Connection': 'keep-alive',
-                'Referer': 'https://www.cuatroruedas.cl/sistema/productos/home_carro',
-                'Cookie': 'CAKEPHP=ngkjmkpjhcl91knop63fh0jh67; _ga=GA1.2.41023893.1657142051; _gid=GA1.2.1390214180.1657142051; _gat=1',
-                'Upgrade-Insecure-Requests': '1',
-                'Sec-Fetch-Dest': 'document',
-                'Sec-Fetch-Mode': 'navigate',
-                'Sec-Fetch-Site': 'same-origin',
-                'Sec-Fetch-User': '?1',
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101 Firefox/102.0",
+            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
+            "Accept-Language": "es-CL,es;q=0.8,en-US;q=0.5,en;q=0.3",
+            "Content-Type": "multipart/form-data; boundary=---------------------------285243982628837725834080908036",
+            "Upgrade-Insecure-Requests": "1",
+            "Sec-Fetch-Dest": "document",
+            "Sec-Fetch-Mode": "navigate",
+            "Sec-Fetch-Site": "same-origin",
+            "Sec-Fetch-User": "?1",
                 jar: jar
             };
-            
-            var dataStringdos = 'Content-Disposition: form-data; name="data[Producto][modelo_uso]"\n'+
-            'amortiguador\n'+
-            '-----------------------------18915390131068473625871846969--\n';
+
+
+            var dataStringdos = `-----------------------------285243982628837725834080908036\r\nContent-Disposition: form-data; name=\"_method\"\r\n\r\nPOST\r\n-----------------------------285243982628837725834080908036\r\nContent-Disposition: form-data; name=\"data[Producto][modelo_uso]\"\r\n\r\nCulata\r\n-----------------------------285243982628837725834080908036--\r\n`;            
             
             var optionsdos = {
                 url: 'https://www.cuatroruedas.cl/sistema/productos/buscar_catalogo',
                 method: 'POST',
                 headers: headersdos,
-                gzip: true,
                 body: dataStringdos,
                 jar: jar
             };
             
             function callback(error, response, body) {
                 if (!error && response.statusCode == 200) {
-                    res.send(body);
+
+                    const $ = cheerio.load(body);
+                    
+                    let prueba = $('div > div.content > table > tbody > tr:nth-child(4) > td > table > tbody > tr:nth-child(2) > td > table > tbody').html().replace('/sistema/img/', 'https://www.cuatroruedas.cl/sistema/img/')
+
+                    const jsonTablesCuatroRuedas = HtmlTableToJson.parse('<table><thead><th>1</th><th>2</th><th>3</th><th>Sku</th><th>3</th><th>Descripcion</th><th>4</th><th>Stock</th><th>5</th><th>6</th><th>7</th><th>Precio</th><th>8</th></thead><tbody>'+prueba+'</tbody></table>');
+
+                    jsonTablesCuatroRuedas.results[0] = jsonTablesCuatroRuedas.results[0].filter(e => {
+                        if(e.Sku != '' && e.Descripcion != '' && e.Precio != ''){
+                            delete e[1]
+                            delete e[2]
+                            delete e[3]
+                            delete e[4]
+                            delete e[5]
+                            delete e[6]
+                            delete e[7]
+                            delete e[8]
+                            delete e[14]
+                            return e;
+                        }
+                    })
+
+
+                    jsonTablesCuatroRuedas.results[0] = jsonTablesCuatroRuedas.results[0].filter(e => {
+                        if(Object.keys(e).length != 0){
+                            return e;
+                        }
+                    })
+
+
+                    res.send(jsonTablesCuatroRuedas.results[0]);
                 }
             }
             
@@ -4675,6 +4808,7 @@ static async GET_TESTTRES(req, res){
     }
     
     request(options, callback);
+
 
 }
 

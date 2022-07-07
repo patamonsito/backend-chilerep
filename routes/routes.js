@@ -56,7 +56,9 @@ router.post('/api-alsacia', API.POST_API_ALSACIA);
 router.post('/api-bicimoto', API.POST_API_BICIMOTO);
 router.post('/api-mannheim', API.POST_API_MANNHEIM);
 router.post('/api-noriega', API.POST_API_NORIEGA);
+router.post('/api-cuatro-ruedas', API.POST_API_CUATRORUEDAS);
 router.post('/aplicaciones-m', API.POST_APLICACIONESM);
+
 
 //PRODUCTOS CRUD
 router.post('/products/create-many', API.POST_CREATEPRODUCTS)
