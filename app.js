@@ -58,6 +58,13 @@ app.use(
       );
 
 
+      app.use(function(req, res, next) {
+        res.header('Access-Control-Allow-Origin', '*');
+        res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+        next();
+      });
+
+
 // router prefix
 app.use('/api', require('./routes/routes'))
 const jsonArr = [{
