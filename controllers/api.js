@@ -1281,6 +1281,10 @@ module.exports = class API {
 
     static async GET_USER_TOKEN_ADMIN(req, res){
         try {
+            
+            console.log(req.session);
+
+
             if(!req.session.tokenAdmin){ req.session.tokenAdmin = '' }else{
                 // if(req.session.tokenAdmin != ''){
                 //     if(req.session.tokenAdmin.split('AqEUQJ')[1] != req.body.ip){
