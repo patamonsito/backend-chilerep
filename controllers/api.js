@@ -1136,11 +1136,9 @@ module.exports = class API {
                 
                 bcrypt.compare(Contraseña, User.Contraseña, async function(err, result){
                     if(result == true){
-                        var ip = req.body.ip;
-                        var cookie = User.Contraseña
-                        req.session.tokenAdmin = cookie;
-                        await Usuarios.updateOne({ Usuario, Correo }, {$set: { Token: cookie } });
-                        return res.status(200).send(User)
+                        var Token = User.Contraseña
+                        await Usuarios.updateOne({ Usuario, Correo }, {$set: { Token: Token } });
+                        return res.status(200).send({User, Token})
                     }else{
                         return res.status(200).send('Error: 403')
                     }
@@ -1267,8 +1265,8 @@ module.exports = class API {
     }
     static async GET_USER_TOKEN(req, res){
         try {
-            var token = req.session.token;
-            var CurrentUser = await Usuarios.find({ Token: token });
+            var Token = req.body.Token;
+            var CurrentUser = await Usuarios.findOne({ Token: Token });
             if(CurrentUser.length == 0){
                 return res.status(200).json('Invitado');
             }else{
@@ -1295,8 +1293,8 @@ module.exports = class API {
                 //     }
                 // }
             }
-            var token = req.session.tokenAdmin;
-            var CurrentUser = await Usuarios.find({ Token: token });
+            var Token = req.body.Token;
+            var CurrentUser = await Usuarios.find({ Token: Token });
             if(CurrentUser.length == 0){
                 return res.status(200).send('Invitado');
             }else{
@@ -1363,6 +1361,29 @@ module.exports = class API {
             // Fin 
         } catch (err) {
             return res.status(200).json({ message: err.message});
+        }
+    }
+
+
+    static async POST_API_CHILEREPUESTOS(req, res){
+        try {
+            let { Buscar } = req.body;
+
+            var options = { method: 'GET',
+              url: 'https://chilerepuestos.com/admin/secrect-page-toke-483482',
+              qs: { param1: Buscar },
+              headers: 
+               { 'cache-control': 'no-cache' } };
+
+            request(options, function (error, response, body) {
+              if (error) throw new Error(error);
+              return res.send(body)
+            });
+
+
+
+        } catch (error) {
+            res.status(200).send(error);
         }
     }
 
