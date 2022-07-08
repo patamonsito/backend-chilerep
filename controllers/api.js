@@ -1609,6 +1609,14 @@ module.exports = class API {
    
             let { Buscar } = req.body;
 
+            let Pass = Buscar.split(' ');
+            console.log(Pass);
+            if(Pass.includes('metal') || Pass.includes('biela') || Pass.includes('0.75') || Pass.includes('h-1') || Pass.includes('h1')){
+                
+            }else{
+                Buscar = Buscar.replaceAll('mastervan', 'master').replaceAll('master van', 'master').replaceAll(',', '').replaceAll('.', '').replaceAll('1', '').replaceAll('2', '').replaceAll('3', '').replaceAll('4', '').replaceAll('5', '').replaceAll('6', '').replaceAll('7', '').replaceAll('8', '').replaceAll('9', '').replaceAll('0', '').trim();
+            }
+
             let headersCuatro = {
                 'authority': 'repuestos.buscalibre.cl',
                 'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
