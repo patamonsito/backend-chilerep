@@ -28,8 +28,7 @@ app.use(bodyParser.urlencoded({limit: "50mb", extended: true, parameterLimit:500
 
 
 // middlewares
-app.use(cors({credentials: true, origin: 'http://143.198.165.86:3000/'}));
-app.use(cors({credentials: true, origin: 'http://143.198.165.86:8080/'}));
+app.use(cors());
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -57,15 +56,6 @@ app.use(
         cookie: { maxAge: 1000 * 60 * 60 * 24 }, // 24 hours
       })
       );
-
-
-      app.use(function(req, res, next) {
-        res.header('Access-Control-Allow-Credentials', true);
-        res.header('Access-Control-Allow-Origin', req.headers.origin);
-        res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,UPDATE,OPTIONS');
-        res.header('Access-Control-Allow-Headers', 'X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept');
-        next();
-      });
 
 
 // router prefix
