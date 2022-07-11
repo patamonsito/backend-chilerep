@@ -1183,7 +1183,6 @@ module.exports = class API {
         //CERRAR SESION
         static async GET_LOGOUT(req, res){
             try {
-                req.session.destroy();
                 return res.status(200).json('ready')
             } catch (err) {
                 return res.status(200).json({ message: err.message});
@@ -1267,6 +1266,7 @@ module.exports = class API {
         try {
             var Token = req.body.Token;
             var CurrentUser = await Usuarios.findOne({ Token: Token });
+
             if(CurrentUser.length == 0){
                 return res.status(200).json('Invitado');
             }else{
@@ -1279,20 +1279,6 @@ module.exports = class API {
 
     static async GET_USER_TOKEN_ADMIN(req, res){
         try {
-            
-            console.log(req.session);
-
-
-            if(!req.session.tokenAdmin){ req.session.tokenAdmin = '' }else{
-                // if(req.session.tokenAdmin != ''){
-                //     if(req.session.tokenAdmin.split('AqEUQJ')[1] != req.body.ip){
-                //         req.session.tokenAdmin = '';
-                //         req.session.destroy();
-                //         await Usuarios.updateOne({Token: req.session.tokenAdmin}, {$set: {Token: '7564327895487324' } })
-                //         return res.status(200).json('Error: 404')
-                //     }
-                // }
-            }
             var Token = req.body.Token;
             var CurrentUser = await Usuarios.find({ Token: Token });
             if(CurrentUser.length == 0){
@@ -1394,7 +1380,7 @@ module.exports = class API {
         
         let CookieRefax = await Credenciales.findOne({ Importadora: 'Refax' });
 
-        var headers = {
+        let headers = {
             'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:97.0) Gecko/20100101 Firefox/97.0',
             'Accept': '*/*',
             'Accept-Language': 'en-US,en;q=0.5',
@@ -1410,9 +1396,9 @@ module.exports = class API {
             'Sec-Fetch-Site': 'same-origin'
         };
         
-        var dataString = 'html=1&busqueda='+Buscar+'+&usuariop=sasval13&cliente=C77554630';
+        let dataString = 'html=1&busqueda='+Buscar+'+&usuariop=sasval13&cliente=C77554630';
         
-        var options = {
+        let options = {
             url: 'https://b2b.refaxchile.cl/B2BRefax/buscadorA',
             method: 'POST',
             headers: headers,
@@ -1425,6 +1411,62 @@ module.exports = class API {
             if (!error && response.statusCode == 200) {
                 let RefaxResult = body;
 
+
+
+                if(typeof(body) === 'string' && Buscar.split(' ').length == 1 && response.request.headers["content-length"] == 60){
+                    console.log('se ejecuto');
+                    let headers = {
+                        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101 Firefox/102.0',
+                        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
+                        'Accept-Language': 'es-CL,es;q=0.8,en-US;q=0.5,en;q=0.3',
+                        'Accept-Encoding': 'gzip, deflate, br',
+                        'Referer': 'https://b2b.refaxchile.cl/B2BRefax/index.jsp',
+                        'Connection': 'keep-alive',
+                        'Cookie': CookieRefax.Cookie,
+                        'Upgrade-Insecure-Requests': '1',
+                        'Sec-Fetch-Dest': 'document',
+                        'Sec-Fetch-Mode': 'navigate',
+                        'Sec-Fetch-Site': 'same-origin',
+                        'Sec-Fetch-User': '?1'
+                    };
+                    
+                    let options = {
+                        url: 'https://b2b.refaxchile.cl/B2BRefax/producto.jsp?idArticulo='+Buscar+'&tipo=D',
+                        headers: headers,
+                        gzip: true
+                    };
+                    
+                    function callback(error, response, body) {
+                        if (!error && response.statusCode == 200) {
+                            console.log(body, 'here')
+                            const $ = cheerio.load(body);
+
+                            console.log($('#idArticulo').text().trim())
+
+
+                            let Json = [[ {
+                                Sku: $('#idArticulo').text().trim(),
+                                Producto: $('#block-right > div.title-producto > h3').text().trim(),
+                                Descripcion: ($('#block-right > div.description > p:nth-child(1)').text().trim() + ' ' + $('#block-right > div.description > p:nth-child(2)').text().trim() + ' ' + $('#block-right > div.description > p:nth-child(3)').text().trim()).trim(),
+                                MARCA: $('#more-info > div > div:nth-child(2) > div.marca.row > span:nth-child(2)').text().trim(),
+                                Origen: $('#more-info > div > div:nth-child(2) > div.origen.row > span:nth-child(2)').text().trim(),
+                                PrecioImportadora: $('#precio').text().trim(),
+                                Stock: $('#stocks').text().trim(),
+                                Llegada: $('#more-info > div > div:nth-child(3) > div.llegada.row > span:nth-child(2)').text().trim(),
+                                Oem: $('div.n-original > ul').html()
+                            },
+                            {},
+                            {}
+                        ]]
+
+                            return res.status(200).send(Json);
+                        }
+                    }
+                    
+                    request(options, callback);
+
+                }else{
+                
                 if(RefaxResult.length == 78){
                     return res.status(200).send('Error al iniciar sesion')
                 }
@@ -1434,6 +1476,8 @@ module.exports = class API {
 
                 res.status(200).send(jsonTablesRefax.results);
                 return;
+                
+            }
 
             }
         }
@@ -1838,7 +1882,6 @@ module.exports = class API {
     
     
     }
-
 
 
     static async POST_API_IMPORTADORA(req, res){
@@ -2437,6 +2480,52 @@ module.exports = class API {
         }
     }
 
+
+
+    static async POST_APLICACIONESR(req, res){
+        let { CodigoImportadora } = req.body;
+        
+
+        let CookieRefax = await Credenciales.findOne({ Importadora: 'Refax' });
+
+        var headers = {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101 Firefox/102.0',
+            'Accept': '*/*',
+            'Accept-Language': 'es-CL,es;q=0.8,en-US;q=0.5,en;q=0.3',
+            'Accept-Encoding': 'gzip, deflate, br',
+            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+            'X-Requested-With': 'XMLHttpRequest',
+            'Origin': 'https://b2b.refaxchile.cl',
+            'Connection': 'keep-alive',
+            'Referer': 'https://b2b.refaxchile.cl/B2BRefax/producto.jsp?idArticulo='+ CodigoImportadora +'&tipo=D',
+            'Cookie': CookieRefax.Cookie,
+            'Sec-Fetch-Dest': 'empty',
+            'Sec-Fetch-Mode': 'cors',
+            'Sec-Fetch-Site': 'same-origin'
+        };
+        
+        var dataString = 'tipo=APLICACIONES&idArticulo=' + CodigoImportadora;
+        
+        var options = {
+            url: 'https://b2b.refaxchile.cl/B2BRefax/productoAplicaciones',
+            method: 'POST',
+            headers: headers,
+            gzip: true,
+            body: dataString
+        };
+        
+        function callback(error, response, body) {
+            if (!error && response.statusCode == 200) {
+                 
+                res.status(200).send(body)
+            }
+        }
+        
+        request(options, callback);
+        
+
+
+    }
 
 
     static async POST_APLICACIONESM(req, res){
@@ -3246,9 +3335,11 @@ static async UPLOAD_IMG_REPUESTO(req, res){
 
 static async GET_CART(req, res){
     try {
-    if(!req.session.carrito){ req.session.carrito = []}
+    let Token = req.body.Token;
+    let User = await Usuarios.findOne({Token: Token });
+    let Carrito = User.Carrito
 
-    res.status(200).json(req.session.carrito)
+    res.status(200).json(Carrito)
         
     } catch (err) {
         return res.status(200).json({ message: err.message});
@@ -3258,10 +3349,11 @@ static async GET_CART(req, res){
 
 static async GET_CERRITO_SESSION(req, res){
     try {
+        let Token = req.body.Token;
+        let User = await Usuarios.findOne({Token: Token });
+        let Carrito = User.Carrito;
 
-        if(!req.session.carrito){ req.session.carrito = []}
-        
-        return res.status(200).json(req.session.carrito);
+        res.status(200).json(Carrito);
         
     } catch (err) {
         return res.status(200).json({ message: err.message});
@@ -3270,25 +3362,33 @@ static async GET_CERRITO_SESSION(req, res){
 
 static async ADD_TO_CART(req, res){
     try {
-        if(!req.session.carrito){ req.session.carrito = []}
+        let Token = req.body.Token;
+        let User = await Usuarios.findOne({Token: Token });
+        let Carrito = User.Carrito;
+
+        console.log(Carrito);
+
+
         let { CodigoImportadora, Cantidad, Modelo } = req.body;
 
         if(Modelo == 'No Informado'){
             let Product = await Productos.findOne({$or: [{ CodigoImportadora: CodigoImportadora }, { CodigoProducto: CodigoImportadora }, { OEM: CodigoImportadora }]})
             if(Product){
-                console.log(Product)
                 let Existe = false;
         
-                req.session.carrito.map(e => {
-                    if(e.CodigoImportadora == Product.CodigoImportadora){
-                        e.Cantidad = parseInt(e.Cantidad) + parseInt(Cantidad)
-                        e.Total = parseInt(e.Precio) * parseInt(e.Cantidad)
-                        Existe = true
-                    }
-                })
+                if(Carrito.length > 0){
+                    Carrito.map(e => {
+                        if(e.CodigoImportadora == Product.CodigoImportadora){
+                            e.Cantidad = parseInt(e.Cantidad) + parseInt(Cantidad)
+                            e.Total = parseInt(e.Precio) * parseInt(e.Cantidad)
+                            Existe = true
+                        }
+                    })
+                }
         
                 if(Existe){
-                    return res.status(200).json(req.session.carrito);
+                    await Usuarios.updateOne({Token: Token}, {$set: {Carrito: Carrito} });
+                    return res.status(200).json(Carrito);
                 }
         
                 let Json = {
@@ -3308,21 +3408,21 @@ static async ADD_TO_CART(req, res){
                     Total: MargenPrecio(Product.PrecioImportadora) * req.body.Cantidad
                 }
         
-                req.session.carrito.push(Json)
-        
-                return res.status(200).json(req.session.carrito)
+                Carrito.push(Json)
+                
+                await Usuarios.updateOne({Token: Token}, {$set: {Carrito: Carrito} });
+
+                return res.status(200).json(Carrito)
             }else{
                 return res.status(200).send('PRODUCTO NO ENCONTRADO CODIGO: ' + CodigoImportadora)
             }
         }
 
-        console.log(req.body)
         let Product = await Productos.findOne({ CodigoImportadora: CodigoImportadora })
         
-        console.log(Product)
         let Existe = false;
 
-        req.session.carrito.map(e => {
+        Carrito.map(e => {
             if(e.CodigoImportadora == Product.CodigoImportadora){
                 e.Cantidad = parseInt(e.Cantidad) + parseInt(Cantidad)
                 e.Total = parseInt(e.Precio) * parseInt(e.Cantidad)
@@ -3331,7 +3431,8 @@ static async ADD_TO_CART(req, res){
         })
 
         if(Existe){
-            return res.status(200).json(req.session.carrito);
+            await Usuarios.updateOne({Token: Token}, {$set: {Carrito: Carrito} });
+            return res.status(200).json(Carrito);
         }
 
         let Json = {
@@ -3351,12 +3452,10 @@ static async ADD_TO_CART(req, res){
             Total: MargenPrecio(Product.PrecioImportadora) * req.body.Cantidad
         }
 
-        req.session.carrito.push(Json)
+        Carrito.push(Json)
 
-
-        console.log(req.session.carrito)
-
-        return res.status(200).json(req.session.carrito)
+        await Usuarios.updateOne({Token: Token}, {$set: {Carrito: Carrito} });
+        return res.status(200).json(Carrito)
     } catch (err) {
         return res.status(200).json({ message: err.message});
     }
@@ -3365,18 +3464,23 @@ static async ADD_TO_CART(req, res){
 
 static async REMOVE_TO_CART(req, res){
     try {
+        let Token = req.body.Token;
+        let User = await Usuarios.findOne({Token: Token });
+        let Carrito = User.Carrito;
+
         let { CodigoImportadora, Cantidad } = req.body;
         if(CodigoImportadora == 'todo'){
-            req.session.carrito = []
+            Carrito = []
+            await Usuarios.updateOne({Token: Token}, {$set: {Carrito: Carrito} });
             return res.status(200).send('EXITO')
         }
         let Product = await Productos.findOne({ CodigoImportadora: CodigoImportadora })
-        req.session.carrito.map(e => {
+        Carrito.map(e => {
             if(e.CodigoImportadora == Product.CodigoImportadora){
                 if(e.Cantidad - 1 == 0 || Cantidad == 99){
-                    req.session.carrito.forEach(function(currentValue, index, arr){
-                        if(req.session.carrito[index].CodigoImportadora == e.CodigoImportadora){
-                            req.session.carrito.splice(index, 1);     
+                    Carrito.forEach(function(currentValue, index, arr){
+                        if(Carrito[index].CodigoImportadora == e.CodigoImportadora){
+                            Carrito.splice(index, 1);     
                          }
                         })
 
@@ -3386,8 +3490,8 @@ static async REMOVE_TO_CART(req, res){
                 }
             }
         })
-    
-        return res.status(200).json(req.session.carrito);
+        await Usuarios.updateOne({Token: Token}, {$set: {Carrito: Carrito} });
+        return res.status(200).json(Carrito);
 
     } catch (err) {
         return res.status(200).json({ message: err.message});
@@ -3397,16 +3501,21 @@ static async REMOVE_TO_CART(req, res){
 
 static async UPDATE_CART(req, res){
     try {
+        let Token = req.body.Token;
+        let User = await Usuarios.findOne({Token: Token });
+        let Carrito = User.Carrito;
+
         let { CodigoImportadora, Cantidad } = req.body;
         let Product = await Productos.findOne({ CodigoImportadora: CodigoImportadora })
-        req.session.carrito.map(e => {
+        Carrito.map(e => {
             if(e.CodigoImportadora == Product.CodigoImportadora){
                     e.Cantidad = parseInt(Cantidad)
                     e.Total = parseInt(e.Precio) * parseInt(e.Cantidad)
             }
         })
-    
-        return res.status(200).json(req.session.carrito);
+
+        await Usuarios.updateOne({Token: Token}, {$set: {Carrito: Carrito} });
+        return res.status(200).json(Carrito);
 
     } catch (err) {
         return res.status(200).json({ message: err.message});
@@ -3415,7 +3524,7 @@ static async UPDATE_CART(req, res){
 
 
 static async DELETE_SESSION(req, res){
-       req.session.destroy();
+       await Usuarios.updateOne({Token: Token}, {$set: {Carrito: []} });
        res.send('session destruida')
 }
 
@@ -3483,9 +3592,13 @@ static async POST_SAVEORDEN(req, res){
 
 static async POST_WEBPAY(req, res){
 
+    let Token = req.body.Token;
+    let User = await Usuarios.findOne({Token: Token });
+    let Carrito = User.Carrito;
+
     let Total = 0;
 
-    req.session.carrito.map(e => {
+    Carrito.map(e => {
         Total = Total + e.Total
     })
 
@@ -3501,7 +3614,7 @@ static async POST_WEBPAY(req, res){
 
     const response = await WebpayPlus.Transaction.create(buyOrder, sessionId, amount, returnUrl);
 
-    req.session.carrito.map(async e => {
+    Carrito.map(async e => {
         await new Ventas({ ...e, TBK_TOKEN: response.token, Orden: parseInt(respuesta.Orden), TotalNeto: Total }).save(); 
     })
 
@@ -3509,8 +3622,9 @@ static async POST_WEBPAY(req, res){
 
     await Folios.updateOne( { Referencia: 'Webpay' }, {$set: { Orden: (respuesta.Orden + 1) } });
 
-    req.session.carrito = [];
+    Carrito = [];
 
+    await Usuarios.updateOne({Token: Token}, {$set: {Carrito: []} });
     return res.status(200).json({ response })
 
 }

@@ -13,9 +13,6 @@ var json2xls = require('json2xls');
 
 const bodyParser = require("body-parser");
 const fs = require("fs");
-
-const session = require('express-session');
-const MongoStore = require('connect-mongo');
 mongoose.Promise = global.Promise; 
 const port = process.env.PORT // 3000;
 
@@ -41,37 +38,8 @@ const conn = require('./conection');
 const { env } = require("process");
 
 
-//configuracion de session
-let store = new MongoStore({
-    mongoUrl: process.env.DB_LOCAL,
-    collection: "sessions"
- });
-
-app.use(
-    session({
-        secret: process.env.SESSION_SECRET || 'Chilerepuestos',
-        resave: false,
-        store: store,
-        saveUninitialized: false,
-        cookie: { maxAge: 1000 * 60 * 60 * 24 }, // 24 hours
-      })
-      );
-
-
 // router prefix
 app.use('/api', require('./routes/routes'))
-const jsonArr = [{
-    foo: 'bar',
-    qux: 'moo',
-    poo: 123,
-    stux: new Date()
-},
-{
-    foo: 'bar',
-    qux: 'moo',
-    poo: 345,
-    stux: new Date()
-}];
 
 app.use(json2xls.middleware);
 

@@ -59,6 +59,7 @@ router.post('/api-mannheim', API.POST_API_MANNHEIM);
 router.post('/api-noriega', API.POST_API_NORIEGA);
 router.post('/api-cuatro-ruedas', API.POST_API_CUATRORUEDAS);
 router.post('/aplicaciones-m', API.POST_APLICACIONESM);
+router.post('/aplicaciones-r', API.POST_APLICACIONESR);
 
 
 //PRODUCTOS CRUD
@@ -132,7 +133,7 @@ router.get('/get-regiones', API.GET_REGIONES,)
 router.post('/post-comuna', API.POST_COMUNA)
 
 //CARRITO - ADD_TO_CART
-router.get('/get-carrito', API.GET_CERRITO_SESSION)
+router.post('/get-carrito', API.GET_CERRITO_SESSION)
 router.post('/add-cart', API.ADD_TO_CART)
 router.post('/update-carrito', API.UPDATE_CART)
 router.post('/remove-cart', API.REMOVE_TO_CART)

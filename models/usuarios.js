@@ -6,6 +6,7 @@ const UsuariosSchema = new Schema({
     Nombre: String,
     Rol: String,
     Apellido: String,
+    Carrito: {type: Array, default: []},
     Rut: { type: String, unique: true, uppercase: true },
     Direccion: String,
     Telefono: String,
