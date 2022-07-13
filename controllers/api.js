@@ -1533,9 +1533,6 @@ module.exports = class API {
                     const $ = cheerio.load(body);
 
                     const jsonTablesAlsacia = HtmlTableToJson.parse('<table>'+$('table').html().replace(/(\r\n|\n|\r)/gm, "").replace(/(\r\n|\n|\r)/gm, "").replace(/(\r\n|\n|\r)/gm, "").replace(/(\r\n|\n|\r)/gm, "").replace(/(\r\n|\n|\r)/gm, "").replace(/(\r\n|\n|\r)/gm, "").replace(/(\r\n|\n|\r)/gm, "").replace(/(\r\n|\n|\r)/gm, "").replace(/(\r\n|\n|\r)/gm, "").replace(/(\r\n|\n|\r)/gm, "").replace(/(\r\n|\n|\r)/gm, "").replace(/(\r\n|\n|\r)/gm, "").replace(/(\r\n|\n|\r)/gm, "").replace(/(\r\n|\n|\r)/gm, "").replace(/(\r\n|\n|\r)/gm, "").replace(/(\r\n|\n|\r)/gm, "").replace('Descripción', 'Descripcion').replace('Año Ini', 'AñoI').replace('Año Fin', 'AñoT')+'</table>');
-             
-
-                    console.log(jsonTablesAlsacia[0].lenght, response.request.headers["content-length"], Buscar.split(' ').length)
 
                    res.status(200).send(jsonTablesAlsacia.results);
                    return;
@@ -1884,6 +1881,39 @@ module.exports = class API {
         request(options, callback);
     
     
+    }
+
+
+    static async POST_API_GABTEC(req, res){
+        try {
+            // Inicio
+            var Descripcion = req.body.Buscar.slice()
+            
+            Descripcion.split(' ');
+            var Descripcion = Descripcion.split(' ')
+
+            let i = 0
+            var reset = () => { i = 0; return i }
+            var next = () => { i++; return i }
+
+            if (Descripcion.length == 1) {
+                var Datos = await Gabtec.find({ $and: [{ $or: [{ Busqueda: new RegExp(Descripcion[0], 'i') }  ] } ] }).limit(100);
+            }else if(Descripcion.length == 2) {
+                var Datos = await Gabtec.find({ $and: [ { $or: [ { $and: [{ Busqueda: new RegExp(Descripcion[reset()], 'i') }, { Busqueda: new RegExp(Descripcion[Descripcion.length - 1], 'i') }] }] }  ] }).limit(100);
+            }else if(Descripcion.length == 3) {
+                var Datos = await Gabtec.find({ $and: [ { $or: [ { $and: [{ Busqueda: new RegExp(Descripcion[reset()], 'i') }, { Busqueda: new RegExp(Descripcion[next()], 'i') }, { Busqueda: new RegExp(Descripcion[Descripcion.length - 1], 'i') }] }] }  ] }).limit(100);
+            }else if(Descripcion.length == 4) {
+                var Datos = await Gabtec.find({ $and: [ { $or: [ { $and: [{ Busqueda: new RegExp(Descripcion[reset()], 'i') }, { Busqueda: new RegExp(Descripcion[next()], 'i') }, { Busqueda: new RegExp(Descripcion[next()], 'i') }, { Busqueda: new RegExp(Descripcion[Descripcion.length - 1], 'i') }] }] }  ] }).limit(100);
+            }else if(Descripcion.length == 5) {
+                var Datos = await Gabtec.find({ $and: [ { $or: [ { $and: [{ Busqueda: new RegExp(Descripcion[reset()], 'i') }, { Busqueda: new RegExp(Descripcion[next()], 'i') }, { Busqueda: new RegExp(Descripcion[next()], 'i') }, { Busqueda: new RegExp(Descripcion[next()], 'i') }, { Busqueda: new RegExp(Descripcion[Descripcion.length - 1], 'i') }] }] }  ] }).limit(100);
+            }
+
+            return res.status(200).send(Datos)
+
+            // Fin 
+        } catch (err) {
+            return res.status(200).json({ message: err.message});
+        }
     }
 
 

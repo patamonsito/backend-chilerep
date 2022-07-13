@@ -58,6 +58,7 @@ router.post('/api-bicimoto', API.POST_API_BICIMOTO);
 router.post('/api-mannheim', API.POST_API_MANNHEIM);
 router.post('/api-noriega', API.POST_API_NORIEGA);
 router.post('/api-cuatro-ruedas', API.POST_API_CUATRORUEDAS);
+router.post('/api-gabtec', API.POST_API_GABTEC);
 router.post('/aplicaciones-m', API.POST_APLICACIONESM);
 router.post('/aplicaciones-r', API.POST_APLICACIONESR);
 
