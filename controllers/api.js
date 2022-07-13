@@ -2396,7 +2396,53 @@ module.exports = class API {
         }
     }
 
+    static async POST_CONSULTARGABTEC(req, res){
 
+        let { Codigo } = req.body; 
+
+    let headers = {
+        "accept": "*/*",
+        "accept-language": "es-ES,es;q=0.9,en;q=0.8",
+        "content-type": "application/x-www-form-urlencoded; charset=UTF-8",
+        "sec-ch-ua": "\".Not/A)Brand\";v=\"99\", \"Google Chrome\";v=\"103\", \"Chromium\";v=\"103\"",
+        "sec-ch-ua-mobile": "?0",
+        "sec-ch-ua-platform": "\"Windows\"",
+        "sec-fetch-dest": "empty",
+        "sec-fetch-mode": "cors",
+        "sec-fetch-site": "same-origin",
+        "token_authorization": "U2FsdGVkX18/6NBYUPpHoOqljGWMuk7i7hMA8p1gefkEWMINDX7ADGYloRi72f7t",
+        "x-requested-with": "XMLHttpRequest",
+        "cookie": "PHPSESSID=lcm0clui3uk33rmdq67k8vjf40; compCookie2=6364",
+        "Referer": "https://www.gabtec.cl/",
+        "Referrer-Policy": "strict-origin-when-cross-origin"
+    };
+    
+    let dataString = 'codigo='+ Codigo +'&tipbus=codigoCruzado';
+    
+    let options = {
+        url: 'https://www.gabtec.cl/busqueda.php',
+        method: 'POST',
+        headers: headers,
+        gzip: true,
+        body: dataString
+    };
+    
+    async function callback(error, response, body) {
+
+        const $ = cheerio.load(body);
+
+        let Json = { 
+            Precio: $('div.row.col-12.pr-0.mr-0.my-2.pl-0 > div.col-lg-6.bg-white > div > div.col-12.mt-5 > span > b').text().trim(),
+            Stock: $('div.row.col-12.pr-0.mr-0.my-2.pl-0 > div.col-lg-6.bg-white > div > div:nth-child(5) > span').text().trim()
+        }
+
+        return res.status(200).send(Json)
+
+    }
+
+   request(options, callback);
+
+   }
     static async POST_EXTRAERGABTEC(req, res){
 
     let GabtecCode = await Gabtec.findOne({ Extraido: false });

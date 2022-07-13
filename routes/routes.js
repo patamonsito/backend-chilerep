@@ -61,6 +61,7 @@ router.post('/api-cuatro-ruedas', API.POST_API_CUATRORUEDAS);
 router.post('/api-gabtec', API.POST_API_GABTEC);
 router.post('/aplicaciones-m', API.POST_APLICACIONESM);
 router.post('/aplicaciones-r', API.POST_APLICACIONESR);
+router.post('/consultar-gabtec', API.POST_CONSULTARGABTEC); 
 
 router.get('/extraer-gabtec', API.POST_EXTRAERGABTEC);
 
