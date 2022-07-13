@@ -2,6 +2,7 @@ const Usuarios = require("../models/usuarios");
 const Modelos = require("../models/modelos");
 const Familias = require("../models/familias");
 const Credenciales = require("../models/credenciales");
+const Gabtec = require("../models/gabtecs");
 const HtmlTableToJson = require('html-table-to-json');
 const Sucursales = require("../models/sucursales");
 const Bodegas = require("../models/bodegas");
@@ -1533,7 +1534,9 @@ module.exports = class API {
 
                     const jsonTablesAlsacia = HtmlTableToJson.parse('<table>'+$('table').html().replace(/(\r\n|\n|\r)/gm, "").replace(/(\r\n|\n|\r)/gm, "").replace(/(\r\n|\n|\r)/gm, "").replace(/(\r\n|\n|\r)/gm, "").replace(/(\r\n|\n|\r)/gm, "").replace(/(\r\n|\n|\r)/gm, "").replace(/(\r\n|\n|\r)/gm, "").replace(/(\r\n|\n|\r)/gm, "").replace(/(\r\n|\n|\r)/gm, "").replace(/(\r\n|\n|\r)/gm, "").replace(/(\r\n|\n|\r)/gm, "").replace(/(\r\n|\n|\r)/gm, "").replace(/(\r\n|\n|\r)/gm, "").replace(/(\r\n|\n|\r)/gm, "").replace(/(\r\n|\n|\r)/gm, "").replace(/(\r\n|\n|\r)/gm, "").replace('Descripción', 'Descripcion').replace('Año Ini', 'AñoI').replace('Año Fin', 'AñoT')+'</table>');
              
-   
+
+                    console.log(jsonTablesAlsacia[0].lenght, response.request.headers["content-length"], Buscar.split(' ').length)
+
                    res.status(200).send(jsonTablesAlsacia.results);
                    return;
    
@@ -1882,6 +1885,7 @@ module.exports = class API {
     
     
     }
+
 
 
     static async POST_API_IMPORTADORA(req, res){
@@ -2360,6 +2364,96 @@ module.exports = class API {
                 return res.status(200).send(SendJson);
             }
         }
+    }
+
+
+    static async POST_EXTRAERGABTEC(req, res){
+
+    let GabtecCode = await Gabtec.findOne({ Extraido: false });
+
+
+        if(!GabtecCode){
+            return res.send('sin resultados');
+        }
+
+    var headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101 Firefox/102.0',
+        'Accept': '*/*',
+        'Accept-Language': 'es-CL,es;q=0.8,en-US;q=0.5,en;q=0.3',
+        'Accept-Encoding': 'gzip, deflate, br',
+        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+        'X-Requested-With': 'XMLHttpRequest',
+        'Origin': 'https://www.gabtec.cl',
+        'Connection': 'keep-alive',
+        'Referer': 'https://www.gabtec.cl/',
+        'Cookie': 'PHPSESSID=lcm0clui3uk33rmdq67k8vjf40',
+        'Sec-Fetch-Dest': 'empty',
+        'Sec-Fetch-Mode': 'cors',
+        'Sec-Fetch-Site': 'same-origin'
+    };
+    
+    var dataString = 'codigo='+ GabtecCode.CodigoImportadora +'&tipbus=codigoCruzado';
+    
+    var options = {
+        url: 'https://www.gabtec.cl/busqueda.php',
+        method: 'POST',
+        headers: headers,
+        gzip: true,
+        body: dataString
+    };
+    
+    async function callback(error, response, body) {
+    if (!error && response.statusCode == 200) {
+    
+    const $ = cheerio.load(body);
+
+    let Cantidad = $('#home > table > tbody > tr').length + 1;
+
+    for (let i = 1; i < Cantidad; i++) {
+        let Marca = $('#home > table > tbody > tr:nth-child('+ i +') > td:nth-child(1)').text().trim();
+        let Modelo = $('#home > table > tbody > tr:nth-child('+ i +') > td:nth-child(2)').text().trim();
+        let Posicion = $('#home > table > tbody > tr:nth-child('+ i +') > td:nth-child(3)').text().trim();
+        let AñoI = parseInt($('#home > table > tbody > tr:nth-child('+ i +') > td:nth-child(4)').text().trim());
+        let AñoT = parseInt($('#home > table > tbody > tr:nth-child('+ i +') > td:nth-child(5)').text().trim());
+        let Fabricante = $('span > img').attr('src').split('/')[$('span > img').attr('src').split('/').length - 1].replace('.jpg', '');
+        let FabricanteImg = $('span > img').attr('src');
+        let Img = $('#img-grande > div > a > img').attr('src');
+
+        let Años = [];
+
+        for(let a = AñoI; a < AñoT + 1; a++){
+            Años.push(a)
+        }
+
+        let Json = {
+            CodigoImportadora: GabtecCode.CodigoImportadora,
+            Descripcion: GabtecCode.Descripcion,
+            Img, 
+            Marca,
+            Modelo,
+            Posicion,
+            AñoI,
+            AñoT,
+            Fabricante,
+            FabricanteImg,
+            Años,
+            Busqueda: GabtecCode.CodigoImportadora + ' ' + GabtecCode.Descripcion + ' ' + Marca + ' ' + Modelo + ' ' + Posicion + ' ' + Fabricante + ' ' + Años 
+        }
+
+        new Gabtec(Json).save();
+        console.log(Json);
+    }
+    
+    
+        await Gabtec.updateOne({ _id: GabtecCode._id }, {$set: { Extraido: true } });
+
+        res.send('Ready')
+        
+    }
+    }
+    
+    request(options, callback);
+
     }
 
     static async POST_CREATEPRODUCTS(req, res){

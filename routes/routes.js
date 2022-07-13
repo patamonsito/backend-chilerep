@@ -61,6 +61,7 @@ router.post('/api-cuatro-ruedas', API.POST_API_CUATRORUEDAS);
 router.post('/aplicaciones-m', API.POST_APLICACIONESM);
 router.post('/aplicaciones-r', API.POST_APLICACIONESR);
 
+router.get('/extraer-gabtec', API.POST_EXTRAERGABTEC);
 
 //PRODUCTOS CRUD
 router.post('/products/create-many', API.POST_CREATEPRODUCTS)
