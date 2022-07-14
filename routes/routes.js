@@ -59,12 +59,20 @@ router.post('/api-mannheim', API.POST_API_MANNHEIM);
 router.post('/api-noriega', API.POST_API_NORIEGA);
 router.post('/api-cuatro-ruedas', API.POST_API_CUATRORUEDAS);
 router.post('/api-gabtec', API.POST_API_GABTEC);
+router.post('/api-sasval', API.POST_API_SASVAL);
 router.post('/aplicaciones-m', API.POST_APLICACIONESM);
 router.post('/aplicaciones-r', API.POST_APLICACIONESR);
 router.post('/consultar-gabtec', API.POST_CONSULTARGABTEC); 
 router.post('/consultar-alsacia', API.POST_CONSULTARALSACIA); 
+router.post('/consultar-sasval', API.POST_CONSULTARSASVAL);  
+router.post('/consultar-bodega-sasval', API.POST_CONSULTARBODEGASASVAL); 
+
 
 router.get('/extraer-gabtec', API.POST_EXTRAERGABTEC);
+
+
+
+
 
 //PRODUCTOS CRUD
 router.post('/products/create-many', API.POST_CREATEPRODUCTS)

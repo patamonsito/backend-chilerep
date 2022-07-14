@@ -19,6 +19,7 @@ const Empresas = require("../models/empresas");
 const Proveedores = require("../models/proveedores");
 const Regiones = require("../models/regiones");
 const Productos = require("../models/productos");
+const Sasval = require("../models/sasvals");
 const Cotizaciones = require("../models/cotizaciones");
 const NotaCreditos = require("../models/notacreditos");
 const Boletas = require("../models/boletas");
@@ -1956,6 +1957,39 @@ module.exports = class API {
     }
 
 
+    
+    static async POST_API_SASVAL(req, res){
+        try {
+            // Inicio
+            var Descripcion = req.body.Buscar.slice()
+            
+            Descripcion.split(' ');
+            var Descripcion = Descripcion.split(' ')
+
+            let i = 0
+            var reset = () => { i = 0; return i }
+            var next = () => { i++; return i }
+
+            if (Descripcion.length == 1) {
+                var Datos = await Sasval.find({ $and: [{ $or: [{ Busqueda: new RegExp(Descripcion[0], 'i') }  ] } ] }).limit(100);
+            }else if(Descripcion.length == 2) {
+                var Datos = await Sasval.find({ $and: [ { $or: [ { $and: [{ Busqueda: new RegExp(Descripcion[reset()], 'i') }, { Busqueda: new RegExp(Descripcion[Descripcion.length - 1], 'i') }] }] }  ] }).limit(100);
+            }else if(Descripcion.length == 3) {
+                var Datos = await Sasval.find({ $and: [ { $or: [ { $and: [{ Busqueda: new RegExp(Descripcion[reset()], 'i') }, { Busqueda: new RegExp(Descripcion[next()], 'i') }, { Busqueda: new RegExp(Descripcion[Descripcion.length - 1], 'i') }] }] }  ] }).limit(100);
+            }else if(Descripcion.length == 4) {
+                var Datos = await Sasval.find({ $and: [ { $or: [ { $and: [{ Busqueda: new RegExp(Descripcion[reset()], 'i') }, { Busqueda: new RegExp(Descripcion[next()], 'i') }, { Busqueda: new RegExp(Descripcion[next()], 'i') }, { Busqueda: new RegExp(Descripcion[Descripcion.length - 1], 'i') }] }] }  ] }).limit(100);
+            }else if(Descripcion.length == 5) {
+                var Datos = await Sasval.find({ $and: [ { $or: [ { $and: [{ Busqueda: new RegExp(Descripcion[reset()], 'i') }, { Busqueda: new RegExp(Descripcion[next()], 'i') }, { Busqueda: new RegExp(Descripcion[next()], 'i') }, { Busqueda: new RegExp(Descripcion[next()], 'i') }, { Busqueda: new RegExp(Descripcion[Descripcion.length - 1], 'i') }] }] }  ] }).limit(100);
+            }
+
+            return res.status(200).send(Datos);
+
+            // Fin 
+        } catch (err) {
+            return res.status(200).json({ message: err.message});
+        }
+    }
+
 
     static async POST_API_IMPORTADORA(req, res){
 
@@ -2437,7 +2471,7 @@ module.exports = class API {
 
     static async POST_CONSULTARGABTEC(req, res){
 
-        let { Codigo } = req.body; 
+    let { Codigo } = req.body; 
 
     let headers = {
         "accept": "*/*",
@@ -2484,6 +2518,97 @@ module.exports = class API {
    }
 
 
+   static async POST_CONSULTARSASVAL(req, res){
+
+    let { Codigo } = req.body; 
+
+    let CookieSasval = await Credenciales.findOne({ Importadora: 'Sasval' });
+
+    var headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101 Firefox/102.0',
+        'Accept': 'application/json, text/javascript, */*; q=0.01',
+        'Accept-Language': 'es-CL,es;q=0.8,en-US;q=0.5,en;q=0.3',
+        'Accept-Encoding': 'gzip, deflate, br',
+        'X-Requested-With': 'XMLHttpRequest',
+        'Connection': 'keep-alive',
+        'Referer': 'https://www.softnet.cl/sistems/contabilidad/m_productos.php',
+        'Cookie': CookieSasval.Cookie,
+        'Sec-Fetch-Dest': 'empty',
+        'Sec-Fetch-Mode': 'cors',
+        'Sec-Fetch-Site': 'same-origin'
+    };
+    
+    var options = {
+        url: 'https://www.softnet.cl/sistems/contabilidad/test/carga_maestro_prod.php?btn_e=&sEcho=3&iColumns=7&sColumns=&iDisplayStart=0&iDisplayLength=10&sSearch='+ Codigo +'&bEscapeRegex=false&sSearch_0=&bEscapeRegex_0=true&bSearchable_0=true&sSearch_1=&bEscapeRegex_1=true&bSearchable_1=true&sSearch_2=&bEscapeRegex_2=true&bSearchable_2=true&sSearch_3=&bEscapeRegex_3=true&bSearchable_3=true&sSearch_4=&bEscapeRegex_4=true&bSearchable_4=true&sSearch_5=&bEscapeRegex_5=true&bSearchable_5=true&sSearch_6=&bEscapeRegex_6=true&bSearchable_6=true&iSortingCols=1&iSortCol_0=0&sSortDir_0=asc&bSortable_0=true&bSortable_1=true&bSortable_2=true&bSortable_3=true&bSortable_4=true&bSortable_5=true&bSortable_6=true',
+        headers: headers,
+        gzip: true
+    };
+    
+    function callback(error, response, body) {
+        if (!error && response.statusCode == 200) {
+            body = JSON.parse(body);
+            console.log(body.aaData.length)
+
+
+            if(body.aaData.length == 0){
+                let Json = { 
+                    Precio: 0,
+                    Stock: 0
+                }
+                return res.status(200).send(Json)
+            }
+            let Json = { 
+                Precio: body.aaData[0][3],
+                Stock: body.aaData[0][4]
+            }
+    
+            return res.status(200).send(Json)
+
+        }
+    }
+    
+
+    
+    request(options, callback);
+
+   }
+
+   static async POST_CONSULTARBODEGASASVAL(req, res){
+
+    let { Codigo } = req.body; 
+
+    let CookieSasval = await Credenciales.findOne({ Importadora: 'Sasval' });
+
+    var headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101 Firefox/102.0',
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
+        'Accept-Language': 'es-CL,es;q=0.8,en-US;q=0.5,en;q=0.3',
+        'Accept-Encoding': 'gzip, deflate, br',
+        'Connection': 'keep-alive',
+        'Referer': 'https://www.softnet.cl/sistems/contabilidad/m_lista_cprecios2.php',
+        'Cookie': CookieSasval.Cookie,
+        'Upgrade-Insecure-Requests': '1',
+        'Sec-Fetch-Dest': 'iframe',
+        'Sec-Fetch-Mode': 'navigate',
+        'Sec-Fetch-Site': 'same-origin'
+    };
+    
+    var options = {
+        url: 'https://www.softnet.cl/sistems/contabilidad/listado_bodegas.php?codigo=' + Codigo,
+        headers: headers,
+        gzip: true
+    };
+    
+    function callback(error, response, body) {
+        if (!error && response.statusCode == 200) {
+            const $ = cheerio.load(body);
+            res.send($('#item > table:nth-child(2)').html())
+        }
+    }
+    
+    request(options, callback);
+
+   }
 
 
     static async POST_EXTRAERGABTEC(req, res){
@@ -3548,9 +3673,9 @@ static async UPLOAD_IMG_REPUESTO(req, res){
 
 static async GET_CART(req, res){
     try {
-    let Token = req.body.Token;
+    let Token = req.body.Token || '';
     let User = await Usuarios.findOne({Token: Token });
-    let Carrito = User.Carrito
+    let Carrito = User.Carrito || [];
 
     res.status(200).json(Carrito)
         
@@ -3562,9 +3687,9 @@ static async GET_CART(req, res){
 
 static async GET_CERRITO_SESSION(req, res){
     try {
-        let Token = req.body.Token;
+        let Token = req.body.Token || '';
         let User = await Usuarios.findOne({Token: Token });
-        let Carrito = User.Carrito;
+        let Carrito = User.Carrito || [];
 
         res.status(200).json(Carrito);
         
