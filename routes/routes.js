@@ -62,6 +62,7 @@ router.post('/api-gabtec', API.POST_API_GABTEC);
 router.post('/aplicaciones-m', API.POST_APLICACIONESM);
 router.post('/aplicaciones-r', API.POST_APLICACIONESR);
 router.post('/consultar-gabtec', API.POST_CONSULTARGABTEC); 
+router.post('/consultar-alsacia', API.POST_CONSULTARALSACIA); 
 
 router.get('/extraer-gabtec', API.POST_EXTRAERGABTEC);
 

@@ -1548,6 +1548,45 @@ module.exports = class API {
        }
 
 
+       
+   static async POST_CONSULTARALSACIA(req, res){
+
+    let { Codigo } = req.body;
+    
+    let CookieAlsacia = await Credenciales.findOne({ Importadora: 'Alsacia' });
+
+    var headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101 Firefox/102.0',
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
+        'Accept-Language': 'es-CL,es;q=0.8,en-US;q=0.5,en;q=0.3',
+        'Accept-Encoding': 'gzip, deflate, br',
+        'Connection': 'keep-alive',
+        'Referer': 'https://www.repuestosalsacia.com/alsacia/buscador',
+        'Cookie': 'csrf_cookie_name=f84a0c09e3eb87ec1a369fd7f8850dbd; ci_session='+ CookieAlsacia.Cookie +'; ssupp.vid=vigpZqvCeuxVY; ssupp.visits=1; _ga=GA1.2.63973752.1656705830; _gid=GA1.2.1828128899.1656705830; _gat_gtag_UA_57096536_1=1',
+        'Upgrade-Insecure-Requests': '1',
+        'Sec-Fetch-Dest': 'iframe',
+        'Sec-Fetch-Mode': 'navigate',
+        'Sec-Fetch-Site': 'same-origin'
+    };
+    
+    var options = {
+        url: 'https://www.repuestosalsacia.com/alsacia/producto/detalle/' + Codigo,
+        headers: headers,
+        gzip: true
+    };
+    
+    function callback(error, response, body) {
+        if (!error && response.statusCode == 200) {
+            const $ = cheerio.load(body);
+            res.status(200).send($('body').html())
+        }
+    }
+    
+    request(options, callback);
+
+
+    }
+
        static async POST_API_BICIMOTO(req, res){
         try {
             let { Buscar } = req.body;
@@ -2443,6 +2482,10 @@ module.exports = class API {
    request(options, callback);
 
    }
+
+
+
+
     static async POST_EXTRAERGABTEC(req, res){
 
     let GabtecCode = await Gabtec.findOne({ Extraido: false });
