@@ -3737,6 +3737,7 @@ static async UPDATE_CART(req, res){
 
 
 static async DELETE_SESSION(req, res){
+       let { Token } = req.body;
        await Usuarios.updateOne({Token: Token}, {$set: {Carrito: []} });
        res.send('session destruida')
 }
