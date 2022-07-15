@@ -3,6 +3,7 @@ const Modelos = require("../models/modelos");
 const Familias = require("../models/familias");
 const Credenciales = require("../models/credenciales");
 const Gabtec = require("../models/gabtecs");
+const Automarcos = require("../models/automarcos")
 const HtmlTableToJson = require('html-table-to-json');
 const Sucursales = require("../models/sucursales");
 const Bodegas = require("../models/bodegas");
@@ -2699,6 +2700,100 @@ module.exports = class API {
     request(options, callback);
 
     }
+
+    static async POST_EXTRAERAUTOMARCOS(req, res){
+
+        let AutomarcosCode = await Automarcos.findOne({ Extraido: false });
+    
+            if(!AutomarcosCode){
+                return res.send('sin resultados');
+            }
+    
+            var headers = {
+                'Accept': '*/*',
+                'Accept-Language': 'es-ES,es;q=0.9,en;q=0.8',
+                'Connection': 'keep-alive',
+                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                'Cookie': 'compCookie2=19350; PHPSESSID=guphvhqdbt6jctcb67gauscv9b',
+                'Origin': 'https://www.automarco.cl',
+                'Referer': 'https://www.automarco.cl/index.php',
+                'Sec-Fetch-Dest': 'empty',
+                'Sec-Fetch-Mode': 'cors',
+                'Sec-Fetch-Site': 'same-origin',
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36',
+                'X-Requested-With': 'XMLHttpRequest',
+                'sec-ch-ua': '".Not/A)Brand";v="99", "Google Chrome";v="103", "Chromium";v="103"',
+                'sec-ch-ua-mobile': '?0',
+                'sec-ch-ua-platform': '"Windows"',
+                'token_authorization': 'U2FsdGVkX18/6NBYUPpHoOqljGWMuk7i7hMA8p1gefkEWMINDX7ADGYloRi72f7t'
+            };
+            
+            var dataString = 'codigo='+AutomarcosCode.Sku+'&tipbus=codigoCruzado';
+            
+            var options = {
+                url: 'https://www.automarco.cl/busqueda.php',
+                method: 'POST',
+                headers: headers,
+                body: dataString
+            };
+        
+        async function callback(error, response, body) {
+        if (!error && response.statusCode == 200) {
+
+        const $ = cheerio.load(body);
+    
+        let Cantidad = $('#home > table > tbody > tr').length + 1;
+            console.log(Cantidad, 'cantidad')
+        for (let i = 1; i < Cantidad; i++) {
+            console.log(i)
+            let Marca = $('#home > table > tbody > tr:nth-child('+ i +') > td:nth-child(1)').text().trim();
+            let Modelo = $('#home > table > tbody > tr:nth-child('+ i +') > td:nth-child(2)').text().trim();
+            let AñoI = parseInt($('#home > table > tbody > tr:nth-child('+ i +') > td:nth-child(3)').text().trim());
+            let AñoT = parseInt($('#home > table > tbody > tr:nth-child('+ i +') > td:nth-child(4)').text().trim());
+            let Motor = $('#home > table > tbody > tr:nth-child('+ i +') > td:nth-child(5)').text().trim();
+            let Aplicacion = $('#home > table > tbody > tr:nth-child('+ i +') > td:nth-child(6)').text().trim();
+            let Fabricante = $('span > img').attr('src').split('/')[$('span > img').attr('src').split('/').length - 1].replace('.jpg', '');
+            let FabricanteImg = $('span > img').attr('src');
+            let Img = $('#img-grande > div > a > img').attr('src');
+    
+            let Años = [];
+    
+            for(let a = AñoI; a < AñoT + 1; a++){
+                Años.push(a)
+            }
+    
+            let Json = {
+                CodigoImportadora: AutomarcosCode.Sku,
+                Descripcion: AutomarcosCode.Descripcion,
+                Img, 
+                Marca,
+                Modelo,
+                Motor,
+                Aplicacion,
+                AñoI,
+                AñoT,
+                Fabricante,
+                FabricanteImg,
+                Años,
+                Busqueda: AutomarcosCode.Sku + ' ' + AutomarcosCode.Descripcion + ' ' + Marca + ' ' + Modelo + ' ' + Motor + ' ' + Aplicacion +  ' ' + Fabricante + ' ' + Años
+            }
+    
+            new Automarcos(Json).save();
+            console.log(Json)
+        }
+        
+        
+            await Automarcos.updateOne({ _id: AutomarcosCode._id }, {$set: { Extraido: true } });
+    
+            res.send('Ready')
+            
+        }
+        }
+        
+        request(options, callback);
+    
+        }
+
 
     static async POST_CREATEPRODUCTS(req, res){
         try {

@@ -69,8 +69,7 @@ router.post('/consultar-bodega-sasval', API.POST_CONSULTARBODEGASASVAL);
 
 
 router.get('/extraer-gabtec', API.POST_EXTRAERGABTEC);
-
-
+router.get('/extraer-automarcos', API.POST_EXTRAERAUTOMARCOS);
 
 
 
