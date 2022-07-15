@@ -1958,6 +1958,38 @@ module.exports = class API {
     }
 
 
+    static async POST_API_AUTOMARCOS(req, res){
+        try {
+            // Inicio
+            var Descripcion = req.body.Buscar.slice()
+            
+            Descripcion.split(' ');
+            var Descripcion = Descripcion.split(' ')
+
+            let i = 0
+            var reset = () => { i = 0; return i }
+            var next = () => { i++; return i }
+
+            if (Descripcion.length == 1) {
+                var Datos = await Automarcos.find({ $and: [{ $or: [{ Busqueda: new RegExp(Descripcion[0], 'i') }  ] } ] }).limit(100);
+            }else if(Descripcion.length == 2) {
+                var Datos = await Automarcos.find({ $and: [ { $or: [ { $and: [{ Busqueda: new RegExp(Descripcion[reset()], 'i') }, { Busqueda: new RegExp(Descripcion[Descripcion.length - 1], 'i') }] }] }  ] }).limit(100);
+            }else if(Descripcion.length == 3) {
+                var Datos = await Automarcos.find({ $and: [ { $or: [ { $and: [{ Busqueda: new RegExp(Descripcion[reset()], 'i') }, { Busqueda: new RegExp(Descripcion[next()], 'i') }, { Busqueda: new RegExp(Descripcion[Descripcion.length - 1], 'i') }] }] }  ] }).limit(100);
+            }else if(Descripcion.length == 4) {
+                var Datos = await Automarcos.find({ $and: [ { $or: [ { $and: [{ Busqueda: new RegExp(Descripcion[reset()], 'i') }, { Busqueda: new RegExp(Descripcion[next()], 'i') }, { Busqueda: new RegExp(Descripcion[next()], 'i') }, { Busqueda: new RegExp(Descripcion[Descripcion.length - 1], 'i') }] }] }  ] }).limit(100);
+            }else if(Descripcion.length == 5) {
+                var Datos = await Automarcos.find({ $and: [ { $or: [ { $and: [{ Busqueda: new RegExp(Descripcion[reset()], 'i') }, { Busqueda: new RegExp(Descripcion[next()], 'i') }, { Busqueda: new RegExp(Descripcion[next()], 'i') }, { Busqueda: new RegExp(Descripcion[next()], 'i') }, { Busqueda: new RegExp(Descripcion[Descripcion.length - 1], 'i') }] }] }  ] }).limit(100);
+            }
+
+            return res.status(200).send(Datos)
+
+            // Fin 
+        } catch (err) {
+            return res.status(200).json({ message: err.message});
+        }
+    }
+
     
     static async POST_API_SASVAL(req, res){
         try {
@@ -2474,6 +2506,8 @@ module.exports = class API {
 
     let { Codigo } = req.body; 
 
+    let CookieGabtec = await Credenciales.findOne({ Importadora: 'Gabtec' });
+
     let headers = {
         "accept": "*/*",
         "accept-language": "es-ES,es;q=0.9,en;q=0.8",
@@ -2486,7 +2520,7 @@ module.exports = class API {
         "sec-fetch-site": "same-origin",
         "token_authorization": "U2FsdGVkX18/6NBYUPpHoOqljGWMuk7i7hMA8p1gefkEWMINDX7ADGYloRi72f7t",
         "x-requested-with": "XMLHttpRequest",
-        "cookie": "PHPSESSID=lcm0clui3uk33rmdq67k8vjf40; compCookie2=6364",
+        "cookie": CookieGabtec.Cookie,
         "Referer": "https://www.gabtec.cl/",
         "Referrer-Policy": "strict-origin-when-cross-origin"
     };
@@ -2508,6 +2542,62 @@ module.exports = class API {
         let Json = { 
             Precio: $('div.row.col-12.pr-0.mr-0.my-2.pl-0 > div.col-lg-6.bg-white > div > div.col-12.mt-5 > span > b').text().trim(),
             Stock: $('div.row.col-12.pr-0.mr-0.my-2.pl-0 > div.col-lg-6.bg-white > div > div:nth-child(5) > span').text().trim()
+        }
+
+        return res.status(200).send(Json)
+
+    }
+
+   request(options, callback);
+
+   }
+
+
+
+   static async POST_CONSULTARAUTOMARCOS(req, res){
+
+    let { Codigo } = req.body; 
+
+    let CookieAutomarco = await Credenciales.findOne({ Importadora: 'Automarco' });
+
+
+    var headers = {
+        'Accept': '*/*',
+        'Accept-Language': 'es-ES,es;q=0.9,en;q=0.8',
+        'Connection': 'keep-alive',
+        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+        'Cookie': CookieAutomarco.Cookie,
+        'Origin': 'https://www.automarco.cl',
+        'Referer': 'https://www.automarco.cl/index.php',
+        'Sec-Fetch-Dest': 'empty',
+        'Sec-Fetch-Mode': 'cors',
+        'Sec-Fetch-Site': 'same-origin',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36',
+        'X-Requested-With': 'XMLHttpRequest',
+        'sec-ch-ua': '".Not/A)Brand";v="99", "Google Chrome";v="103", "Chromium";v="103"',
+        'sec-ch-ua-mobile': '?0',
+        'sec-ch-ua-platform': '"Windows"',
+        'token_authorization': 'U2FsdGVkX18/6NBYUPpHoOqljGWMuk7i7hMA8p1gefkEWMINDX7ADGYloRi72f7t'
+    };
+    
+    var dataString = 'codigo='+Codigo+'&tipbus=codigoCruzado';
+    
+    
+    let options = {
+        url: 'https://www.automarco.cl/busqueda.php',
+        method: 'POST',
+        headers: headers,
+        gzip: true,
+        body: dataString
+    };
+    
+    async function callback(error, response, body) {
+
+        const $ = cheerio.load(body);
+
+        let Json = { 
+            Precio: $('span > b').text().trim(),
+            Stock: $('div.row.col-12.pr-0.mr-0.my-2.pl-0 > div.col-lg-6.bg-white > div > div:nth-child(7) > span').text().trim()
         }
 
         return res.status(200).send(Json)
@@ -3084,6 +3174,141 @@ module.exports = class API {
         }
     }
 
+    static async POST_SASVAL_AUTH(req, res){
+    var headers = {
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9',
+        'Accept-Language': 'es-ES,es;q=0.9,en;q=0.8',
+        'Cache-Control': 'max-age=0',
+        'Connection': 'keep-alive',
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Origin': 'https://www.softnet.cl',
+        'Referer': 'https://www.softnet.cl/sistems/contabilidad/login.php',
+        'Sec-Fetch-Dest': 'document',
+        'Sec-Fetch-Mode': 'navigate',
+        'Sec-Fetch-Site': 'same-origin',
+        'Sec-Fetch-User': '?1',
+        'Upgrade-Insecure-Requests': '1',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36',
+        'sec-ch-ua': '".Not/A)Brand";v="99", "Google Chrome";v="103", "Chromium";v="103"',
+        'sec-ch-ua-mobile': '?0',
+        'sec-ch-ua-platform': '"Windows"',
+        'token_authorization': 'U2FsdGVkX18/6NBYUPpHoOqljGWMuk7i7hMA8p1gefkEWMINDX7ADGYloRi72f7t',
+        jar: jar,
+    };
+    
+    var dataString = 'empresa=77554630-1&usuario=gabriel&clave=12345678&aceptarlogin=Ingresar';
+    
+    var options = {
+        url: 'https://www.softnet.cl/sistems/contabilidad/login.php',
+        method: 'POST',
+        headers: headers,
+        body: dataString,
+        jar: jar,
+    };
+    
+    async function callback(error, response, body) {
+        if (!error && response.statusCode == 200) {
+            console.log(body);
+
+            let CookieSasval = jar._jar.store.idx["www.softnet.cl"]["/"].PHPSESSID.value;
+    
+            await Credenciales.updateOne({ Importadora: 'Sasval' }, {$set: { Cookie: 'PHPSESSID='+CookieSasval+';' } })
+
+            res.status(200).send('EXITO');
+
+
+        }
+    }
+    
+    request(options, callback);
+}
+
+static async POST_AUTOMARCO_AUTH(req, res){
+var headers = {
+    'Accept': '*/*',
+    'Accept-Language': 'es-ES,es;q=0.9,en;q=0.8',
+    'Connection': 'keep-alive',
+    'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+    'Origin': 'https://www.automarco.cl',
+    'Referer': 'https://www.automarco.cl/index.php',
+    'Sec-Fetch-Dest': 'empty',
+    'Sec-Fetch-Mode': 'cors',
+    'Sec-Fetch-Site': 'same-origin',
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36',
+    'X-Requested-With': 'XMLHttpRequest',
+    'sec-ch-ua': '".Not/A)Brand";v="99", "Google Chrome";v="103", "Chromium";v="103"',
+    'sec-ch-ua-mobile': '?0',
+    'sec-ch-ua-platform': '"Windows"',
+    'token_authorization': 'U2FsdGVkX18/6NBYUPpHoOqljGWMuk7i7hMA8p1gefkEWMINDX7ADGYloRi72f7t',
+    jar: jar,
+};
+
+var dataString = 'mail=chilerepuestos@outlook.com&pass=6087';
+
+var options = {
+    url: 'https://www.automarco.cl/codigo.php',
+    method: 'POST',
+    headers: headers,
+    body: dataString,
+    jar: jar,
+};
+
+ async function callback(error, response, body) {
+    if (!error && response.statusCode == 200) {
+
+        let CookieAutomarco = jar._jar.store.idx["www.automarco.cl"]["/"].PHPSESSID.value;
+    
+        await Credenciales.updateOne({ Importadora: 'Automarco' }, {$set: { Cookie: 'PHPSESSID='+CookieAutomarco+';' } })
+
+        res.status(200).send('EXITO');
+
+    }
+}
+
+request(options, callback);
+
+}
+
+
+static async POST_GABTEC_AUTH(req, res){
+    var headers = {
+        'sec-ch-ua': '".Not/A)Brand";v="99", "Google Chrome";v="103", "Chromium";v="103"',
+        'sec-ch-ua-mobile': '?0',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36',
+        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+        'Accept': '*/*',
+        'Referer': 'https://www.gabtec.cl/index.php',
+        'X-Requested-With': 'XMLHttpRequest',
+        'sec-ch-ua-platform': '"Windows"'
+    };
+    
+    var dataString = 'codigo=5104&mail=chilerepuestos@outlook.com';
+    
+    var options = {
+        url: 'https://www.gabtec.cl/script-codigo.php',
+        method: 'POST',
+        headers: headers,
+        body: dataString
+    };
+    
+     async function callback(error, response, body) {
+        if (!error && response.statusCode == 200) {
+    
+            console.log(body);
+
+            return res.send(jar._jar.store.idx)
+            let CookieGabtec = jar._jar.store.idx["www.gabtec.cl"]["/"].PHPSESSID.value;
+        
+            await Credenciales.updateOne({ Importadora: 'Gabtec' }, {$set: { Cookie: 'PHPSESSID='+CookieGabtec+';' } })
+    
+            res.status(200).send('EXITO');
+    
+        }
+    }
+    
+    request(options, callback);
+    
+    }
 
 
     static async POST_NORIEGA_AUTH(req, res){
@@ -3770,9 +3995,12 @@ static async GET_CART(req, res){
     try {
     let Token = req.body.Token || '';
     let User = await Usuarios.findOne({Token: Token });
+
     let Carrito = User.Carrito || [];
 
-    res.status(200).json(Carrito)
+
+
+    res.status(200).send(Carrito)
         
     } catch (err) {
         return res.status(200).json({ message: err.message});
@@ -3781,12 +4009,17 @@ static async GET_CART(req, res){
 
 
 static async GET_CERRITO_SESSION(req, res){
+    console.log('hola')
     try {
+        console.log('hola')
         let Token = req.body.Token || '';
         let User = await Usuarios.findOne({Token: Token });
-        let Carrito = User.Carrito || [];
-
-        res.status(200).json(Carrito);
+    
+        if(User){
+            return res.status(200).json(User.Carrito)
+        }else{
+            return res.status(200).json([])
+        }
         
     } catch (err) {
         return res.status(200).json({ message: err.message});

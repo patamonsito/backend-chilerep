@@ -51,6 +51,8 @@ router.post('/products/api-importadora', API.POST_API_IMPORTADORA);
 router.post('/auth-refax', API.POST_REFAX_AUTH);
 router.post('/auth-bicimoto', API.POST_BICIMOTO_AUTH);
 router.post('/auth-noriega', API.POST_NORIEGA_AUTH);
+router.post('/auth-sasval', API.POST_SASVAL_AUTH);
+router.post('/auth-automarco', API.POST_AUTOMARCO_AUTH);
 router.post('/api-chilerepuestos', API.POST_API_CHILEREPUESTOS);
 router.post('/api-refax', API.POST_API_REFAX);
 router.post('/api-alsacia', API.POST_API_ALSACIA);
@@ -59,14 +61,18 @@ router.post('/api-mannheim', API.POST_API_MANNHEIM);
 router.post('/api-noriega', API.POST_API_NORIEGA);
 router.post('/api-cuatro-ruedas', API.POST_API_CUATRORUEDAS);
 router.post('/api-gabtec', API.POST_API_GABTEC);
+router.post('/api-automarcos', API.POST_API_AUTOMARCOS);
 router.post('/api-sasval', API.POST_API_SASVAL);
 router.post('/aplicaciones-m', API.POST_APLICACIONESM);
 router.post('/aplicaciones-r', API.POST_APLICACIONESR);
 router.post('/consultar-gabtec', API.POST_CONSULTARGABTEC); 
+router.post('/consultar-automarcos', API.POST_CONSULTARAUTOMARCOS); 
 router.post('/consultar-alsacia', API.POST_CONSULTARALSACIA); 
 router.post('/consultar-sasval', API.POST_CONSULTARSASVAL);  
 router.post('/consultar-bodega-sasval', API.POST_CONSULTARBODEGASASVAL); 
 
+
+router.get('/auth-gabtec', API.POST_GABTEC_AUTH);
 
 router.get('/extraer-gabtec', API.POST_EXTRAERGABTEC);
 router.get('/extraer-automarcos', API.POST_EXTRAERAUTOMARCOS);
