@@ -1549,8 +1549,69 @@ module.exports = class API {
         } 
        }
 
+       static async POST_PAGEALSACIA(req, res){
 
-       
+        let { Page } = req.body || 1;
+        
+        let CookieAlsacia = await Credenciales.findOne({ Importadora: 'Alsacia' });
+
+       var headers = {
+        'authority': 'www.repuestosalsacia.com',
+        'accept': '*/*',
+        'accept-language': 'es-ES,es;q=0.9,en;q=0.8',
+        'Cookie': 'csrf_cookie_name=f84a0c09e3eb87ec1a369fd7f8850dbd; ci_session='+ CookieAlsacia.Cookie +'; ssupp.vid=vigpZqvCeuxVY; ssupp.visits=1; _ga=GA1.2.63973752.1656705830; _gid=GA1.2.1828128899.1656705830; _gat_gtag_UA_57096536_1=1',
+        'referer': 'https://www.repuestosalsacia.com/alsacia/buscador',
+        'sec-ch-ua': '".Not/A)Brand";v="99", "Google Chrome";v="103", "Chromium";v="103"',
+        'sec-ch-ua-mobile': '?0',
+        'sec-ch-ua-platform': '"Windows"',
+        'sec-fetch-dest': 'empty',
+        'sec-fetch-mode': 'cors',
+        'sec-fetch-site': 'same-origin',
+        'token_authorization': 'U2FsdGVkX18/6NBYUPpHoOqljGWMuk7i7hMA8p1gefkEWMINDX7ADGYloRi72f7t',
+        'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36',
+        'x-requested-with': 'XMLHttpRequest'
+    };
+    
+    var options = {
+        url: 'https://www.repuestosalsacia.com/alsacia/buscador/ajax_result2/' + 1,
+        headers: headers
+    };
+    
+    function callback(error, response, body) {
+        if (!error && response.statusCode == 200) {
+            body = JSON.parse(body);
+            let Json = [];
+
+            if(body.data != ''){
+                Json = body.data.filter(e => {
+                    // if(e.Stock != '0'){
+                        e.MARCA = e.FirmName;
+                        e.Sku = e.ItemCode;
+                        e.AñoI = e.U_inicio;
+                        e.AñoT = e.U_fin;
+                        e.Marca = e.U_marca;
+                        e.Modelo = e.U_submodelo;
+                        e.Producto = e.U_subsubcategoria;
+                        e.Descripcion = e.descripcion;
+                        e.Origen = e.origen;
+                        e.Precio = e.precio;
+                        e.Stock = e.stock;
+
+                        return e;
+                    // }
+                })
+            }
+
+            return res.send(Json)
+        }
+    }
+    
+    request(options, callback);
+
+
+}
+
+
    static async POST_CONSULTARALSACIA(req, res){
 
     let { Codigo } = req.body;

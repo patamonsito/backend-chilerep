@@ -70,9 +70,12 @@ router.post('/consultar-automarcos', API.POST_CONSULTARAUTOMARCOS);
 router.post('/consultar-alsacia', API.POST_CONSULTARALSACIA); 
 router.post('/consultar-sasval', API.POST_CONSULTARSASVAL);  
 router.post('/consultar-bodega-sasval', API.POST_CONSULTARBODEGASASVAL); 
-
+router.post('/alsacia-page', API.POST_PAGEALSACIA)
 
 router.get('/auth-gabtec', API.POST_GABTEC_AUTH);
+
+
+
 
 router.get('/extraer-gabtec', API.POST_EXTRAERGABTEC);
 router.get('/extraer-automarcos', API.POST_EXTRAERAUTOMARCOS);
