@@ -2748,8 +2748,8 @@ module.exports = class API {
             console.log(i)
             let Marca = $('#home > table > tbody > tr:nth-child('+ i +') > td:nth-child(1)').text().trim();
             let Modelo = $('#home > table > tbody > tr:nth-child('+ i +') > td:nth-child(2)').text().trim();
-            let AñoI = parseInt($('#home > table > tbody > tr:nth-child('+ i +') > td:nth-child(3)').text().trim());
-            let AñoT = parseInt($('#home > table > tbody > tr:nth-child('+ i +') > td:nth-child(4)').text().trim());
+            let AñoI = parseInt($('#home > table > tbody > tr:nth-child('+ i +') > td:nth-child(3)').text().trim()) || 0;
+            let AñoT = parseInt($('#home > table > tbody > tr:nth-child('+ i +') > td:nth-child(4)').text().trim()) || 0;
             let Motor = $('#home > table > tbody > tr:nth-child('+ i +') > td:nth-child(5)').text().trim();
             let Aplicacion = $('#home > table > tbody > tr:nth-child('+ i +') > td:nth-child(6)').text().trim();
             let Fabricante = $('span > img').attr('src').split('/')[$('span > img').attr('src').split('/').length - 1].replace('.jpg', '');
@@ -2770,8 +2770,8 @@ module.exports = class API {
                 Modelo,
                 Motor,
                 Aplicacion,
-                AñoI,
-                AñoT,
+                AñoI: AñoI || 0,
+                AñoT: AñoT || 0,
                 Fabricante,
                 FabricanteImg,
                 Años,
