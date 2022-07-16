@@ -1379,6 +1379,7 @@ module.exports = class API {
 
     static async POST_API_REFAX(req, res){
      try {
+        console.log(req.body)
         let { Buscar } = req.body;
         
         let CookieRefax = await Credenciales.findOne({ Importadora: 'Refax' });
