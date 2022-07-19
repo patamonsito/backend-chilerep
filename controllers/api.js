@@ -3258,7 +3258,7 @@ module.exports = class API {
         jar: jar,
     };
     
-    var dataString = 'empresa=77554630-1&usuario=gabriel&clave=12345678&aceptarlogin=Ingresar';
+    var dataString = 'empresa=77554630-1&usuario=genesis&clave=191094&aceptarlogin=Ingresar';
     
     var options = {
         url: 'https://www.softnet.cl/sistems/contabilidad/login.php',
