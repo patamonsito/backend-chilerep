@@ -59,7 +59,7 @@ WebpayPlus.apiKey = '579B532A7440BB0C9079DED94D31EA1615BACEB56610332264630D42D0A
 WebpayPlus.environment = Environment.Integration;
 
 
-cron.schedule('*/2 * * * * *', async () => {
+cron.schedule('/2 * * * * *', async () => {
     try {
 
         let MannheimCode = await Mannheim.findOne({ Extraido: false });
@@ -92,21 +92,38 @@ cron.schedule('*/2 * * * * *', async () => {
             let Comprobar = false;
 
         aplicaciones = aplicaciones.aplicaciones.map((e, i) => {
+            console.log(e)
             e.title_unico = replaceAll(',', '', e.title_unico);
             let SubModelo = e.title_unico.split(' ');
             e.Marca = e.marca
-            e.Modelo = (e.modelo + ' ' + e.motor.split('.')[0].slice(-1)+'.' + e.motor.split('.')[1].slice(0, 1) + ' ' +
-        (SubModelo.includes('Hatchback') ? 'Hatchback ' : '') +
-        (SubModelo.includes('Camioneta') ? 'Camioneta ' : '') +
-        (SubModelo.includes('Suv') ? 'Suv ' : '') +
-        (SubModelo.includes('Van') ? 'Van ' : '') +
-        (SubModelo.includes('4x2') ? '4x2 ' : '') +
-        (SubModelo.includes('4x4') ? '4x4 ' : '') +
-        (SubModelo.includes('8') ? '8 Valvulas ' : '') +
-        (SubModelo.includes('12') ? '12 Valvulas ' : '') +
-        (SubModelo.includes('16') ? '16 Valvulas ' : '') +
-        (SubModelo.includes('Bencina') ? 'Bencina' : '') +
-        (SubModelo.includes('Diesel') ? 'Diesel' : '')).toUpperCase().trim();
+            let prueba = e.motor.split('.');
+            if(prueba.includes('.')){
+                e.Modelo = (e.modelo + ' ' + e.motor.split('.')[0].slice(-1)+'.' + e.motor.split('.')[1].slice(0, 1) + ' ' +
+                (SubModelo.includes('Hatchback') ? 'Hatchback ' : '') +
+                (SubModelo.includes('Camioneta') ? 'Camioneta ' : '') +
+                (SubModelo.includes('Suv') ? 'Suv ' : '') +
+                (SubModelo.includes('Van') ? 'Van ' : '') +
+                (SubModelo.includes('4x2') ? '4x2 ' : '') +
+                (SubModelo.includes('4x4') ? '4x4 ' : '') +
+                (SubModelo.includes('8') ? '8 Valvulas ' : '') +
+                (SubModelo.includes('12') ? '12 Valvulas ' : '') +
+                (SubModelo.includes('16') ? '16 Valvulas ' : '') +
+                (SubModelo.includes('Bencina') ? 'Bencina' : '') +
+                (SubModelo.includes('Diesel') ? 'Diesel' : '')).toUpperCase().trim();
+            }else{
+                e.Modelo = (e.modelo + ' ' +
+                (SubModelo.includes('Hatchback') ? 'Hatchback ' : '') +
+                (SubModelo.includes('Camioneta') ? 'Camioneta ' : '') +
+                (SubModelo.includes('Suv') ? 'Suv ' : '') +
+                (SubModelo.includes('Van') ? 'Van ' : '') +
+                (SubModelo.includes('4x2') ? '4x2 ' : '') +
+                (SubModelo.includes('4x4') ? '4x4 ' : '') +
+                (SubModelo.includes('8') ? '8 Valvulas ' : '') +
+                (SubModelo.includes('12') ? '12 Valvulas ' : '') +
+                (SubModelo.includes('16') ? '16 Valvulas ' : '') +
+                (SubModelo.includes('Bencina') ? 'Bencina' : '') +
+                (SubModelo.includes('Diesel') ? 'Diesel' : '')).toUpperCase().trim();
+            }
         
 
         if(i == 0 || e.Marca != aplicaciones.aplicaciones[i -1].Marca || e.Modelo != aplicaciones.aplicaciones[i -1].Modelo){
