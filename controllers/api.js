@@ -61,18 +61,9 @@ WebpayPlus.environment = Environment.Integration;
 
 cron.schedule('*/2 * * * * *', async () => {
     try {
-       
-        await Mannheim.updateMany({ Extraido: false });
 
 
         let MannheimCode = await Mannheim.findOne({ Extraido: false }).sort({_id: 1});
-
-
-        if(!MannheimCode){
-            console.log('meh')
-            await Mannheim.updateMany({ Extraido: false });
-            return
-        }
 
         if(!MannheimCode){
             return res.send('sin resultados');
