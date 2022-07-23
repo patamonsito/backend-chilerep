@@ -79,7 +79,7 @@ router.get('/auth-gabtec', API.POST_GABTEC_AUTH);
 
 router.get('/extraer-gabtec', API.POST_EXTRAERGABTEC);
 router.get('/extraer-automarcos', API.POST_EXTRAERAUTOMARCOS);
-
+// router.get('/extraer-mannheim', API.GET_EXTRAER_MANNHEIM);
 
 
 //PRODUCTOS CRUD
