@@ -75,6 +75,8 @@ cron.schedule('*/2 * * * * *', async () => {
         request(options, async function (error, response, body) {
         if (error) throw new Error(error);
 
+            console.log(body);
+
         let aplicaciones = JSON.parse(body)
 
             if(aplicaciones.aplicaciones.length == 0){
