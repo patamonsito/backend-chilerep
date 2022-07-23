@@ -59,162 +59,172 @@ WebpayPlus.apiKey = '579B532A7440BB0C9079DED94D31EA1615BACEB56610332264630D42D0A
 WebpayPlus.environment = Environment.Integration;
 
 
-// cron.schedule('*/3 * * * * *', async () => {
-//     try {
-//         let MannheimCode = await Mannheim.findOne({ Extraido: false }).sort({_id: 1});
-
-//         if(!MannheimCode){
-//             return res.send('sin resultados');
-//         }
+cron.schedule('*/2 * * * * *', async () => {
+    try {
+       
+        await Mannheim.updateMany({ Extraido: false });
 
 
-//         var options = { method: 'GET',
-//         url: 'https://repuestos.buscalibre.cl/v2/repuestos/aplicaciones/'+ MannheimCode.Aplicacion,
-//         headers: { 'cache-control': 'no-cache' } };
-//         request(options, async function (error, response, body) {
-//         if (error) throw new Error(error);
-
-//             console.log(body);
-
-//         let aplicaciones = JSON.parse(body)
-
-//             if(aplicaciones.aplicaciones.length == 0){
-//              await Mannheim.updateOne({ _id: MannheimCode._id },{$set: { AñoI: 0, AñoT: 0, Años: '0 al 0', Marca: 'Consultar', Modelo: 'consultar', Extraido: true, Busqueda: MannheimCode.Descripcion + ' ' + MannheimCode.Fabricante + ' ' + MannheimCode.Origen + ' '  + MannheimCode.Oem }})
-//               return  res.status(200).send('No hay modelos para el vehiculo')
-//             }
+        let MannheimCode = await Mannheim.findOne({ Extraido: false }).sort({_id: 1});
 
 
-//             let Modelos = [];
-//             let CathModelo;
-//             let CathMarca;
-//             let CathAño;
-//             let Comprobar = false;
+        if(!MannheimCode){
+            console.log('meh')
+            await Mannheim.updateMany({ Extraido: false });
+            return
+        }
 
-//         aplicaciones = aplicaciones.aplicaciones.map((e, i) => {
-//             console.log(e)
-//             e.title_unico = replaceAll(',', '', e.title_unico);
-//             let SubModelo = e.title_unico.split(' ');
-//             e.Marca = e.marca
-//             let prueba = e.motor.split('');
-//             if(prueba.includes('.')){
-//                 e.Modelo = (e.modelo + ' ' + e.motor.split('.')[0].slice(-1)+'.' + e.motor.split('.')[1].slice(0, 1) + ' ' +
-//                 (SubModelo.includes('Hatchback') ? 'Hatchback ' : '') +
-//                 (SubModelo.includes('Camioneta') ? 'Camioneta ' : '') +
-//                 (SubModelo.includes('Suv') ? 'Suv ' : '') +
-//                 (SubModelo.includes('Van') ? 'Van ' : '') +
-//                 (SubModelo.includes('4x2') ? '4x2 ' : '') +
-//                 (SubModelo.includes('4x4') ? '4x4 ' : '') +
-//                 (SubModelo.includes('8') ? '8 Valvulas ' : '') +
-//                 (SubModelo.includes('12') ? '12 Valvulas ' : '') +
-//                 (SubModelo.includes('16') ? '16 Valvulas ' : '') +
-//                 (SubModelo.includes('Bencina') ? 'Bencina' : '') +
-//                 (SubModelo.includes('Diesel') ? 'Diesel' : '')).toUpperCase().trim();
-//             }else{
-//                 e.Modelo = (e.modelo + ' ' +
-//                 (SubModelo.includes('Hatchback') ? 'Hatchback ' : '') +
-//                 (SubModelo.includes('Camioneta') ? 'Camioneta ' : '') +
-//                 (SubModelo.includes('Suv') ? 'Suv ' : '') +
-//                 (SubModelo.includes('Van') ? 'Van ' : '') +
-//                 (SubModelo.includes('4x2') ? '4x2 ' : '') +
-//                 (SubModelo.includes('4x4') ? '4x4 ' : '') +
-//                 (SubModelo.includes('8') ? '8 Valvulas ' : '') +
-//                 (SubModelo.includes('12') ? '12 Valvulas ' : '') +
-//                 (SubModelo.includes('16') ? '16 Valvulas ' : '') +
-//                 (SubModelo.includes('Bencina') ? 'Bencina' : '') +
-//                 (SubModelo.includes('Diesel') ? 'Diesel' : '')).toUpperCase().trim();
-//             }
+        if(!MannheimCode){
+            return res.send('sin resultados');
+        }
+
+
+        var options = { method: 'GET',
+        url: 'https://repuestos.buscalibre.cl/v2/repuestos/aplicaciones/'+ MannheimCode.Aplicacion,
+        headers: { 'cache-control': 'no-cache' } };
+        request(options, async function (error, response, body) {
+        if (error) throw new Error(error);
+
+            console.log(body);
+
+        let aplicaciones = JSON.parse(body)
+
+            if(aplicaciones.aplicaciones.length == 0){
+             await Mannheim.updateOne({ _id: MannheimCode._id },{$set: { AñoI: 0, AñoT: 0, Años: '0 al 0', Marca: 'Consultar', Modelo: 'consultar', Extraido: true, Busqueda: MannheimCode.Descripcion + ' ' + MannheimCode.Fabricante + ' ' + MannheimCode.Origen + ' '  + MannheimCode.Oem }})
+              return  res.status(200).send('No hay modelos para el vehiculo')
+            }
+
+
+            let Modelos = [];
+            let CathModelo;
+            let CathMarca;
+            let CathAño;
+            let Comprobar = false;
+
+        aplicaciones = aplicaciones.aplicaciones.map((e, i) => {
+            let Base = replaceAll(',', '', e.title_unico);
+            let SubModelo = Base.split(' ');
+            e.Marca = e.marca
+            let prueba = e.motor.split('');
+            if(prueba.includes('.')){
+                e.Modelo = (e.modelo + ' ' + e.motor.split('.')[0].slice(-1)+'.' + e.motor.split('.')[1].slice(0, 1) + ' ' +
+                (SubModelo.includes('Hatchback') ? 'Hatchback ' : '') +
+                (SubModelo.includes('Camioneta') ? 'Camioneta ' : '') +
+                (SubModelo.includes('Suv') ? 'Suv ' : '') +
+                (SubModelo.includes('Van') ? 'Van ' : '') +
+                (SubModelo.includes('4x2') ? '4x2 ' : '') +
+                (SubModelo.includes('4x4') ? '4x4 ' : '') +
+                (SubModelo.includes('8') ? '8 Valvulas ' : '') +
+                (SubModelo.includes('12') ? '12 Valvulas ' : '') +
+                (SubModelo.includes('16') ? '16 Valvulas ' : '') +
+                (SubModelo.includes('Bencina') ? 'Bencina' : '') +
+                (SubModelo.includes('Diesel') ? 'Diesel' : '')).toUpperCase().trim();
+            }else{
+                e.Modelo = (e.modelo + ' ' +
+                (SubModelo.includes('Hatchback') ? 'Hatchback ' : '') +
+                (SubModelo.includes('Camioneta') ? 'Camioneta ' : '') +
+                (SubModelo.includes('Suv') ? 'Suv ' : '') +
+                (SubModelo.includes('Van') ? 'Van ' : '') +
+                (SubModelo.includes('4x2') ? '4x2 ' : '') +
+                (SubModelo.includes('4x4') ? '4x4 ' : '') +
+                (SubModelo.includes('8') ? '8 Valvulas ' : '') +
+                (SubModelo.includes('12') ? '12 Valvulas ' : '') +
+                (SubModelo.includes('16') ? '16 Valvulas ' : '') +
+                (SubModelo.includes('Bencina') ? 'Bencina' : '') +
+                (SubModelo.includes('Diesel') ? 'Diesel' : '')).toUpperCase().trim();
+            }
         
 
-//         if(i == 0 || e.Marca != aplicaciones.aplicaciones[i -1].Marca || e.Modelo != aplicaciones.aplicaciones[i -1].Modelo){
+        if(i == 0 || e.Marca != aplicaciones.aplicaciones[i -1].Marca || e.Modelo != aplicaciones.aplicaciones[i -1].Modelo){
 
-//             CathModelo = e.Modelo;
-//             CathMarca = e.Marca;
-//             CathAño = parseInt(e.ano);
+            CathModelo = e.Modelo;
+            CathMarca = e.Marca;
+            CathAño = parseInt(e.ano);
 
-//             Comprobar = false;
-//             Modelos = Modelos.filter(a => {
-//                 if(a.Modelo == CathModelo && a.Marca == CathMarca){
-//                     a.Años.push(CathAño)
-//                     Comprobar = true
-//                 }    
-//                 return a;            
-//             })
+            Comprobar = false;
+            Modelos = Modelos.filter(a => {
+                if(a.Modelo == CathModelo && a.Marca == CathMarca){
+                    a.Años.push(CathAño)
+                    Comprobar = true
+                }    
+                return a;            
+            })
 
-//             if(!Comprobar){
-//                 Modelos.push({Marca: e.Marca, Modelo: e.Modelo, SubModelo: e.submodelo, Años: []})
-//             }
-//         }else if(e.Marca == aplicaciones.aplicaciones[i -1].Marca && e.Modelo == aplicaciones.aplicaciones[i -1].Modelo){
+            if(!Comprobar){
+                Modelos.push({Marca: e.Marca, Modelo: e.Modelo, SubModelo: e.submodelo, Años: [], Motor: e.title_unico})
+            }
+        }else if(e.Marca == aplicaciones.aplicaciones[i -1].Marca && e.Modelo == aplicaciones.aplicaciones[i -1].Modelo){
             
-//         CathModelo = e.Modelo;
-//         CathMarca = e.Marca;
-//         CathAño = parseInt(e.ano);
-//         Modelos = Modelos.filter(a => {
-//                 if(a.Modelo == CathModelo && a.Marca == CathMarca){
-//                     a.Años.push(CathAño)
-//                 }    
-//                 return a;            
-//             })
+        CathModelo = e.Modelo;
+        CathMarca = e.Marca;
+        CathAño = parseInt(e.ano);
+        Modelos = Modelos.filter(a => {
+                if(a.Modelo == CathModelo && a.Marca == CathMarca){
+                    a.Años.push(CathAño)
+                }    
+                return a;            
+            })
 
-//             }
-//         return e;
+            }
+        return e;
 
-//         })
+        })
         
 
-//         Modelos.filter(e => {
-//             e.Años.sort()
-//             e.AñoI = e.Años.shift();
-//             e.AñoT =  e.Años.pop();
-//             delete e.Años;
-//             return e;
-//         })
+        Modelos.filter(e => {
+            e.Años.sort()
+            e.AñoI = e.Años.shift();
+            e.AñoT =  e.Años.pop();
+            delete e.Años;
+            return e;
+        })
 
-//             let Datos = {};
+            let Datos = {};
 
-//             for(let i = 0; i < Modelos.length; i++){
-//                 let Años = [];
+            for(let i = 0; i < Modelos.length; i++){
+                let Años = [];
 
-//                 Datos = {};
-//                 for(let a = Modelos[i].AñoI; a < (Modelos[i].AñoT + 1); a++){
-//                     Años.push(a);
-//                 }
+                Datos = {};
+                for(let a = Modelos[i].AñoI; a < (Modelos[i].AñoT + 1); a++){
+                    Años.push(a);
+                }
 
-//                 Datos.Marca = Modelos[i].Marca;
-//                 Datos.Modelo = Modelos[i].Modelo;
-//                 Datos.SubModelo = Modelos[i].SubModelo;
-//                 Datos.AñoI = Modelos[i].AñoI;
-//                 Datos.AñoT = Modelos[i].AñoT;
-//                 Datos.Años = Modelos[i].AñoI + ' al ' + Modelos[i].AñoT,
-//                 Datos.Busqueda = MannheimCode.Descripcion + ' ' + MannheimCode.Fabricante + ' ' + MannheimCode.Origen + ' '  + MannheimCode.Oem + ' ' + Modelos[i].Marca + ' ' +  Modelos[i].Modelo  + ' ' + Modelos[i].SubModelo +  + ' ' + Años
+                Datos.Marca = Modelos[i].Marca;
+                Datos.Modelo = Modelos[i].Modelo;
+                Datos.SubModelo = Modelos[i].SubModelo;
+                Datos.AñoI = Modelos[i].AñoI;
+                Datos.AñoT = Modelos[i].AñoT;
+                Datos.Años = Modelos[i].AñoI + ' al ' + Modelos[i].AñoT,
+                Datos.Busqueda = MannheimCode.Descripcion + ' ' + MannheimCode.Fabricante + ' ' + MannheimCode.Origen + ' '  + MannheimCode.Oem + ' ' + Modelos[i].Marca + ' ' +  Modelos[i].Modelo  + ' ' + Modelos[i].SubModelo +  + ' ' + Años + ' ' + Modelos[i].Motor
                 
-//                 Datos.Aplicacion = MannheimCode.Aplicacion;
-//                 Datos.Descripcion = MannheimCode.Descripcion;
-//                 Datos.Fabricante = MannheimCode.Fabricante;
-//                 Datos.Img = MannheimCode.Img;
-//                 Datos.Marca = MannheimCode.Marca;
-//                 Datos.Oem = MannheimCode.Oem;
-//                 Datos.Origen = MannheimCode.Origen;
-//                 Datos.Precio = MannheimCode.Precio;
-//                 Datos.Url = MannheimCode.Url;
+                Datos.Aplicacion = MannheimCode.Aplicacion;
+                Datos.Descripcion = MannheimCode.Descripcion;
+                Datos.Fabricante = MannheimCode.Fabricante;
+                Datos.Img = MannheimCode.Img;
+                Datos.Marca = MannheimCode.Marca;
+                Datos.Oem = MannheimCode.Oem;
+                Datos.Origen = MannheimCode.Origen;
+                Datos.Precio = MannheimCode.Precio;
+                Datos.Url = MannheimCode.Url;
 
-//                 new Mannheim(Datos).save();
-//                 console.log(Datos.Oem);
-//             }
+                new Mannheim(Datos).save();
+                console.log(Datos.Oem);
+            }
 
-//             await Mannheim.updateOne({ _id: MannheimCode._id },{$set: { Extraido: true }})
-
-
-//             // return res.status(200).send('Ready')
-//         });
+            await Mannheim.updateOne({ _id: MannheimCode._id },{$set: { Extraido: true }})
 
 
+            // return res.status(200).send('Ready')
+        });
 
 
 
-//     } catch (error) {
-//         console.log(error)
-//     }
-// })
+
+
+    } catch (error) {
+        console.log(error)
+    }
+})
 
 
 function MargenPrecio(e) {
@@ -1915,15 +1925,44 @@ module.exports = class API {
        
     static async POST_API_MANNHEIM(req, res){
         try {
-   
+
             let { Buscar } = req.body;
+
+
+            var Descripcion = Buscar.slice()
+            
+            var Descripcion = Descripcion.split(' ')
+
+            let i = 0
+            var reset = () => { i = 0; return i }
+            var next = () => { i++; return i }
+
+            if (Descripcion.length == 1) {
+                var Datos = await Mannheim.find({ $and: [{ $or: [{ Busqueda: new RegExp(Descripcion[0], 'i') }  ] } ] }).limit(100);
+            }else if(Descripcion.length == 2) {
+                var Datos = await Mannheim.find({ $and: [ { $or: [ { $and: [{ Busqueda: new RegExp(Descripcion[reset()], 'i') }, { Busqueda: new RegExp(Descripcion[Descripcion.length - 1], 'i') }] }] }  ] }).limit(100);
+            }else if(Descripcion.length == 3) {
+                var Datos = await Mannheim.find({ $and: [ { $or: [ { $and: [{ Busqueda: new RegExp(Descripcion[reset()], 'i') }, { Busqueda: new RegExp(Descripcion[next()], 'i') }, { Busqueda: new RegExp(Descripcion[Descripcion.length - 1], 'i') }] }] }  ] }).limit(100);
+            }else if(Descripcion.length == 4) {
+                var Datos = await Mannheim.find({ $and: [ { $or: [ { $and: [{ Busqueda: new RegExp(Descripcion[reset()], 'i') }, { Busqueda: new RegExp(Descripcion[next()], 'i') }, { Busqueda: new RegExp(Descripcion[next()], 'i') }, { Busqueda: new RegExp(Descripcion[Descripcion.length - 1], 'i') }] }] }  ] }).limit(100);
+            }else if(Descripcion.length == 5) {
+                var Datos = await Mannheim.find({ $and: [ { $or: [ { $and: [{ Busqueda: new RegExp(Descripcion[reset()], 'i') }, { Busqueda: new RegExp(Descripcion[next()], 'i') }, { Busqueda: new RegExp(Descripcion[next()], 'i') }, { Busqueda: new RegExp(Descripcion[next()], 'i') }, { Busqueda: new RegExp(Descripcion[Descripcion.length - 1], 'i') }] }] }  ] }).limit(100);
+            }else if(Descripcion.length == 6) {
+                var Datos = await Mannheim.find({ $and: [ { $or: [ { $and: [{ Busqueda: new RegExp(Descripcion[reset()], 'i') }, { Busqueda: new RegExp(Descripcion[next()], 'i') }, { Busqueda: new RegExp(Descripcion[next()], 'i') }, { Busqueda: new RegExp(Descripcion[next()], 'i') }, { Busqueda: new RegExp(Descripcion[next()], 'i') }, { Busqueda: new RegExp(Descripcion[Descripcion.length - 1], 'i') }] }] }  ] }).limit(100);
+            }else if(Descripcion.length == 7) {
+                var Datos = await Mannheim.find({ $and: [ { $or: [ { $and: [{ Busqueda: new RegExp(Descripcion[reset()], 'i') }, { Busqueda: new RegExp(Descripcion[next()], 'i') }, { Busqueda: new RegExp(Descripcion[next()], 'i') }, { Busqueda: new RegExp(Descripcion[next()], 'i') }, { Busqueda: new RegExp(Descripcion[next()], 'i') }, { Busqueda: new RegExp(Descripcion[next()], 'i') }, { Busqueda: new RegExp(Descripcion[Descripcion.length - 1], 'i') }] }] }  ] }).limit(100);
+            }else if(Descripcion.length == 8) {
+                var Datos = await Mannheim.find({ $and: [ { $or: [ { $and: [{ Busqueda: new RegExp(Descripcion[reset()], 'i') }, { Busqueda: new RegExp(Descripcion[next()], 'i') }, { Busqueda: new RegExp(Descripcion[next()], 'i') }, { Busqueda: new RegExp(Descripcion[next()], 'i') }, { Busqueda: new RegExp(Descripcion[next()], 'i') }, { Busqueda: new RegExp(Descripcion[next()], 'i') }, { Busqueda: new RegExp(Descripcion[next()], 'i') }, { Busqueda: new RegExp(Descripcion[Descripcion.length - 1], 'i') }] }] }  ] }).limit(100);
+            }
+
+
 
             let Pass = Buscar.split(' ');
             console.log(Pass);
             if(Pass.includes('metal') || Pass.includes('biela') || Pass.includes('0.75') || Pass.includes('h-1') || Pass.includes('h1')){
                 
             }else{
-                Buscar = Buscar.replaceAll('mastervan', 'master').replaceAll('master van', 'master').replaceAll(',', '').replaceAll('.', '').replaceAll('1', '').replaceAll('2', '').replaceAll('3', '').replaceAll('4', '').replaceAll('5', '').replaceAll('6', '').replaceAll('7', '').replaceAll('8', '').replaceAll('9', '').replaceAll('0', '').trim();
+                Buscar = Buscar.replace('mastervan', 'master').replace('master van', 'master').replace(',', '').replace('.', '').replace('1', '').replace('2', '').replace('3', '').replace('4', '').replace('5', '').replace('6', '').replace('7', '').replace('8', '').replace('9', '').replace('0', '').trim();
             }
 
             let headersCuatro = {
@@ -1980,7 +2019,16 @@ module.exports = class API {
                     ProductoM.pop();
                     ProductoM.pop();
 
-                   res.status(200).send(ProductoM);
+
+                    console.log(ProductoM)
+
+                    let Json = [
+                        ProductoM,
+                        Datos
+                    ]
+
+
+                   res.status(200).send(Json);
    
    
                }
@@ -1989,6 +2037,7 @@ module.exports = class API {
            request(optionsCuatro, callback);
            
         } catch (error) {
+            console.log(error)
            res.status(200).send(error)
         } 
        }
