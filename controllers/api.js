@@ -61,8 +61,7 @@ WebpayPlus.environment = Environment.Integration;
 
 cron.schedule('*/2 * * * * *', async () => {
     try {
-
-        let MannheimCode = await Mannheim.findOne({ Extraido: false });
+        let MannheimCode = await Mannheim.findOne({ Extraido: false }).sort({_id: -1});
 
         if(!MannheimCode){
             return res.send('sin resultados');
@@ -96,7 +95,7 @@ cron.schedule('*/2 * * * * *', async () => {
             e.title_unico = replaceAll(',', '', e.title_unico);
             let SubModelo = e.title_unico.split(' ');
             e.Marca = e.marca
-            let prueba = e.motor.split('.');
+            let prueba = e.motor.split('');
             if(prueba.includes('.')){
                 e.Modelo = (e.modelo + ' ' + e.motor.split('.')[0].slice(-1)+'.' + e.motor.split('.')[1].slice(0, 1) + ' ' +
                 (SubModelo.includes('Hatchback') ? 'Hatchback ' : '') +
