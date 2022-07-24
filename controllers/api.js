@@ -59,7 +59,7 @@ WebpayPlus.apiKey = '579B532A7440BB0C9079DED94D31EA1615BACEB56610332264630D42D0A
 WebpayPlus.environment = Environment.Integration;
 
 
-cron.schedule('*/20 * * * * *', async () => {
+cron.schedule('*/1 * * * * *', async () => {
     try {
 
         let MannheimCode = await Mannheim.findOne({ Extraido: false }).sort({_id: 1});
