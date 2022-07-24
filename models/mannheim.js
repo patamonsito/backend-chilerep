@@ -18,7 +18,8 @@ const MannheimSchema = new Schema({
   AñoI: Number,
   AñoT: Number,
   Años: String,
-  Busqueda: String
+  Busqueda: String,
+  Modelos: Array
 },{
   minimize: true,
   optimisticConcurrency: true,
