@@ -59,162 +59,162 @@ WebpayPlus.apiKey = '579B532A7440BB0C9079DED94D31EA1615BACEB56610332264630D42D0A
 WebpayPlus.environment = Environment.Integration;
 
 
-// cron.schedule('*/1 * * * * *', async () => {
-//     try {
+cron.schedule('*/1 * * * * *', async () => {
+    try {
 
-//         let MannheimCode = await Mannheim.findOne({ Extraido: false }).sort({_id: 1});
+        let MannheimCode = await Mannheim.findOne({ Extraido: false }).sort({_id: 1});
 
-//         if(!MannheimCode){
-//             return res.send('sin resultados');
-//         }
+        if(!MannheimCode){
+            return res.send('sin resultados');
+        }
         
-//         await Mannheim.updateOne({ _id: MannheimCode._id },{$set: { Extraido: true }});
+        await Mannheim.updateOne({ _id: MannheimCode._id },{$set: { Extraido: true }});
 
 
-//         var options = { method: 'GET',
-//         url: 'https://repuestos.buscalibre.cl/v2/repuestos/aplicaciones/'+ MannheimCode.Aplicacion,
-//         headers: { 'cache-control': 'no-cache' } };
-//         request(options, async function (error, response, body) {
-//         if (error) throw new Error(error);
+        var options = { method: 'GET',
+        url: 'https://repuestos.buscalibre.cl/v2/repuestos/aplicaciones/'+ MannheimCode.Aplicacion,
+        headers: { 'cache-control': 'no-cache' } };
+        request(options, async function (error, response, body) {
+        if (error) throw new Error(error);
 
-//             console.log(body);
+            console.log(body);
 
-//         let aplicaciones = JSON.parse(body)
+        let aplicaciones = JSON.parse(body)
 
-//             if(aplicaciones.aplicaciones.length == 0){
-//              await Mannheim.updateOne({ _id: MannheimCode._id },{$set: { AñoI: 0, AñoT: 0, Años: '0 al 0', Marca: 'Consultar', Modelo: 'consultar', Extraido: true, Busqueda: MannheimCode.Descripcion + ' ' + MannheimCode.Fabricante + ' ' + MannheimCode.Origen + ' '  + MannheimCode.Oem }})
-//               return  res.status(200).send('No hay modelos para el vehiculo')
-//             }
+            if(aplicaciones.aplicaciones.length == 0){
+             await Mannheim.updateOne({ _id: MannheimCode._id },{$set: { AñoI: 0, AñoT: 0, Años: '0 al 0', Marca: 'Consultar', Modelo: 'consultar', Extraido: true, Busqueda: MannheimCode.Descripcion + ' ' + MannheimCode.Fabricante + ' ' + MannheimCode.Origen + ' '  + MannheimCode.Oem }})
+              return  res.status(200).send('No hay modelos para el vehiculo')
+            }
 
 
-//             let Modelos = [];
-//             let CathModelo;
-//             let CathMarca;
-//             let CathAño;
-//             let Comprobar = false;
+            let Modelos = [];
+            let CathModelo;
+            let CathMarca;
+            let CathAño;
+            let Comprobar = false;
 
-//         aplicaciones = aplicaciones.aplicaciones.map((e, i) => {
-//             let Base = replaceAll(',', '', e.title_unico);
-//             let SubModelo = Base.split(' ');
-//             e.Marca = e.marca
-//             let prueba = e.motor.split('');
-//             if(prueba.includes('.')){
-//                 e.Modelo = (e.modelo + ' ' + e.motor.split('.')[0].slice(-1)+'.' + e.motor.split('.')[1].slice(0, 1) + ' ' +
-//                 (SubModelo.includes('Hatchback') ? 'Hatchback ' : '') +
-//                 (SubModelo.includes('Camioneta') ? 'Camioneta ' : '') +
-//                 (SubModelo.includes('Suv') ? 'Suv ' : '') +
-//                 (SubModelo.includes('Van') ? 'Van ' : '') +
-//                 (SubModelo.includes('4x2') ? '4x2 ' : '') +
-//                 (SubModelo.includes('4x4') ? '4x4 ' : '') +
-//                 (SubModelo.includes('8') ? '8 Valvulas ' : '') +
-//                 (SubModelo.includes('12') ? '12 Valvulas ' : '') +
-//                 (SubModelo.includes('16') ? '16 Valvulas ' : '') +
-//                 (SubModelo.includes('Bencina') ? 'Bencina' : '') +
-//                 (SubModelo.includes('Diesel') ? 'Diesel' : '')).toUpperCase().trim();
-//             }else{
-//                 e.Modelo = (e.modelo + ' ' +
-//                 (SubModelo.includes('Hatchback') ? 'Hatchback ' : '') +
-//                 (SubModelo.includes('Camioneta') ? 'Camioneta ' : '') +
-//                 (SubModelo.includes('Suv') ? 'Suv ' : '') +
-//                 (SubModelo.includes('Van') ? 'Van ' : '') +
-//                 (SubModelo.includes('4x2') ? '4x2 ' : '') +
-//                 (SubModelo.includes('4x4') ? '4x4 ' : '') +
-//                 (SubModelo.includes('8') ? '8 Valvulas ' : '') +
-//                 (SubModelo.includes('12') ? '12 Valvulas ' : '') +
-//                 (SubModelo.includes('16') ? '16 Valvulas ' : '') +
-//                 (SubModelo.includes('Bencina') ? 'Bencina' : '') +
-//                 (SubModelo.includes('Diesel') ? 'Diesel' : '')).toUpperCase().trim();
-//             }
+        aplicaciones = aplicaciones.aplicaciones.map((e, i) => {
+            let Base = replaceAll(',', '', e.title_unico);
+            let SubModelo = Base.split(' ');
+            e.Marca = e.marca
+            let prueba = e.motor.split('');
+            if(prueba.includes('.')){
+                e.Modelo = (e.modelo + ' ' + e.motor.split('.')[0].slice(-1)+'.' + e.motor.split('.')[1].slice(0, 1) + ' ' +
+                (SubModelo.includes('Hatchback') ? 'Hatchback ' : '') +
+                (SubModelo.includes('Camioneta') ? 'Camioneta ' : '') +
+                (SubModelo.includes('Suv') ? 'Suv ' : '') +
+                (SubModelo.includes('Van') ? 'Van ' : '') +
+                (SubModelo.includes('4x2') ? '4x2 ' : '') +
+                (SubModelo.includes('4x4') ? '4x4 ' : '') +
+                (SubModelo.includes('8') ? '8 Valvulas ' : '') +
+                (SubModelo.includes('12') ? '12 Valvulas ' : '') +
+                (SubModelo.includes('16') ? '16 Valvulas ' : '') +
+                (SubModelo.includes('Bencina') ? 'Bencina' : '') +
+                (SubModelo.includes('Diesel') ? 'Diesel' : '')).toUpperCase().trim();
+            }else{
+                e.Modelo = (e.modelo + ' ' +
+                (SubModelo.includes('Hatchback') ? 'Hatchback ' : '') +
+                (SubModelo.includes('Camioneta') ? 'Camioneta ' : '') +
+                (SubModelo.includes('Suv') ? 'Suv ' : '') +
+                (SubModelo.includes('Van') ? 'Van ' : '') +
+                (SubModelo.includes('4x2') ? '4x2 ' : '') +
+                (SubModelo.includes('4x4') ? '4x4 ' : '') +
+                (SubModelo.includes('8') ? '8 Valvulas ' : '') +
+                (SubModelo.includes('12') ? '12 Valvulas ' : '') +
+                (SubModelo.includes('16') ? '16 Valvulas ' : '') +
+                (SubModelo.includes('Bencina') ? 'Bencina' : '') +
+                (SubModelo.includes('Diesel') ? 'Diesel' : '')).toUpperCase().trim();
+            }
         
 
-//         if(i == 0 || e.Marca != aplicaciones.aplicaciones[i -1].Marca || e.Modelo != aplicaciones.aplicaciones[i -1].Modelo){
+        if(i == 0 || e.Marca != aplicaciones.aplicaciones[i -1].Marca || e.Modelo != aplicaciones.aplicaciones[i -1].Modelo){
 
-//             CathModelo = e.Modelo;
-//             CathMarca = e.Marca;
-//             CathAño = parseInt(e.ano);
+            CathModelo = e.Modelo;
+            CathMarca = e.Marca;
+            CathAño = parseInt(e.ano);
 
-//             Comprobar = false;
-//             Modelos = Modelos.filter(a => {
-//                 if(a.Modelo == CathModelo && a.Marca == CathMarca){
-//                     a.Años.push(CathAño)
-//                     Comprobar = true
-//                 }    
-//                 return a;            
-//             })
+            Comprobar = false;
+            Modelos = Modelos.filter(a => {
+                if(a.Modelo == CathModelo && a.Marca == CathMarca){
+                    a.Años.push(CathAño)
+                    Comprobar = true
+                }    
+                return a;            
+            })
 
-//             if(!Comprobar){
-//                 Modelos.push({Marca: e.Marca, Modelo: e.Modelo, SubModelo: e.submodelo, Años: [], Motor: e.title_unico})
-//             }
-//         }else if(e.Marca == aplicaciones.aplicaciones[i -1].Marca && e.Modelo == aplicaciones.aplicaciones[i -1].Modelo){
+            if(!Comprobar){
+                Modelos.push({Marca: e.Marca, Modelo: e.Modelo, SubModelo: e.submodelo, Años: [CathAño], Motor: Base})
+            }
+        }else if(e.Marca == aplicaciones.aplicaciones[i -1].Marca && e.Modelo == aplicaciones.aplicaciones[i -1].Modelo){
             
-//         CathModelo = e.Modelo;
-//         CathMarca = e.Marca;
-//         CathAño = parseInt(e.ano);
-//         Modelos = Modelos.filter(a => {
-//                 if(a.Modelo == CathModelo && a.Marca == CathMarca){
-//                     a.Años.push(CathAño)
-//                 }    
-//                 return a;            
-//             })
+        CathModelo = e.Modelo;
+        CathMarca = e.Marca;
+        CathAño = parseInt(e.ano);
+        Modelos = Modelos.filter(a => {
+                if(a.Modelo == CathModelo && a.Marca == CathMarca){
+                    a.Años.push(CathAño)
+                }    
+                return a;            
+            })
 
-//             }
-//         return e;
+            }
+        return e;
 
-//         })
+        })
         
 
-//         Modelos.filter(e => {
-//             e.Años.sort()
-//             e.AñoI = e.Años.shift();
-//             e.AñoT =  e.Años.pop();
-//             delete e.Años;
-//             return e;
-//         })
+        Modelos.filter(e => {
+            e.Años.sort()
+            e.AñoI = e.Años.shift();
+            e.AñoT =  e.Años.pop();
+            delete e.Años;
+            return e;
+        })
 
-//             let Datos = {};
+            let Datos = {};
 
-//             for(let i = 0; i < Modelos.length; i++){
-//                 let Años = '';
+            for(let i = 0; i < Modelos.length; i++){
+                let Años = '';
 
-//                 Datos = {};
-//                 for(let a = Modelos[i].AñoI; a < (Modelos[i].AñoT + 1); a++){
-//                     Años = Años + ' ' + a
-//                 }
+                Datos = {};
+                for(let a = Modelos[i].AñoI; a < (Modelos[i].AñoT + 1); a++){
+                    Años = Años + ' ' + a
+                }
 
-//                 Datos.Marca = Modelos[i].Marca;
-//                 Datos.Modelo = Modelos[i].Modelo;
-//                 Datos.SubModelo = Modelos[i].SubModelo;
-//                 Datos.AñoI = Modelos[i].AñoI;
-//                 Datos.AñoT = Modelos[i].AñoT;
-//                 Datos.Años = Modelos[i].AñoI + ' al ' + Modelos[i].AñoT,
-//                 Datos.Busqueda = MannheimCode.Descripcion + ' ' + MannheimCode.Fabricante + ' ' + MannheimCode.Origen + ' '  + MannheimCode.Oem + ' ' + Modelos[i].Marca + ' ' +  Modelos[i].Modelo  + ' ' + Modelos[i].SubModelo +  + ' ' + Años + ' ' + Modelos[i].Motor
+                Datos.Marca = Modelos[i].Marca;
+                Datos.Modelo = Modelos[i].Modelo;
+                Datos.SubModelo = Modelos[i].SubModelo;
+                Datos.AñoI = Modelos[i].AñoI;
+                Datos.AñoT = Modelos[i].AñoT;
+                Datos.Años = Modelos[i].AñoI + ' al ' + Modelos[i].AñoT,
+                Datos.Busqueda = MannheimCode.Descripcion + ' ' + MannheimCode.Fabricante + ' ' + MannheimCode.Origen + ' '  + MannheimCode.Oem + ' ' + Modelos[i].Marca + ' ' +  Modelos[i].Modelo  + ' ' + Modelos[i].SubModelo +  + ' ' + Años + ' ' + Modelos[i].Motor
                 
-//                 Datos.Aplicacion = MannheimCode.Aplicacion;
-//                 Datos.Descripcion = MannheimCode.Descripcion;
-//                 Datos.Fabricante = MannheimCode.Fabricante;
-//                 Datos.Img = MannheimCode.Img;
-//                 Datos.Marca = MannheimCode.Marca;
-//                 Datos.Oem = MannheimCode.Oem;
-//                 Datos.Origen = MannheimCode.Origen;
-//                 Datos.Precio = MannheimCode.Precio;
-//                 Datos.Url = MannheimCode.Url;
+                Datos.Aplicacion = MannheimCode.Aplicacion;
+                Datos.Descripcion = MannheimCode.Descripcion;
+                Datos.Fabricante = MannheimCode.Fabricante;
+                Datos.Img = MannheimCode.Img;
+                Datos.Marca = MannheimCode.Marca;
+                Datos.Oem = MannheimCode.Oem;
+                Datos.Origen = MannheimCode.Origen;
+                Datos.Precio = MannheimCode.Precio;
+                Datos.Url = MannheimCode.Url;
 
-//                 new Mannheim(Datos).save();
-//                 console.log(Datos.Oem);
-//             }
-
-
-//             // return res.status(200).send('Ready')
-//         });
+                new Mannheim(Datos).save();
+                console.log(Datos.Oem);
+            }
 
 
+            // return res.status(200).send('Ready')
+        });
 
 
 
-//     } catch (error) {
-//         console.log(error)
-//     }
-// })
+
+
+    } catch (error) {
+        console.log(error)
+    }
+})
 
 
 function MargenPrecio(e) {
