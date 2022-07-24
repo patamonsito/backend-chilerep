@@ -83,7 +83,7 @@ cron.schedule('*/1 * * * * *', async () => {
 
             if(aplicaciones.aplicaciones.length == 0){
              await Mannheim.updateOne({ _id: MannheimCode._id },{$set: { AñoI: 0, AñoT: 0, Años: '0 al 0', Marca: 'Consultar', Modelo: 'consultar', Extraido: true, Busqueda: MannheimCode.Descripcion + ' ' + MannheimCode.Fabricante + ' ' + MannheimCode.Origen + ' '  + MannheimCode.Oem }})
-              return  res.status(200).send('No hay modelos para el vehiculo')
+             return true;
             }
 
 
