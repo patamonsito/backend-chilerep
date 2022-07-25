@@ -4,6 +4,7 @@ const Familias = require("../models/familias");
 const Credenciales = require("../models/credenciales");
 const Gabtec = require("../models/gabtecs");
 const Mannheim = require("../models/mannheim");
+const Bicimoto = require("../models/bicimoto");
 const Automarcos = require("../models/automarcos")
 const HtmlTableToJson = require('html-table-to-json');
 const Sucursales = require("../models/sucursales");
@@ -1815,7 +1816,7 @@ module.exports = class API {
 
     }
 
-       static async POST_API_BICIMOTO(req, res){
+       static async POST_EXTRAER_BICIMOTO(req, res){
         try {
             let { Buscar } = req.body;
    
@@ -1823,7 +1824,9 @@ module.exports = class API {
             let CookieBicimoto = await Credenciales.findOne({ Importadora: 'Bicimoto' });
 
 
-            let dataStringTres = 'id_category=&id_subcategory=&id_subsubcategory=&option_filter=&search=' + Buscar + '&order=&register=50';
+            process.env.COUNT = parseInt(process.env.COUNT) + 1;
+
+            let dataStringTres = 'id_category=&id_subcategory=&id_subsubcategory=&option_filter=&search=%%&order=&register=100&page='+process.env.COUNT;
     
                                 let headersTres = {
                                     'authority': 'www.bicimoto.cl',
@@ -1864,8 +1867,10 @@ module.exports = class API {
                                         let cantidadB = $('body > div').length + 1;
     
                                         let ProductosB = []
+                                        console.log(cantidadB);
     
                                         for(let i = 1; i < cantidadB; i++){
+                                            console.log(i, process.env.COUNT)
                                         let Descripcion = $('body > div:nth-child('+ i +') > div > div.producto-box-pack > div.producto-box-datos > h2').text().trim();
                                         let Sku = $('body > div:nth-child('+i+') > div > div.producto-box-pack > div.producto-box-datos > p:nth-child(2)').text().trim();
                                         let Marca = $('body > div:nth-child('+i+') > div > div.producto-box-pack > div.producto-box-datos > p:nth-child(3)').text().trim();
@@ -1883,16 +1888,39 @@ module.exports = class API {
                                             Oem,
                                             Origen,
                                             PrecioImportadora,
-                                            Stock
+                                            Stock,
+                                            Busqueda: Sku + ' ' + Descripcion + ' ' + Marca + ' ' + Modelo + ' ' + Oem + ' ' + Origen
                                         }
-                                            ProductosB.push(JsonB)
+                                         
+                                        new Bicimoto(JsonB).save()
+
+                                        // ProductosB.push(JsonB)
     
                                         }
 
                                         if(ProductosB.length == 0){
                                             ProductosB = [
                                                 {
-                                                    Descripcion: ''
+                                                    "Descripcion": process.env.COUNT,
+                                                    "Marca": process.env.COUNT,
+                                                    "Modelo": process.env.COUNT,
+                                                    "Oem": process.env.COUNT,
+                                                    "Origen": process.env.COUNT,
+                                                    "PrecioImportadora": process.env.COUNT,
+                                                    "Sku": process.env.COUNT,
+                                                    "Stock": process.env.COUNT,
+                                                    "Busqueda": process.env.COUNT,
+                                                },
+                                                {
+                                                    "Descripcion": process.env.COUNT,
+                                                    "Marca": process.env.COUNT,
+                                                    "Modelo": process.env.COUNT,
+                                                    "Oem": process.env.COUNT,
+                                                    "Origen": process.env.COUNT,
+                                                    "PrecioImportadora": process.env.COUNT,
+                                                    "Sku": process.env.COUNT,
+                                                    "Stock": process.env.COUNT,
+                                                    "Busqueda": process.env.COUNT,
                                                 }
                                             ]
                                         }
@@ -1907,8 +1935,8 @@ module.exports = class API {
 
             request(optionsTres, callbackTres);
                                 
-                                
         } catch (error) {
+            console.log(error)
            res.status(200).send(error)
         } 
        }
@@ -2212,6 +2240,43 @@ module.exports = class API {
                 var Datos = await Gabtec.find({ $and: [ { $or: [ { $and: [{ Busqueda: new RegExp(Descripcion[reset()], 'i') }, { Busqueda: new RegExp(Descripcion[next()], 'i') }, { Busqueda: new RegExp(Descripcion[next()], 'i') }, { Busqueda: new RegExp(Descripcion[Descripcion.length - 1], 'i') }] }] }  ] }).limit(100);
             }else if(Descripcion.length == 5) {
                 var Datos = await Gabtec.find({ $and: [ { $or: [ { $and: [{ Busqueda: new RegExp(Descripcion[reset()], 'i') }, { Busqueda: new RegExp(Descripcion[next()], 'i') }, { Busqueda: new RegExp(Descripcion[next()], 'i') }, { Busqueda: new RegExp(Descripcion[next()], 'i') }, { Busqueda: new RegExp(Descripcion[Descripcion.length - 1], 'i') }] }] }  ] }).limit(100);
+            }
+
+            return res.status(200).send(Datos)
+
+            // Fin 
+        } catch (err) {
+            return res.status(200).json({ message: err.message});
+        }
+    }
+
+
+    static async POST_API_BICIMOTO(req, res){
+        try {
+            // Inicio
+            var Descripcion = req.body.Buscar.slice()
+            
+            Descripcion.split(' ');
+            var Descripcion = Descripcion.split(' ')
+
+            let i = 0
+            var reset = () => { i = 0; return i }
+            var next = () => { i++; return i }
+
+            if (Descripcion.length == 1) {
+                var Datos = await Bicimoto.find({ $and: [{ $or: [{ Busqueda: new RegExp(Descripcion[0], 'i') }  ] } ] }).limit(100);
+            }else if(Descripcion.length == 2) {
+                var Datos = await Bicimoto.find({ $and: [ { $or: [ { $and: [{ Busqueda: new RegExp(Descripcion[reset()], 'i') }, { Busqueda: new RegExp(Descripcion[Descripcion.length - 1], 'i') }] }] }  ] }).limit(100);
+            }else if(Descripcion.length == 3) {
+                var Datos = await Bicimoto.find({ $and: [ { $or: [ { $and: [{ Busqueda: new RegExp(Descripcion[reset()], 'i') }, { Busqueda: new RegExp(Descripcion[next()], 'i') }, { Busqueda: new RegExp(Descripcion[Descripcion.length - 1], 'i') }] }] }  ] }).limit(100);
+            }else if(Descripcion.length == 4) {
+                var Datos = await Bicimoto.find({ $and: [ { $or: [ { $and: [{ Busqueda: new RegExp(Descripcion[reset()], 'i') }, { Busqueda: new RegExp(Descripcion[next()], 'i') }, { Busqueda: new RegExp(Descripcion[next()], 'i') }, { Busqueda: new RegExp(Descripcion[Descripcion.length - 1], 'i') }] }] }  ] }).limit(100);
+            }else if(Descripcion.length == 5) {
+                var Datos = await Bicimoto.find({ $and: [ { $or: [ { $and: [{ Busqueda: new RegExp(Descripcion[reset()], 'i') }, { Busqueda: new RegExp(Descripcion[next()], 'i') }, { Busqueda: new RegExp(Descripcion[next()], 'i') }, { Busqueda: new RegExp(Descripcion[next()], 'i') }, { Busqueda: new RegExp(Descripcion[Descripcion.length - 1], 'i') }] }] }  ] }).limit(100);
+            }else if(Descripcion.length == 6) {
+                var Datos = await Bicimoto.find({ $and: [ { $or: [ { $and: [{ Busqueda: new RegExp(Descripcion[reset()], 'i') }, { Busqueda: new RegExp(Descripcion[next()], 'i') }, { Busqueda: new RegExp(Descripcion[next()], 'i') }, { Busqueda: new RegExp(Descripcion[next()], 'i') }, { Busqueda: new RegExp(Descripcion[next()], 'i') }, { Busqueda: new RegExp(Descripcion[Descripcion.length - 1], 'i') }] }] }  ] }).limit(100);
+            }else if(Descripcion.length == 7) {
+                var Datos = await Bicimoto.find({ $and: [ { $or: [ { $and: [{ Busqueda: new RegExp(Descripcion[reset()], 'i') }, { Busqueda: new RegExp(Descripcion[next()], 'i') }, { Busqueda: new RegExp(Descripcion[next()], 'i') }, { Busqueda: new RegExp(Descripcion[next()], 'i') }, { Busqueda: new RegExp(Descripcion[next()], 'i') }, { Busqueda: new RegExp(Descripcion[next()], 'i') }, { Busqueda: new RegExp(Descripcion[Descripcion.length - 1], 'i') }] }] }  ] }).limit(100);
             }
 
             return res.status(200).send(Datos)
