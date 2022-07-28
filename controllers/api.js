@@ -3798,6 +3798,45 @@ static async POST_GABTEC_AUTH(req, res){
 
 
 
+    static async POST_OFERTAS(req, res){
+        try {
+            let { Repuesto } = req.body;
+
+            var Datos = await Productos.find({ Busqueda: new RegExp(Repuesto, 'i'), Oferta: true, Stock: {$ne: '0'} }).limit(8);
+            
+            return res.status(200).send(Datos)
+        } catch (error) {
+            console.log(error);
+            return res.status(200).send(error)
+        }
+    }
+
+
+    static async POST_POPULARES(req, res){
+        try {
+
+            var Datos = await Productos.find({ Popular: true, Stock: {$ne: '0'} }).limit(8);
+            
+            return res.status(200).send(Datos)
+        } catch (error) {
+            console.log(error);
+            return res.status(200).send(error)
+        }
+    }
+
+    static async POST_ULTIMOS_PRODUCTOS(req, res){
+        try {
+
+            var Datos = await Productos.find({Stock: {$ne: '0'}, Importadora: {$ne: 'Refax'}, Importadora: {$ne: 'Alsacia'} }).sort({_id: -1}).limit(8);
+            
+            return res.status(200).send(Datos)
+        } catch (error) {
+            console.log(error);
+            return res.status(200).send(error)
+        }
+    }
+
+
     static async PRODUCT_CHANGE_DESCRIPCTION(req, res){
         try {
            var { Importadora, Descripcion, OEM, CodigoImportadora } = req.body;
@@ -6273,6 +6312,16 @@ static async GET_TIMBRE(req, res){
         res.status(200).send(error)
     }
 }
+
+
+static async POST_DTE_COMPRA(req, res){
+    try {
+       return GetDTERecibido(res, req.body.Emisor, req.body.Folio)
+    } catch (error) {
+        res.status(200).send(error)
+    }
+}
+
 
 
 static async POST_DTE_COMPRA(req, res){

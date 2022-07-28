@@ -104,6 +104,15 @@ router.delete('/products/delete-refax', API.DELETE_PRODUCTSREFAX);
 router.delete('/products/delete-alsacia', API.DELETE_PRODUCTSALSACIA);
 router.delete('/products/delete-bicimoto', API.DELETE_PRODUCTSBICIMOTO);
 
+
+//Ofertas y otros
+router.post('/ofertas', API.POST_OFERTAS);
+router.post('/productos-populares', API.POST_POPULARES);
+router.post('/productos-relacionados', API.POST_ULTIMOS_PRODUCTOS);
+
+//Otros
+
+
 //MARCAS CRUD
 router.get('/marcas', API.GET_MARCAS);
 
@@ -243,6 +252,12 @@ router.get('/certificado/:certificado/:id/:dte', API.GENERAR_PDF)
 
 //API SII
 router.get('/get-timbre', API.GET_TIMBRE)
+
+
+
+//Ecommerce 28/07/2022
+
+
 
 
 module.exports = router;
