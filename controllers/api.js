@@ -3802,7 +3802,7 @@ static async POST_GABTEC_AUTH(req, res){
         try {
             let { Repuesto } = req.body;
 
-            var Datos = await Productos.find({ Busqueda: new RegExp(Repuesto, 'i'), Oferta: true, Stock: {$ne: '0'} }).limit(8);
+            var Datos = await Productos.find({$and: [ { Descripcion: new RegExp(Repuesto, 'i') },{ Oferta: true }, { Stock: {$ne: '0'}} ]}).limit(8);
             
             return res.status(200).send(Datos)
         } catch (error) {
