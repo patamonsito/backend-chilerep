@@ -3815,9 +3815,14 @@ static async POST_GABTEC_AUTH(req, res){
     static async POST_POPULARES(req, res){
         try {
 
-            var Datos = await Productos.find({ Popular: true, Stock: {$ne: '0'} }).limit(8);
-            
-            return res.status(200).send(Datos)
+            let { Repuesto } = req.body;
+            if(!Repuesto){
+                var Datos = await Productos.find({ Popular: true, Stock: {$ne: '0'} }).limit(8);
+                
+                return res.status(200).send(Datos)
+            }else{
+                var Datos = await Productos.find({$and: [ { Descripcion: new RegExp(Repuesto, 'i') }, { Stock: {$ne: '0'}} ]}).sort({_id: -1}).limit(10);
+            }
         } catch (error) {
             console.log(error);
             return res.status(200).send(error)
